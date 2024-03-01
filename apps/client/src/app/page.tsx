@@ -2,13 +2,10 @@ import Chart from '@/assets/landing/chart.png';
 import Vector from '@/assets/landing/vector.png';
 import Logo from '@/assets/logo.png';
 import { Button } from '@/components';
-import { SpreadSDK } from '@ituspreadtrading/spread-sdk';
 import { DashboardIcon, GitHubLogoIcon } from '@radix-ui/react-icons';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ReactNode } from 'react';
-
-const spread = new SpreadSDK();
 
 export default function Home(): ReactNode {
     return (
