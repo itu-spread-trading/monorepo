@@ -1,3 +1,5 @@
+import { SpreadSDK1InchLimitOrder } from './1inch';
+
 export * from './ISpreadSDK';
 export * from './ISpreadSDKSwapModule';
 
@@ -29,3 +31,17 @@ export type SpreadSDKModuleInitProps = {
      */
     privateKey: string;
 };
+
+export interface SpreadSDKBaseQuery {
+    /**
+     * Number of records to take
+     */
+    limit?: number;
+
+    /**
+     * Searched page (for infinite query purpose)
+     */
+    page?: number;
+}
+
+export type SpreadSDKLimitOrder = SpreadSDK1InchLimitOrder;
