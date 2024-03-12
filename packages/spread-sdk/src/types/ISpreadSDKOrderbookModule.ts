@@ -10,15 +10,20 @@ export interface ISpreadSDKOrderbookModule {
      * @dev Get limit orders belonging to the specified address
      * @param props - The required metadata to build the swap
      */
-    genLimitOrdersForAddress(query: SpreadSDKBaseQuery): void;
+    genLimitOrdersForAddress(
+        query?: SpreadSDKBaseQuery,
+    ): Promise<Array<SpreadSDKLimitOrder>>;
 
     /**
-     * @dev Get the list of available tokens for swap
+     * @dev Get limit order by order hash
+     * @param orderHash - The order hash returned from the orderbook
      */
-    genLimitOrders(): Promise<Array<SpreadSDKLimitOrder>>;
+    genLimitOrdersByOrderHash(orderHash: string): Promise<SpreadSDKLimitOrder>;
 
     /**
-     * @dev Get the number of tokens that is allowed to swap
+     * @dev Get all limit orders
      */
-    genAllowance(): Promise<string>;
+    genLimitOrders(
+        query?: SpreadSDKBaseQuery,
+    ): Promise<Array<SpreadSDKLimitOrder>>;
 }

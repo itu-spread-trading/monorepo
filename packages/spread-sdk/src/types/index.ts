@@ -1,4 +1,11 @@
-import { SpreadSDK1InchLimitOrder } from './1inch';
+import {
+    SpreadSDK1InchApproveCalldata,
+    SpreadSDK1InchLimitOrder,
+    SpreadSDK1InchSwapCalldata,
+    SpreadSDK1InchSwapParams,
+    SpreadSDK1InchToken,
+    SpreadSDKGet1InchApproveParamsProps,
+} from './1inch';
 
 export * from './ISpreadSDK';
 export * from './ISpreadSDKSwapModule';
@@ -45,3 +52,31 @@ export interface SpreadSDKBaseQuery {
 }
 
 export type SpreadSDKLimitOrder = SpreadSDK1InchLimitOrder;
+
+export type SpreadSDKToken = SpreadSDK1InchToken;
+
+export type SpreadSDKSwapParams = SpreadSDK1InchSwapParams;
+
+export type SpreadSDKGetSwapParamsProps = {
+    /**
+     * Address of input token to be swapped
+     */
+    inputToken: string;
+
+    /**
+     * Address of output token to be received after swap
+     */
+    outputToken: string;
+
+    /**
+     * Amount of input token to be swapped in wei
+     */
+    amount: string;
+};
+
+export type SpreadSDKSwapCalldata = SpreadSDK1InchSwapCalldata;
+
+export type SpreadSDKApproveCallData = SpreadSDK1InchApproveCalldata;
+
+export type SpreadSDKGetApproveParamsProps =
+    SpreadSDKGet1InchApproveParamsProps;

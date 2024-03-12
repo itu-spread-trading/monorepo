@@ -1,24 +1,11 @@
-export type GetSwapParamsProps = {
-    /**
-     * Address of input token to be swapped
-     */
-    inputToken: string;
-
-    /**
-     * Address of output token to be received after swap
-     */
-    outputToken: string;
-
-    /**
-     * Amount of input token to be swapped in wei
-     */
-    amount: string;
-};
-
-/**
- * @NOTIMPLEMENTED
- */
-export type SpreadSDKToken = null;
+import {
+    SpreadSDKApproveCallData,
+    SpreadSDKGetApproveParamsProps,
+    SpreadSDKGetSwapParamsProps,
+    SpreadSDKSwapCalldata,
+    SpreadSDKSwapParams,
+    SpreadSDKToken,
+} from '.';
 
 export interface ISpreadSDKSwapModule {
     /**
@@ -30,7 +17,21 @@ export interface ISpreadSDKSwapModule {
      *
      * @param props - The required metadata to build the swap
      */
-    getSwapParams(props: GetSwapParamsProps): void;
+    getSwapParams(props: SpreadSDKGetSwapParamsProps): SpreadSDKSwapParams;
+
+    /**
+     * @dev Get the swap calldata to pass as transaction
+     */
+    genSwapCalldata(
+        params: SpreadSDKSwapParams,
+    ): Promise<SpreadSDKSwapCalldata>;
+
+    /**
+     * @dev Get the token approve calldata to pass as transaction
+     */
+    genApproveCalldata(
+        params: SpreadSDKGetApproveParamsProps,
+    ): Promise<SpreadSDKApproveCallData>;
 
     /**
      * @dev Get the list of available tokens for swap
@@ -38,7 +39,7 @@ export interface ISpreadSDKSwapModule {
     genAvailableTokens(): Promise<SpreadSDKToken>;
 
     /**
-     * @dev Get the number of tokens that is allowed to swap
+     * @dev Get the number of tokens that is allowed to swap by token address
      */
-    genAllowance(): Promise<string>;
+    genAllowance(tokenAddress: string): Promise<string>;
 }
