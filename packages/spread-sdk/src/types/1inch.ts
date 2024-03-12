@@ -1,15 +1,17 @@
-export type SpreadSDK1InchToken = {
+export type SpreadSDK1InchData<T> = T & {
     sdkType: '1inch';
+};
+
+export type SpreadSDK1InchToken = SpreadSDK1InchData<{
     address: number;
     symbol: number;
     decimals: number;
     name: string;
     logoURI: string;
     tags: Array<string>;
-};
+}>;
 
-export interface SpreadSDK1InchLimitOrder {
-    sdkType: '1inch';
+export type SpreadSDK1InchLimitOrder = SpreadSDK1InchData<{
     signature: string;
     orderHash: string;
     createDateTime: string;
@@ -31,19 +33,17 @@ export interface SpreadSDK1InchLimitOrder {
     takerRate: string;
     isMakerContract: boolean;
     orderInvalidReason: Array<string> | null;
-}
+}>;
 
-export type SpreadSDK1InchSwapParams = {
-    sdkType: '1inch';
+export type SpreadSDK1InchSwapParams = SpreadSDK1InchData<{
     src: string;
     dst: string;
     amount: string;
     from: string;
     slippage: string;
-};
+}>;
 
-export type SpreadSDK1InchSwapCalldata = {
-    sdkType: '1inch';
+export type SpreadSDK1InchSwapCalldata = SpreadSDK1InchData<{
     dstAmount: string;
     tx: {
         from: string;
@@ -53,15 +53,14 @@ export type SpreadSDK1InchSwapCalldata = {
         gas: number;
         gasPrice: string;
     };
-};
+}>;
 
-export type SpreadSDKGet1InchApproveParamsProps = {
+export type SpreadSDKGet1InchApproveParamsProps = SpreadSDK1InchData<{
     tokenAddress: string;
     amount: string;
-};
+}>;
 
 export type SpreadSDK1InchApproveCalldata = {
-    sdkType: '1inch';
     data: string;
     gasPrice: string;
     to: string;

@@ -3,8 +3,10 @@ export type SpreadSDKBinanceLimitOrderSide = 'BUY' | 'SELL';
 export type SpreadSDKBinanceLimitOrderPositionSide = 'SHORT' | 'LONG';
 export type SpreadSDKBinanceLimitOrderStatus = 'NEW' | 'CANCELED' | 'EXPIRED';
 
-export interface SpreadSDKBinanceLimitOrder {
+export type SpreadSDKBinanceData<T> = T & {
     sdkType: 'binance';
+};
+export type SpreadSDKBinanceLimitOrder = SpreadSDKBinanceData<{
     avgPrice: string;
     clientOrderId: string;
     cumQuote: string;
@@ -31,4 +33,4 @@ export interface SpreadSDKBinanceLimitOrder {
     priceMatch: 'NONE'; //price match mode
     selfTradePreventionMode: 'NONE'; //self trading preventation mode
     goodTillDate: number; //order pre-set auot cancel time for TIF GTD order
-}
+}>;
