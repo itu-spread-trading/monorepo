@@ -1,4 +1,8 @@
-import { SpreadSDKBaseQuery, SpreadSDKLimitOrder } from '.';
+import {
+    SpreadSDKBaseQuery,
+    SpreadSDKCreateLimitOrderProps,
+    SpreadSDKLimitOrder,
+} from '.';
 
 export interface ISpreadSDKOrderbookModule {
     /**
@@ -26,4 +30,11 @@ export interface ISpreadSDKOrderbookModule {
     genLimitOrders(
         query?: SpreadSDKBaseQuery,
     ): Promise<Array<SpreadSDKLimitOrder>>;
+
+    /**
+     * @dev Create a new limit order on database
+     */
+    genCreateLimitOrder(
+        props: SpreadSDKCreateLimitOrderProps,
+    ): Promise<SpreadSDKLimitOrder>;
 }

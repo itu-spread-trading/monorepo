@@ -1,5 +1,6 @@
 import {
     SpreadSDK1InchApproveCalldata,
+    SpreadSDK1InchCreateLimitOrderProps,
     SpreadSDK1InchLimitOrder,
     SpreadSDK1InchSwapCalldata,
     SpreadSDK1InchSwapParams,
@@ -80,3 +81,6 @@ export type SpreadSDKApproveCallData = SpreadSDK1InchApproveCalldata;
 
 export type SpreadSDKGetApproveParamsProps =
     SpreadSDKGet1InchApproveParamsProps;
+
+export type SpreadSDKCreateLimitOrderProps =
+    SpreadSDK1InchCreateLimitOrderProps;
