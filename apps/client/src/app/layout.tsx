@@ -1,7 +1,11 @@
+import { config } from '@/context';
+import Web3ModalProvider from '@/context/web3modal';
 import { clsnm } from '@/utils';
 import { Metadata } from 'next';
 import { Inter as FontSans } from 'next/font/google';
+import { headers } from 'next/headers';
 import { ReactNode } from 'react';
+import { cookieToInitialState } from 'wagmi';
 
 import './globals.css';
 
@@ -21,6 +25,8 @@ type Props = Readonly<{
 }>;
 
 export default function RootLayout({ children }: Props): ReactNode {
+    const initialState = cookieToInitialState(config, headers().get('cookie'));
+
     return (
         <html lang="en">
             <body
@@ -29,7 +35,9 @@ export default function RootLayout({ children }: Props): ReactNode {
                     fontSans.variable,
                 )}
             >
-                {children}
+                <Web3ModalProvider initialState={initialState}>
+                    {children}
+                </Web3ModalProvider>
             </body>
         </html>
     );
