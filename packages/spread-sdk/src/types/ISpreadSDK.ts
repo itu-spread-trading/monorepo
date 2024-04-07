@@ -7,6 +7,4 @@ export interface ISpreadSDK {
      */
     orderbook: ISpreadSDKOrderbookModule;
     swap: ISpreadSDKSwapModule;
-
-    connect(address: string, privateKey: string): void;
 }

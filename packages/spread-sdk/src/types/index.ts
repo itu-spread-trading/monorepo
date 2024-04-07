@@ -13,21 +13,19 @@ export * from './ISpreadSDKSwapModule';
 
 export type SpreadSDKInitProps = {
     /**
+     * API url override
+     */
+    apiUrlOverride?: string;
+
+    /**
      * API key for Spread SDK
      */
     apiKey: string;
-};
 
-export type SpreadSDKModuleInitProps = {
     /**
      * Chain ID of the blockchain network
      */
     chainId: number;
-
-    /**
-     * RPC URL of the blockchain network
-     */
-    rpcUrl: string;
 
     /**
      * Public address of the wallet
@@ -37,8 +35,10 @@ export type SpreadSDKModuleInitProps = {
     /**
      * Private key of the wallet
      */
-    privateKey: string;
+    privateKey?: string;
 };
+
+export type SpreadSDKModuleInitProps = SpreadSDKInitProps;
 
 export interface SpreadSDKBaseQuery {
     /**
@@ -50,6 +50,28 @@ export interface SpreadSDKBaseQuery {
      * Searched page (for infinite query purpose)
      */
     page?: number;
+}
+
+export interface SpreadSDKOrderbookLimitOrdersQuery extends SpreadSDKBaseQuery {
+    /**
+     * Order by field
+     */
+    sortBy?:
+        | 'createDateTime'
+        | 'takerRate'
+        | 'makerRate'
+        | 'makerAmount'
+        | 'takerAmount';
+
+    /**
+     * Address of the taker asset
+     */
+    takerAsset?: string;
+
+    /**
+     * Address of the maker asset
+     */
+    makerAsset?: string;
 }
 
 export type SpreadSDKLimitOrder = SpreadSDK1InchLimitOrder;
@@ -84,3 +106,6 @@ export type SpreadSDKGetApproveParamsProps =
 
 export type SpreadSDKCreateLimitOrderProps =
     SpreadSDK1InchCreateLimitOrderProps;
+
+export * from './ISpreadSDKOrderbookModule';
+export * from './ISpreadSDKSwapModule';

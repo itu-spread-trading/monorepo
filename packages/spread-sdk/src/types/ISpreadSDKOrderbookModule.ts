@@ -2,13 +2,14 @@ import {
     SpreadSDKBaseQuery,
     SpreadSDKCreateLimitOrderProps,
     SpreadSDKLimitOrder,
+    SpreadSDKOrderbookLimitOrdersQuery,
 } from '.';
 
 export interface ISpreadSDKOrderbookModule {
     /**
-     * @dev The API URL for the orderbook module
+     * Base URL of the module API
      */
-    apiUrl: string;
+    baseUrl: string;
 
     /**
      * @dev Get limit orders belonging to the specified address
@@ -28,7 +29,7 @@ export interface ISpreadSDKOrderbookModule {
      * @dev Get all limit orders
      */
     genLimitOrders(
-        query?: SpreadSDKBaseQuery,
+        query?: SpreadSDKOrderbookLimitOrdersQuery,
     ): Promise<Array<SpreadSDKLimitOrder>>;
 
     /**

@@ -12,11 +12,11 @@
   "private": true,
   "scripts": {
     "build": "turbo build",
+    "clear": "find . -name 'node_modules' -type d -prune -exec rm -rf '{}' + && rm package-lock.json",
     "dev": "turbo dev",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "lint": "turbo lint",
-    "syncpack:format": "syncpack format",
-    "clear": "find . -name 'node_modules' -type d -prune -exec rm -rf '{}' + && rm package-lock.json"
+    "syncpack:format": "syncpack format"
   },
   "workspaces": [
     "apps/*",

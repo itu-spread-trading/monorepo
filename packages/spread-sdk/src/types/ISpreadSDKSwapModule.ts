@@ -9,9 +9,9 @@ import {
 
 export interface ISpreadSDKSwapModule {
     /**
-     * @dev The API URL for the swap module
+     * Base URL of the module API
      */
-    apiUrl: string;
+    baseUrl: string;
 
     /**
      *
