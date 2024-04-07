@@ -1,20 +1,22 @@
 {
   "name": "my-turborepo",
-  "private": true,
-  "scripts": {
-    "build": "turbo build",
-    "dev": "turbo dev",
-    "lint": "turbo lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
-  },
   "devDependencies": {
     "prettier": "2.8.8",
+    "syncpack": "12.3.0",
     "turbo": "latest"
   },
   "engines": {
     "node": ">=18"
   },
   "packageManager": "npm@9.8.0",
+  "private": true,
+  "scripts": {
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "lint": "turbo lint",
+    "syncpack:format": "syncpack format"
+  },
   "workspaces": [
     "apps/*",
     "packages/*"
