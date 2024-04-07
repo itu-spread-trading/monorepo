@@ -6,17 +6,19 @@ import { Button } from '@/components';
 import { formatAddress } from '@ituspreadtrading/sdk';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { ReactNode, useEffect } from 'react';
 import { useAccount } from 'wagmi';
 
 export default function ConnectPage(): ReactNode {
     const { open } = useWeb3Modal();
+    const router = useRouter();
     const { isConnected, address, isConnecting, isReconnecting } = useAccount();
 
     useEffect(() => {
         // Navigate to dashboard if already connected
         if (isConnected) {
-            window.location.href = '/dashboard';
+            router.push('/dashboard');
         }
     }, [isConnected]);
 
