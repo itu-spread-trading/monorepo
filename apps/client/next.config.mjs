@@ -1,4 +1,7 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
+const nextConfig = {
+    transpilePackages: ['@ituspreadtrading/sdk'],
+    reactStrictMode: false,
+};
 
 export default nextConfig;

@@ -1,7 +1,7 @@
 import Chart from '@/assets/landing/chart.png';
 import Vector from '@/assets/landing/vector.png';
-import Logo from '@/assets/logo.png';
 import { Button } from '@/components';
+import { Navbar } from '@/components/navbar';
 import { DashboardIcon, GitHubLogoIcon } from '@radix-ui/react-icons';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -10,12 +10,7 @@ import { ReactNode } from 'react';
 export default function Home(): ReactNode {
     return (
         <>
-            <div className="container flex flex-row align-center justify-between pt-4 pb-4">
-                <Image src={Logo} alt="Spread Icon" className="w-[100px]" />
-                <Button size="lg">
-                    <DashboardIcon className="mr-1" /> Launch App
-                </Button>
-            </div>
+            <Navbar />
             <div className="container min-h-[calc(100vh-72px)] pt-[120px] items-center flex flex-col">
                 <h1 className="text-6xl max-w-[100%] md:max-w-[70%] lg:max-w-[50%] leading-normal font-semibold text-center">
                     Explore Spread Trading with Blockchain Assets
@@ -32,9 +27,11 @@ export default function Home(): ReactNode {
                     strategic insights for unrivaled financial success.
                 </p>
                 <div className="mt-10 flex space-x-4">
-                    <Button size="lg">
-                        <DashboardIcon className="mr-2" /> Launch App
-                    </Button>
+                    <a href="/connect">
+                        <Button size="lg">
+                            <DashboardIcon className="mr-2" /> Launch App
+                        </Button>
+                    </a>
                     <Link
                         href="https://github.com/itu-spread-trading"
                         target="_blank"

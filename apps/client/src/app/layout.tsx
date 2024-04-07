@@ -25,8 +25,6 @@ type Props = Readonly<{
 }>;
 
 export default function RootLayout({ children }: Props): ReactNode {
-    const initialState = cookieToInitialState(config, headers().get('cookie'));
-
     return (
         <html lang="en">
             <body
@@ -35,9 +33,7 @@ export default function RootLayout({ children }: Props): ReactNode {
                     fontSans.variable,
                 )}
             >
-                <Web3ModalProvider initialState={initialState}>
-                    {children}
-                </Web3ModalProvider>
+                <Web3ModalProvider>{children}</Web3ModalProvider>
             </body>
         </html>
     );
