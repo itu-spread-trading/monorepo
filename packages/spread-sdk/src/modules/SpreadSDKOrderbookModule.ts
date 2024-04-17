@@ -28,6 +28,9 @@ export class SpreadSDKOrderbookModule implements ISpreadSDKOrderbookModule {
         });
         this.axios1Inch = Axios.create({
             baseURL: this.baseUrl,
+            headers: {
+                Authorization: `Bearer ${props.apiKey}`,
+            },
         });
     }
 

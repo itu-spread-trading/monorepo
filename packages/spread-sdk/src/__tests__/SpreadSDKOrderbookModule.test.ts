@@ -8,7 +8,6 @@ describe('SpreadSDKOrderbookModule', () => {
     const mockConfig: SpreadSDKInitProps = {
         ...getDefaultConfig(),
         publicAddress: '',
-        apiKey: '',
     };
 
     beforeEach(() => {
@@ -17,5 +16,13 @@ describe('SpreadSDKOrderbookModule', () => {
 
     it('should be defined', () => {
         expect(spreadSDK).toBeDefined();
+    });
+
+    it('should return all limit orders correctly', async () => {
+        const limitOrders = await spreadSDK.orderbook.genLimitOrders();
+        expect(limitOrders).toBeDefined();
+        expect(limitOrders.length).toBeGreaterThan(0);
+        expect(limitOrders[0].orderHash).toBeDefined();
+        expect(limitOrders[0].data).toBeDefined();
     });
 });
