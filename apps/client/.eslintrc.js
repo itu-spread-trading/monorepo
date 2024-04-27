@@ -18,9 +18,7 @@ module.exports = {
     ignorePatterns: ['.eslintrc.js'],
     rules: {
         '@typescript-eslint/array-type': ['error', { default: 'generic' }],
-        '@typescript-eslint/explicit-module-boundary-types': 'warn',
         '@typescript-eslint/no-explicit-any': 'error',
-        '@typescript-eslint/explicit-function-return-type': 'warn',
         '@typescript-eslint/ban-ts-comment': [
             'warn',
             {
