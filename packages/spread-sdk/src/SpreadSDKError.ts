@@ -7,4 +7,8 @@ export class SpreadSDKError extends Error {
     public static NotInitialized(): SpreadSDKError {
         return new SpreadSDKError('SpreadSDK is not initialized');
     }
+
+    public static CouldNotGetSpread(): SpreadSDKError {
+        return new SpreadSDKError('Could not get spread data');
+    }
 }

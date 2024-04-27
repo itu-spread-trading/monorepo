@@ -4,11 +4,20 @@ import {
     ISpreadSDK,
     ISpreadSDKOrderbookModule,
     ISpreadSDKSwapModule,
+    SpreadCandleResponse,
+    SpreadGraphQueryParams,
+    SpreadQueryResponse,
     SpreadSDKInitProps,
     SpreadSDKModuleInitProps,
 } from './types';
+import { getApiUrlOrOverride } from './utils';
+import Axios, { AxiosInstance } from 'axios';
 
 export class SpreadSDK implements ISpreadSDK {
+    private props: SpreadSDKInitProps;
+    private apiUrl: string;
+    private axiosInstance: AxiosInstance;
+
     /**
      * Initialized state
      */
@@ -21,21 +30,46 @@ export class SpreadSDK implements ISpreadSDK {
     swap: ISpreadSDKSwapModule;
 
     constructor(props: SpreadSDKInitProps) {
-        this.orderbook = new SpreadSDKOrderbookModule(props);
-        this.swap = new SpreadSDKSwapModule(props);
-
-        this.initialized = true;
+        this.init(props);
     }
 
     public static create(props: SpreadSDKModuleInitProps): SpreadSDK {
         return new SpreadSDK(props);
     }
 
-    public getSpread(): number {
-        if (!this.initialized) {
-            throw SpreadSDKError.NotInitialized();
-        }
+    public init(props: SpreadSDKInitProps): void {
+        this.props = props;
+        this.orderbook = new SpreadSDKOrderbookModule(props);
+        this.swap = new SpreadSDKSwapModule(props);
+        this.initialized = true;
+        this.axiosInstance = Axios.create({
+            baseURL: getApiUrlOrOverride(props.apiUrlOverride),
+        });
+    }
 
-        return 1;
+    public getPublicAddress(): string {
+        return this.props.publicAddress;
+    }
+
+    public async getSpreadGraph(
+        query: SpreadGraphQueryParams,
+    ): Promise<Array<SpreadCandleResponse>> {
+        try {
+            const response = await this.axiosInstance.get('/spread/graph', {
+                params: query,
+            });
+            return response.data;
+        } catch {
+            throw SpreadSDKError.CouldNotGetSpread();
+        }
+    }
+
+    public async getSpread(): Promise<SpreadQueryResponse> {
+        try {
+            const response = await this.axiosInstance.get('/spread');
+            return response.data;
+        } catch {
+            throw SpreadSDKError.CouldNotGetSpread();
+        }
     }
 }

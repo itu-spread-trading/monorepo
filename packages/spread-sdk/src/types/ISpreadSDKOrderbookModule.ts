@@ -4,8 +4,9 @@ import {
     SpreadSDKLimitOrder,
     SpreadSDKOrderbookLimitOrdersQuery,
 } from '.';
+import { ISpreadSDKModule } from './ISpreadSDKModule';
 
-export interface ISpreadSDKOrderbookModule {
+export interface ISpreadSDKOrderbookModule extends ISpreadSDKModule {
     /**
      * Base URL of the module API
      */

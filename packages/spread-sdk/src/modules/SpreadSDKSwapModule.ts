@@ -3,6 +3,7 @@ import {
     SpreadSDKApproveCallData,
     SpreadSDKGetApproveParamsProps,
     SpreadSDKGetSwapParamsProps,
+    SpreadSDKInitProps,
     SpreadSDKModuleInitProps,
     SpreadSDKSwapCalldata,
     SpreadSDKSwapParams,
@@ -20,6 +21,10 @@ export class SpreadSDKSwapModule implements ISpreadSDKSwapModule {
     private axios1Inch: AxiosInstance;
 
     constructor(props: SpreadSDKModuleInitProps) {
+        this.init(props);
+    }
+
+    public init(props: SpreadSDKInitProps): void {
         this.props = props;
 
         // Api Configuration

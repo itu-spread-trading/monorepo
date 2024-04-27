@@ -1,4 +1,5 @@
 import {
+    ISpreadSDKModule,
     SpreadSDKApproveCallData,
     SpreadSDKGetApproveParamsProps,
     SpreadSDKGetSwapParamsProps,
@@ -7,7 +8,7 @@ import {
     SpreadSDKToken,
 } from '.';
 
-export interface ISpreadSDKSwapModule {
+export interface ISpreadSDKSwapModule extends ISpreadSDKModule {
     /**
      * Base URL of the module API
      */

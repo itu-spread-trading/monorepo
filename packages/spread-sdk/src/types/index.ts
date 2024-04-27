@@ -107,5 +107,25 @@ export type SpreadSDKGetApproveParamsProps =
 export type SpreadSDKCreateLimitOrderProps =
     SpreadSDK1InchCreateLimitOrderProps;
 
+export class SpreadGraphQueryParams {
+    symbol: SpreadSDKSupportedSymbols;
+    interval: '1h' | '4h' | '1d';
+}
+export type SpreadQueryResponse = {
+    spread: number;
+    date: string;
+};
+
+export type SpreadCandleResponse = {
+    date: string;
+    open: number;
+    close: number;
+    high: number;
+    low: number;
+};
+
+export type SpreadSDKSupportedSymbols = 'BNBUSDT';
+
+export * from './ISpreadSDKModule';
 export * from './ISpreadSDKOrderbookModule';
 export * from './ISpreadSDKSwapModule';

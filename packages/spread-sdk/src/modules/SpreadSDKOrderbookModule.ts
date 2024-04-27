@@ -3,6 +3,7 @@ import {
     ISpreadSDKOrderbookModule,
     SpreadSDKBaseQuery,
     SpreadSDKCreateLimitOrderProps,
+    SpreadSDKInitProps,
     SpreadSDKLimitOrder,
     SpreadSDKModuleInitProps,
     SpreadSDKOrderbookLimitOrdersQuery,
@@ -18,6 +19,10 @@ export class SpreadSDKOrderbookModule implements ISpreadSDKOrderbookModule {
     private axios1Inch: AxiosInstance;
 
     constructor(props: SpreadSDKModuleInitProps) {
+        this.init(props);
+    }
+
+    public init(props: SpreadSDKInitProps): void {
         this.props = props;
 
         // Api Configuration
