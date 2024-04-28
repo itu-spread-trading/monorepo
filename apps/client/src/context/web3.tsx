@@ -25,11 +25,7 @@ const config = getDefaultConfig({
     ssr: true, // If your dApp uses server side rendering (SSR)
 });
 
-export default function Web3Provider({
-    children,
-}: {
-    children: ReactNode;
-}): ReactNode {
+export function Web3Provider({ children }: { children: ReactNode }): ReactNode {
     return (
         <WagmiProvider config={config}>
             <QueryClientProvider client={queryClient}>

@@ -1,11 +1,11 @@
+import '@rainbow-me/rainbowkit/styles.css';
+import './globals.css';
+
 import { clsnm } from '@/utils';
 import { Metadata } from 'next';
 import { Inter as FontSans } from 'next/font/google';
 import { ReactNode } from 'react';
-import '@rainbow-me/rainbowkit/styles.css';
-
-import './globals.css';
-import Web3Provider from '@/context/web3';
+import { Web3Provider } from '@/context';
 
 export const fontSans = FontSans({
     subsets: ['latin'],
