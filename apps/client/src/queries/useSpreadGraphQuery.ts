@@ -1,19 +1,35 @@
 import { queries } from '@/queries/queries';
 import { spreadSDK } from '@/utils';
-import { SpreadSDKSupportedSymbols } from '@ituspreadtrading/sdk';
+import { SpreadGraphQueryParams } from '@ituspreadtrading/sdk';
 import { useQuery } from '@tanstack/react-query';
 
-type Props = {
-    symbol: SpreadSDKSupportedSymbols;
-};
+type Props = SpreadGraphQueryParams;
 
-export const useSpreadGraphQuery = ({ symbol }: Props) => {
+export const useSpreadGraphQuery = ({ symbol, interval }: Props) => {
     return useQuery({
-        queryKey: [queries.GRAPH],
+        queryKey: [queries.GRAPH + interval],
         queryFn: async () => {
             const response = spreadSDK.getSpreadGraph({
                 symbol,
-                interval: '1h',
+                interval,
+            });
+            return response;
+        },
+    });
+};
+
+export const useSpreadMeanGraphQuery = ({
+    symbol,
+    interval = '5m',
+    range = '1m',
+}: Props) => {
+    return useQuery({
+        queryKey: [queries.MEAN_GRAPH + interval + range],
+        queryFn: async () => {
+            const response = spreadSDK.getSpreadMeanGraph({
+                symbol,
+                interval,
+                range,
             });
             return response;
         },

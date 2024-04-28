@@ -1,8 +1,9 @@
 'use client';
 
-import { SpreadGraph } from '@/app/dashboard/graph';
+import { SpreadCandleStickGraph } from '@/app/dashboard/candleGraph';
+import { SpreadMeanGraph } from '@/app/dashboard/meanGraph';
 import { Navbar } from '@/components/navbar';
-import { useSpreadGraphQuery } from '@/queries';
+import { useSpreadGraphQuery, useSpreadMeanGraphQuery } from '@/queries';
 import { getDefaultConfig, spreadSDK } from '@/utils';
 import { ReactNode, useEffect } from 'react';
 import { useAccount } from 'wagmi';
@@ -20,14 +21,17 @@ export default function DashboardPage(): ReactNode {
         }
     }, [isConnected]);
 
-    const { data } = useSpreadGraphQuery({
-        symbol: 'BNBUSDT',
-    });
-
     return (
         <>
             <Navbar type="connect" />
-            {data != null && <SpreadGraph data={data} />}
+            <div className="grid container grid-cols-2">
+                <div></div>
+                <div>
+                    <SpreadCandleStickGraph />
+                    <div className="h-2" />
+                    <SpreadMeanGraph />
+                </div>
+            </div>
         </>
     );
 }

@@ -7,7 +7,13 @@ import React, { ReactNode } from 'react';
 import { State, WagmiProvider } from 'wagmi';
 
 // Setup queryClient
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+    defaultOptions: {
+        queries: {
+            refetchOnWindowFocus: false,
+        },
+    },
+});
 
 if (!projectId) throw new Error('Project ID is not defined');
 

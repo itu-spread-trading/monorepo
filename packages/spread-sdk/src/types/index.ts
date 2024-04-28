@@ -109,7 +109,8 @@ export type SpreadSDKCreateLimitOrderProps =
 
 export class SpreadGraphQueryParams {
     symbol: SpreadSDKSupportedSymbols;
-    interval: '1h' | '4h' | '1d';
+    interval?: '5m' | '1h' | '4h' | '1d';
+    range?: '1d' | '1w' | '1m' | '3m' | '6m';
 }
 export type SpreadQueryResponse = {
     spread: number;
@@ -122,6 +123,11 @@ export type SpreadCandleResponse = {
     close: number;
     high: number;
     low: number;
+};
+
+export type SpreadMeanResponse = {
+    date: string;
+    value: number;
 };
 
 export type SpreadSDKSupportedSymbols = 'BNBUSDT';

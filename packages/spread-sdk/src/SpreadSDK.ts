@@ -6,6 +6,7 @@ import {
     ISpreadSDKSwapModule,
     SpreadCandleResponse,
     SpreadGraphQueryParams,
+    SpreadMeanResponse,
     SpreadQueryResponse,
     SpreadSDKInitProps,
     SpreadSDKModuleInitProps,
@@ -58,6 +59,22 @@ export class SpreadSDK implements ISpreadSDK {
             const response = await this.axiosInstance.get('/spread/graph', {
                 params: query,
             });
+            return response.data;
+        } catch {
+            throw SpreadSDKError.CouldNotGetSpread();
+        }
+    }
+
+    public async getSpreadMeanGraph(
+        query: SpreadGraphQueryParams,
+    ): Promise<Array<SpreadMeanResponse>> {
+        try {
+            const response = await this.axiosInstance.get(
+                '/spread/graph/mean',
+                {
+                    params: query,
+                },
+            );
             return response.data;
         } catch {
             throw SpreadSDKError.CouldNotGetSpread();
