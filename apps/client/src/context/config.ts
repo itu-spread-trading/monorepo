@@ -1,3 +1,4 @@
+'use client';
 import { getDefaultConfig } from '@rainbow-me/rainbowkit';
 import { bsc } from 'wagmi/chains';
 
