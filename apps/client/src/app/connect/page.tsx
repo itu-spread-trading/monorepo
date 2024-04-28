@@ -1,19 +1,16 @@
 'use client';
 
-import WallpaperImage from '@/assets/connect-wallpaper.png';
+import WallpaperImage from '@/assets/login.png';
 import Logo from '@/assets/logo.png';
-import { Button } from '@/components';
-import { formatAddress } from '@ituspreadtrading/sdk';
-import { useWeb3Modal } from '@web3modal/wagmi/react';
+import { ConnectButton } from '@rainbow-me/rainbowkit';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { ReactNode, useEffect } from 'react';
 import { useAccount } from 'wagmi';
 
 export default function ConnectPage(): ReactNode {
-    const { open } = useWeb3Modal();
     const router = useRouter();
-    const { isConnected, address, isConnecting, isReconnecting } = useAccount();
+    const { isConnected } = useAccount();
 
     useEffect(() => {
         // Navigate to dashboard if already connected
@@ -24,32 +21,28 @@ export default function ConnectPage(): ReactNode {
 
     return (
         <div
-            className="flex h-screen"
+            className="h-screen w-screen grid grid-cols-2"
             style={{
-                backgroundImage: `url(${WallpaperImage.src})`,
                 backgroundSize: 'cover',
             }}
         >
-            <div className="flex flex-col w-[400px] m-auto">
+            <div className="h-screen w-full relative">
+                <Image
+                    layout="fill"
+                    objectFit="cover"
+                    alt="Spread Wallpaper"
+                    className="h-full w-full"
+                    src={WallpaperImage}
+                />
+            </div>
+            <div className="flex flex-col m-auto">
                 <Image
                     className="w-[80%] m-auto mb-4 h-full"
                     alt="Spread Logo"
                     src={Logo}
                 />
 
-                <Button
-                    loading={isConnecting || isReconnecting}
-                    size="lg"
-                    onClick={() => {
-                        if (!isConnected) {
-                            open();
-                        }
-                    }}
-                >
-                    {isConnected
-                        ? `Connected as ${formatAddress(address)}`
-                        : 'Connect'}
-                </Button>
+                <ConnectButton />
             </div>
         </div>
     );

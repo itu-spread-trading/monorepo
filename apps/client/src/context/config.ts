@@ -1,5 +1,4 @@
-import { defaultWagmiConfig } from '@web3modal/wagmi/react/config';
-import { cookieStorage, createStorage } from 'wagmi';
+import { getDefaultConfig } from '@rainbow-me/rainbowkit';
 import { bsc } from 'wagmi/chains';
 
 export const projectId =
@@ -7,21 +6,12 @@ export const projectId =
 
 if (!projectId) throw new Error('Project ID is not defined');
 
-const metadata = {
-    name: 'Spread',
-    description: 'ITU Spread Trading Client Application',
-    url: 'https://ituspreadtrading.com', // origin must match your domain & subdomain
-    icons: ['https://avatars.githubusercontent.com/u/37784886'],
-};
-
 // Create wagmiConfig
 const chains = [bsc] as const;
-export const config = defaultWagmiConfig({
+
+export const config = getDefaultConfig({
+    appName: 'My RainbowKit App',
+    projectId: 'YOUR_PROJECT_ID',
     chains,
-    projectId,
-    metadata,
     ssr: true,
-    storage: createStorage({
-        storage: cookieStorage,
-    }),
 });

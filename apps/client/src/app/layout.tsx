@@ -1,10 +1,11 @@
-import Web3ModalProvider from '@/context/web3modal';
 import { clsnm } from '@/utils';
 import { Metadata } from 'next';
 import { Inter as FontSans } from 'next/font/google';
 import { ReactNode } from 'react';
+import '@rainbow-me/rainbowkit/styles.css';
 
 import './globals.css';
+import Web3Provider from '@/context/web3';
 
 export const fontSans = FontSans({
     subsets: ['latin'],
@@ -30,7 +31,7 @@ export default function RootLayout({ children }: Props): ReactNode {
                     fontSans.variable,
                 )}
             >
-                <Web3ModalProvider>{children}</Web3ModalProvider>
+                <Web3Provider>{children}</Web3Provider>
             </body>
         </html>
     );

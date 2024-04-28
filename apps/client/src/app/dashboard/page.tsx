@@ -3,7 +3,6 @@
 import { SpreadCandleStickGraph } from '@/app/dashboard/candleGraph';
 import { SpreadMeanGraph } from '@/app/dashboard/meanGraph';
 import { Navbar } from '@/components/navbar';
-import { useSpreadGraphQuery, useSpreadMeanGraphQuery } from '@/queries';
 import { getDefaultConfig, spreadSDK } from '@/utils';
 import { ReactNode, useEffect } from 'react';
 import { useAccount } from 'wagmi';
@@ -24,9 +23,9 @@ export default function DashboardPage(): ReactNode {
     return (
         <>
             <Navbar type="connect" />
-            <div className="grid container grid-cols-2">
-                <div></div>
-                <div>
+            <div className="grid container grid-cols-12">
+                <div className="col-span-5"></div>
+                <div className="col-span-7">
                     <SpreadCandleStickGraph />
                     <div className="h-2" />
                     <SpreadMeanGraph />

@@ -9,10 +9,10 @@ export const getSharedGraphOptions = (): ApexOptions => {
         },
         theme: {
             mode: 'dark',
-            palette: 'palette1',
+            palette: 'palette2',
             monochrome: {
                 enabled: true,
-                color: '#255aee',
+                color: '#fff',
                 shadeTo: 'dark',
                 shadeIntensity: 0.65,
             },

@@ -7,7 +7,7 @@ import { Dispatch, ReactNode, SetStateAction, useMemo, useState } from 'react';
 import Chart from 'react-apexcharts';
 
 export const SpreadMeanGraph = () => {
-    const [range, setRange] = useState<SpreadGraphQueryParams['range']>('1m');
+    const [range, setRange] = useState<SpreadGraphQueryParams['range']>('1w');
     const { data } = useSpreadMeanGraphQuery({
         symbol: 'BNBUSDT',
         range,
@@ -43,6 +43,10 @@ export const SpreadMeanGraph = () => {
             stroke: {
                 curve: 'smooth',
             },
+            colors: ['#ffffff'],
+            fill: {
+                colors: ['#ffffff'],
+            },
         };
     }, []);
 
@@ -66,7 +70,7 @@ const RightEl = ({
     const options = ['1d', '1w', '1m'] as const;
 
     return (
-        <div className="flex space-x-2">
+        <div className="flex space-x-2 bg-gray-700 p-1 rounded-lg">
             {options.map((item) => (
                 <Button
                     variant={item === range ? 'default' : 'ghost'}

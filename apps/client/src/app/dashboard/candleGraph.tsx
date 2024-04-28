@@ -8,7 +8,7 @@ import Chart from 'react-apexcharts';
 
 export const SpreadCandleStickGraph = () => {
     const [interval, setInterval] =
-        useState<SpreadGraphQueryParams['interval']>('1h');
+        useState<SpreadGraphQueryParams['interval']>('4h');
 
     const { data } = useSpreadGraphQuery({
         symbol: 'BNBUSDT',
@@ -67,7 +67,7 @@ const RightEl = ({
     const options = ['1h', '4h', '1d'] as const;
 
     return (
-        <div className="flex space-x-2">
+        <div className="flex space-x-2 bg-gray-700 p-1 rounded-lg">
             {options.map((item) => (
                 <Button
                     variant={item === interval ? 'default' : 'ghost'}

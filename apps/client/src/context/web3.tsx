@@ -1,10 +1,11 @@
 'use client';
 
-import { config, projectId } from '@/context';
+import { projectId } from '@/context';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { createWeb3Modal } from '@web3modal/wagmi/react';
 import React, { ReactNode } from 'react';
-import { State, WagmiProvider } from 'wagmi';
+import { WagmiProvider } from 'wagmi';
+import { bsc } from 'wagmi/chains';
+import { RainbowKitProvider, getDefaultConfig } from '@rainbow-me/rainbowkit';
 
 // Setup queryClient
 const queryClient = new QueryClient({
@@ -17,25 +18,22 @@ const queryClient = new QueryClient({
 
 if (!projectId) throw new Error('Project ID is not defined');
 
-// Create modal
-createWeb3Modal({
-    wagmiConfig: config,
-    projectId,
-    enableAnalytics: true, // Optional - defaults to your Cloud configuration
-    enableOnramp: true, // Optional - false as default
+const config = getDefaultConfig({
+    appName: 'Spread',
+    projectId: projectId,
+    chains: [bsc],
+    ssr: true, // If your dApp uses server side rendering (SSR)
 });
 
-export default function Web3ModalProvider({
+export default function Web3Provider({
     children,
-    initialState,
 }: {
     children: ReactNode;
-    initialState?: State;
 }): ReactNode {
     return (
-        <WagmiProvider config={config} initialState={initialState}>
+        <WagmiProvider config={config}>
             <QueryClientProvider client={queryClient}>
-                {children}
+                <RainbowKitProvider>{children}</RainbowKitProvider>
             </QueryClientProvider>
         </WagmiProvider>
     );
