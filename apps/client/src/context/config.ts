@@ -11,8 +11,8 @@ if (!projectId) throw new Error('Project ID is not defined');
 const chains = [bsc] as const;
 
 export const config = getDefaultConfig({
-    appName: 'My RainbowKit App',
-    projectId: 'YOUR_PROJECT_ID',
+    appName: 'Spread',
+    projectId: projectId,
     chains,
     ssr: true,
 });
