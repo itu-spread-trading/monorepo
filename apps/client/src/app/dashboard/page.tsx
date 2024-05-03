@@ -5,8 +5,8 @@ import { SpreadMeanGraph } from '@/app/dashboard/meanGraph';
 import { Navbar } from '@/components/navbar';
 import { TokenSelect } from '@/components/token-select';
 import { Card, CardHeader } from '@/components/ui/card';
-import { useHandleConnection } from '@/hooks/useHandleConnection';
-import { useWallet } from '@/store';
+import { useMarketDataQuery } from '@/queries';
+import { useTokenPair, useWallet } from '@/store';
 import { getDefaultConfig, spreadSDK } from '@/utils';
 import { ReactNode, useEffect } from 'react';
 import { useAccount } from 'wagmi';
@@ -14,8 +14,11 @@ import { useAccount } from 'wagmi';
 export default function DashboardPage(): ReactNode {
     const { isConnected } = useAccount();
     const wallet = useWallet();
+    const tokenPair = useTokenPair();
 
-    useHandleConnection();
+    const { data } = useMarketDataQuery({
+        symbol: tokenPair,
+    });
 
     useEffect(() => {
         if (isConnected && wallet != null) {

@@ -9,6 +9,7 @@ import {
 export type Wallet = {
     address: string;
     privateKey: string;
+    associatedAddress: string;
 };
 
 export const WalletStore = atom<Wallet | null>({

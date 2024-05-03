@@ -14,9 +14,13 @@ import {
 
 type Props = {
     onConnect?: () => void;
+    runOnMount?: boolean;
 };
 
-export const useHandleConnection = ({ onConnect }: Props = {}) => {
+export const useHandleConnection = ({
+    onConnect,
+    runOnMount = true,
+}: Props = {}) => {
     const { isConnected, address } = useAccount();
     const { disconnect } = useDisconnect();
     const { signMessageAsync } = useSignMessage();
@@ -25,50 +29,54 @@ export const useHandleConnection = ({ onConnect }: Props = {}) => {
     const loginMutation = useLoginMutation();
     const setWallet = useSetWallet();
 
-    useEffect(() => {
-        const handler = async () => {
-            if (isConnected && address) {
-                const result = await new Promise((resolve) => {
-                    setTimeout(async () => {
-                        try {
-                            const isRegistered =
-                                await isRegisteredMutation.mutateAsync(address);
-                            let wallet = null;
-                            if (isRegistered) {
-                                const signature = await signMessageAsync({
-                                    message: LOGIN_MESSAGE,
-                                });
-                                wallet = await loginMutation.mutateAsync({
-                                    address,
-                                    signature,
-                                });
-                            } else {
-                                const signature = await signMessageAsync({
-                                    message: REGISTER_MESSAGE,
-                                });
+    const handler = async () => {
+        if (isConnected && address) {
+            const result = await new Promise((resolve) => {
+                setTimeout(async () => {
+                    try {
+                        const isRegistered =
+                            await isRegisteredMutation.mutateAsync(address);
+                        let wallet = null;
+                        if (isRegistered) {
+                            const signature = await signMessageAsync({
+                                message: LOGIN_MESSAGE,
+                            });
+                            wallet = await loginMutation.mutateAsync({
+                                address,
+                                signature,
+                            });
+                        } else {
+                            const signature = await signMessageAsync({
+                                message: REGISTER_MESSAGE,
+                            });
 
-                                wallet = await registerMutation.mutateAsync({
-                                    address,
-                                    signature,
-                                });
-                            }
-                            const accessToken = wallet.accessToken;
-                            localStorage.setItem('accessToken', accessToken);
-                            setWallet(jwtDecode<SpreadJWT>(accessToken));
-                            onConnect?.();
-                            resolve(true);
-                        } catch {
-                            resolve(false);
+                            wallet = await registerMutation.mutateAsync({
+                                address,
+                                signature,
+                            });
                         }
-                    }, 1000);
-                });
+                        const accessToken = wallet.accessToken;
+                        localStorage.setItem('accessToken', accessToken);
+                        setWallet(jwtDecode<SpreadJWT>(accessToken));
+                        onConnect?.();
+                        resolve(true);
+                    } catch {
+                        resolve(false);
+                    }
+                }, 1000);
+            });
 
-                if (result === false) {
-                    disconnect();
-                }
+            if (result === false) {
+                disconnect();
             }
-        };
+        }
+    };
 
-        handler();
-    }, [isConnected, address]);
+    useEffect(() => {
+        if (runOnMount) {
+            handler();
+        }
+    }, [isConnected, address, runOnMount]);
+
+    return handler;
 };
