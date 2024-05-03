@@ -74,19 +74,15 @@ const MarketDataTable = ({ marketData }: { marketData: MarketData }) => {
         <Table>
             <TableHeader>
                 <TableRow>
-                    <TableHead className="w-[100px]">Spot Price</TableHead>
+                    <TableHead>Spot Price</TableHead>
                     <TableHead>Futures Price </TableHead>
-                    <TableHead className="text-right">Spot Best Bid</TableHead>
-                    <TableHead className="text-right">
-                        Futures Best Bid
-                    </TableHead>
+                    <TableHead>Spot Best Bid</TableHead>
+                    <TableHead>Futures Best Bid</TableHead>
                 </TableRow>
             </TableHeader>
             <TableBody>
                 <TableRow>
-                    <TableCell className="font-medium">
-                        {marketData.spotPrice}$
-                    </TableCell>
+                    <TableCell>{marketData.spotPrice}$</TableCell>
                     <TableCell>{marketData.futuresPrice}$</TableCell>
                     <TableCell>{marketData.bestBidPrice}$</TableCell>
                     <TableCell>{marketData.futuresBestBidPrice}$</TableCell>
@@ -95,9 +91,7 @@ const MarketDataTable = ({ marketData }: { marketData: MarketData }) => {
             <TableFooter>
                 <TableRow>
                     <TableCell colSpan={3}>Spread</TableCell>
-                    <TableCell className="text-right">
-                        {marketData.spread}
-                    </TableCell>
+                    <TableCell>{marketData.spread}</TableCell>
                 </TableRow>
             </TableFooter>
         </Table>
