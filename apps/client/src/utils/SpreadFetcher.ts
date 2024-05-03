@@ -61,12 +61,12 @@ export class SpreadFetcher {
         const spotPricesResponseData = spotPriceResponse.data;
         const futuresPriceResponseData = futuresPriceResponse.data;
 
-        const spotPrice = spotPricesResponseData.price;
-        const futuresPrice = futuresPriceResponseData.price;
-        const bestAskPrice = bestAsk[0];
-        const bestBidPrice = bestBid[0];
-        const futuresBestAskPrice = futuresBestAsk[0];
-        const futuresBestBidPrice = futuresBestBid[0];
+        const spotPrice: number = spotPricesResponseData.price;
+        const futuresPrice: number = futuresPriceResponseData.price;
+        const bestAskPrice: number = bestAsk[0];
+        const bestBidPrice: number = bestBid[0];
+        const futuresBestAskPrice: number = futuresBestAsk[0];
+        const futuresBestBidPrice: number = futuresBestBid[0];
 
         const spread = Math.log(futuresBestBidPrice / bestBidPrice) * 100;
 

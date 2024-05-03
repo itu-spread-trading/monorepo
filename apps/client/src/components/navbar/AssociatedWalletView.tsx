@@ -41,7 +41,8 @@ export const AssociatedWalletView = ({ wallet }: Props) => {
                         {balance != null ? (
                             <div>
                                 Balance:{' '}
-                                {formatUnits(balance.value, balance.decimals)}
+                                {formatUnits(balance.value, balance.decimals)}{' '}
+                                {balance.symbol}
                             </div>
                         ) : null}
                     </DialogDescription>
