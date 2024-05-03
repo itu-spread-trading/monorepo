@@ -1,6 +1,7 @@
 import { Graph } from '@/app/dashboard/graph';
-import { Button } from '@/components';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useSpreadGraphQuery } from '@/queries';
+import { useTokenPair } from '@/store';
 import { getSharedGraphOptions } from '@/utils';
 import { SpreadGraphQueryParams } from '@ituspreadtrading/sdk';
 import { Dispatch, ReactNode, SetStateAction, useMemo, useState } from 'react';
@@ -9,9 +10,10 @@ import Chart from 'react-apexcharts';
 export const SpreadCandleStickGraph = () => {
     const [interval, setInterval] =
         useState<SpreadGraphQueryParams['interval']>('4h');
+    const tokenPair = useTokenPair();
 
     const { data } = useSpreadGraphQuery({
-        symbol: 'BNBUSDT',
+        symbol: tokenPair,
         interval,
     });
 
@@ -67,16 +69,18 @@ const RightEl = ({
     const options = ['1h', '4h', '1d'] as const;
 
     return (
-        <div className="flex space-x-2 bg-gray-700 p-1 rounded-lg">
-            {options.map((item) => (
-                <Button
-                    variant={item === interval ? 'default' : 'ghost'}
-                    key={item}
-                    onClick={() => setInterval(item)}
-                >
-                    {item}
-                </Button>
-            ))}
-        </div>
+        <Tabs defaultValue={interval} className="flex ml-auto">
+            <TabsList>
+                {options.map((option) => (
+                    <TabsTrigger
+                        value={option}
+                        key={option}
+                        onClick={() => setInterval(option)}
+                    >
+                        {option}
+                    </TabsTrigger>
+                ))}
+            </TabsList>
+        </Tabs>
     );
 };

@@ -1,6 +1,7 @@
 import { Graph } from '@/app/dashboard/graph';
-import { Button } from '@/components';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useSpreadMeanGraphQuery } from '@/queries';
+import { useTokenPair } from '@/store';
 import { getSharedGraphOptions } from '@/utils/';
 import { SpreadGraphQueryParams } from '@ituspreadtrading/sdk';
 import { Dispatch, ReactNode, SetStateAction, useMemo, useState } from 'react';
@@ -8,8 +9,9 @@ import Chart from 'react-apexcharts';
 
 export const SpreadMeanGraph = () => {
     const [range, setRange] = useState<SpreadGraphQueryParams['range']>('1w');
+    const tokenPair = useTokenPair();
     const { data } = useSpreadMeanGraphQuery({
-        symbol: 'BNBUSDT',
+        symbol: tokenPair,
         range,
     });
 
@@ -70,16 +72,18 @@ const RightEl = ({
     const options = ['1d', '1w', '1m'] as const;
 
     return (
-        <div className="flex space-x-2 bg-gray-700 p-1 rounded-lg">
-            {options.map((item) => (
-                <Button
-                    variant={item === range ? 'default' : 'ghost'}
-                    key={item}
-                    onClick={() => setRange(item)}
-                >
-                    {item}
-                </Button>
-            ))}
-        </div>
+        <Tabs defaultValue={range} className="flex ml-auto">
+            <TabsList>
+                {options.map((option) => (
+                    <TabsTrigger
+                        value={option}
+                        key={option}
+                        onClick={() => setRange(option)}
+                    >
+                        {option}
+                    </TabsTrigger>
+                ))}
+            </TabsList>
+        </Tabs>
     );
 };

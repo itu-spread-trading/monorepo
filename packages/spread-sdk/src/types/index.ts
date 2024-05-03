@@ -130,7 +130,27 @@ export type SpreadMeanResponse = {
     value: number;
 };
 
-export type SpreadSDKSupportedSymbols = 'BNBUSDT';
+export type SpreadSDKSupportedSymbols =
+    | 'BNBUSDT'
+    | 'ETHUSDT'
+    | 'BTCUSDT'
+    | 'XRPUSDT'
+    | 'SOLUSDT'
+    | 'ADAUSDT'
+    | 'DOGEUSDT'
+    | 'TRXUSDT'
+    | 'MATICUSDT'
+    | 'DOTUSDT'
+    | 'LINKUSDT'
+    | 'LTCUSDT'
+    | 'USDCUSDT'
+    | 'AVAXUSDT'
+    | 'XMRUSDT'
+    | 'ATOMUSDT'
+    | 'UNIUSDT'
+    | 'FILUSDT'
+    | 'APTUSDT'
+    | 'MKRUSDT';
 
 export * from './ISpreadSDKModule';
 export * from './ISpreadSDKOrderbookModule';

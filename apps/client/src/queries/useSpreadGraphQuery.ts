@@ -7,7 +7,7 @@ type Props = SpreadGraphQueryParams;
 
 export const useSpreadGraphQuery = ({ symbol, interval }: Props) => {
     return useQuery({
-        queryKey: [queries.GRAPH + interval],
+        queryKey: [queries.GRAPH + interval + symbol],
         queryFn: async () => {
             const response = spreadSDK.getSpreadGraph({
                 symbol,
@@ -24,7 +24,7 @@ export const useSpreadMeanGraphQuery = ({
     range = '1m',
 }: Props) => {
     return useQuery({
-        queryKey: [queries.MEAN_GRAPH + interval + range],
+        queryKey: [queries.MEAN_GRAPH + interval + range + symbol],
         queryFn: async () => {
             const response = spreadSDK.getSpreadMeanGraph({
                 symbol,

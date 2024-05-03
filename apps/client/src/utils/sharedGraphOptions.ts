@@ -27,7 +27,7 @@ export const getSharedGraphOptions = (): ApexOptions => {
             },
         },
         xaxis: {
-            type: 'category',
+            type: 'datetime',
             labels: {
                 formatter: function (value) {
                     return getFormattedDateTime(value);

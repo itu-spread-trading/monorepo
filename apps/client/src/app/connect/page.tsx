@@ -2,22 +2,19 @@
 
 import WallpaperImage from '@/assets/login.png';
 import Logo from '@/assets/logo.png';
+import { useHandleConnection } from '@/hooks/useHandleConnection';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { ReactNode, useEffect } from 'react';
-import { useAccount } from 'wagmi';
+import { ReactNode } from 'react';
 
 export default function ConnectPage(): ReactNode {
     const router = useRouter();
-    const { isConnected } = useAccount();
-
-    useEffect(() => {
-        // Navigate to dashboard if already connected
-        if (isConnected) {
+    useHandleConnection({
+        onConnect: () => {
             router.push('/dashboard');
-        }
-    }, [isConnected]);
+        },
+    });
 
     return (
         <div
@@ -35,13 +32,12 @@ export default function ConnectPage(): ReactNode {
                     src={WallpaperImage}
                 />
             </div>
-            <div className="flex flex-col m-auto">
+            <div className="flex flex-col items-center m-auto">
                 <Image
                     className="w-[80%] m-auto mb-4 h-full"
                     alt="Spread Logo"
                     src={Logo}
                 />
-
                 <ConnectButton />
             </div>
         </div>
