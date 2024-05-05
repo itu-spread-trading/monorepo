@@ -3,4 +3,5 @@ export const queries = {
     MEAN_GRAPH: 'spread-mean-graph',
     MARKET: 'market-data',
     STANDARD_DEVIATION: 'spread-standard-deviation',
+    TOKEN_PAIR: 'token-pair',
 };

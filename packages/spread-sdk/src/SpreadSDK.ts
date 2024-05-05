@@ -1,9 +1,11 @@
 import { SpreadSDKError } from './SpreadSDKError';
 import { SpreadSDKOrderbookModule, SpreadSDKSwapModule } from './modules';
+import { SpreadSDKTokenModule } from './modules/SpreadSDKTokenModule';
 import {
     ISpreadSDK,
     ISpreadSDKOrderbookModule,
     ISpreadSDKSwapModule,
+    ISpreadSDKTokenModule,
     SpreadCandleResponse,
     SpreadGraphQueryParams,
     SpreadMeanResponse,
@@ -32,6 +34,7 @@ export class SpreadSDK implements ISpreadSDK {
      */
     orderbook: ISpreadSDKOrderbookModule;
     swap: ISpreadSDKSwapModule;
+    token: ISpreadSDKTokenModule;
 
     constructor(props: SpreadSDKInitProps) {
         this.init(props);
@@ -45,6 +48,7 @@ export class SpreadSDK implements ISpreadSDK {
         this.props = props;
         this.orderbook = new SpreadSDKOrderbookModule(props);
         this.swap = new SpreadSDKSwapModule(props);
+        this.token = new SpreadSDKTokenModule(props);
         this.initialized = true;
         this.axiosInstance = Axios.create({
             baseURL: getApiUrlOrOverride(props.apiUrlOverride),

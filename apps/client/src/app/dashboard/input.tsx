@@ -13,7 +13,7 @@ import {
     TabsList,
 } from '@/components';
 import { useMarketDataContext } from '@/context';
-import { useSpreadStandardDeviation } from '@/queries';
+import { useSpreadStandardDeviation, useTokenPairQuery } from '@/queries';
 import { useTokenPair } from '@/store';
 import {
     getRecommendedSpreadBuyValue,
@@ -27,6 +27,12 @@ export const SellAndBuyInput = (): ReactNode => {
     const { data: sd } = useSpreadStandardDeviation({
         symbol: tokenPair,
     });
+
+    const oneInchPair = useTokenPairQuery({
+        symbol: tokenPair,
+    });
+
+    console.log(oneInchPair.data);
 
     const [sellSpread, setSellSpread] = useState(0);
     const [buySpread, setBuySpread] = useState(0);

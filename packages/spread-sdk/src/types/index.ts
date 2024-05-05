@@ -186,6 +186,12 @@ export type SpreadSDKSupportedSymbols =
     | 'APTUSDT'
     | 'MKRUSDT';
 
+export type SpreadSDKTokenPair = {
+    USDT: string;
+    TOKEN: string;
+};
+
 export * from './ISpreadSDKModule';
 export * from './ISpreadSDKOrderbookModule';
 export * from './ISpreadSDKSwapModule';
+export * from './ISpreadSDKTokenModule';
