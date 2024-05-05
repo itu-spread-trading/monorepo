@@ -15,4 +15,20 @@ export class SpreadSDKError extends Error {
     public static CouldNotGetStandardDeviation(): SpreadSDKError {
         return new SpreadSDKError('Could not get spread standard deviation');
     }
+
+    public static CouldNotGetOrders(): SpreadSDKError {
+        return new SpreadSDKError('Could not get orders');
+    }
+
+    public static CouldNotGetOrder(): SpreadSDKError {
+        return new SpreadSDKError('Could not get order');
+    }
+
+    public static CouldNotUpdateOrder(): SpreadSDKError {
+        return new SpreadSDKError('Could not update order');
+    }
+
+    public static CouldNotCreateOrder(): SpreadSDKError {
+        return new SpreadSDKError('Could not create order');
+    }
 }

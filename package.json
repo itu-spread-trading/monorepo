@@ -30,6 +30,7 @@
     "@radix-ui/react-tooltip": "^1.0.7",
     "axios": "^1.6.8",
     "jwt-decode": "^4.0.0",
-    "recoil": "^0.7.7"
+    "recoil": "^0.7.7",
+    "web3": "^4.8.0"
   }
 }

@@ -137,6 +137,33 @@ export type SpreadStandardDeviationResponse = {
     value: number;
 };
 
+enum SprreadSDKOrderStatus {
+    PENDING = 'PENDING',
+    FILLED = 'FILLED',
+    CANCELLED = 'CANCELLED',
+    OPEN = 'OPEN',
+}
+
+enum SprreadSDKOrderType {
+    BUY = 'BUY',
+    SELL = 'SELL',
+}
+
+export type SpreadSDKOrder = {
+    id: number;
+    symbol: SpreadSDKSupportedSymbols;
+    spread: number;
+    size: number;
+    status: SprreadSDKOrderStatus;
+    date: string;
+    type: SprreadSDKOrderType;
+    associtedLimitOrderHash: string | null;
+};
+
+export class SpreadSDKUpdateOrderDto {
+    status: SprreadSDKOrderStatus;
+}
+
 export type SpreadSDKSupportedSymbols =
     | 'BNBUSDT'
     | 'ETHUSDT'

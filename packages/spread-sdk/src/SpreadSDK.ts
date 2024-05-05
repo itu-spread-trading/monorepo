@@ -10,6 +10,8 @@ import {
     SpreadQueryResponse,
     SpreadSDKInitProps,
     SpreadSDKModuleInitProps,
+    SpreadSDKOrder,
+    SpreadSDKUpdateOrderDto,
     SpreadStandardDeviationResponse,
 } from './types';
 import { getApiUrlOrOverride } from './utils';
@@ -100,6 +102,47 @@ export class SpreadSDK implements ISpreadSDK {
             return response.data;
         } catch {
             throw SpreadSDKError.CouldNotGetSpread();
+        }
+    }
+
+    public async genOrders(): Promise<Array<SpreadSDKOrder>> {
+        try {
+            const response = await this.axiosInstance.get('/order');
+            return response.data;
+        } catch {
+            throw SpreadSDKError.CouldNotGetOrders();
+        }
+    }
+
+    public async genOrdersById(id: number): Promise<SpreadSDKOrder | null> {
+        try {
+            const response = await this.axiosInstance.get(`/order/${id}`);
+            return response.data;
+        } catch {
+            throw SpreadSDKError.CouldNotGetOrder();
+        }
+    }
+
+    public async genUpdateOrderById(
+        id: number,
+        dto: SpreadSDKUpdateOrderDto,
+    ): Promise<SpreadSDKOrder | null> {
+        try {
+            const response = await this.axiosInstance.put(`/order/${id}`, dto);
+            return response.data;
+        } catch {
+            throw SpreadSDKError.CouldNotUpdateOrder();
+        }
+    }
+
+    public async genCreateOrder(
+        dto: Partial<SpreadSDKOrder>,
+    ): Promise<SpreadSDKOrder> {
+        try {
+            const response = await this.axiosInstance.post('/order', dto);
+            return response.data;
+        } catch {
+            throw SpreadSDKError.CouldNotCreateOrder();
         }
     }
 }

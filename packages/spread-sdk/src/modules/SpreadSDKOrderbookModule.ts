@@ -78,6 +78,8 @@ export class SpreadSDKOrderbookModule implements ISpreadSDKOrderbookModule {
     public async genCreateLimitOrder(
         props: SpreadSDKCreateLimitOrderProps,
     ): Promise<SpreadSDKLimitOrder> {
+        const chainId = this.props.chainId; // suggested, or use your own number
+
         throw new Error('Method not implemented.');
     }
 }
