@@ -3,9 +3,10 @@
 import { DashboardChart } from '@/app/dashboard/chart';
 import { SellAndBuyInput } from '@/app/dashboard/input';
 import { MarketDataTable } from '@/app/dashboard/marketdata';
+import { DashboardOrderHistory } from '@/app/dashboard/orderhistory';
 import { Navbar, TokenSelect, Card, CardHeader } from '@/components';
 import { MarketDataProvider } from '@/context';
-import { useMarketDataQuery } from '@/queries';
+import { useMarketDataQuery, useTokenPairQuery } from '@/queries';
 import { useTokenPair, useWallet } from '@/store';
 import { getDefaultConfig, spreadSDK } from '@/utils';
 import { ReactNode, useEffect } from 'react';
@@ -15,6 +16,10 @@ export default function DashboardPage(): ReactNode {
     const { isConnected } = useAccount();
     const wallet = useWallet();
     const tokenPair = useTokenPair();
+
+    useTokenPairQuery({
+        symbol: tokenPair,
+    });
 
     const { data: marketData } = useMarketDataQuery({
         symbol: tokenPair,
@@ -45,12 +50,13 @@ export default function DashboardPage(): ReactNode {
                         <Card className="mt-2">
                             <MarketDataTable marketData={marketData} />
                         </Card>
-                    </div>
-                    <div className="col-span-6 flex flex-col min-h-[90vh]  w-[100%] h-[100%]">
-                        <SellAndBuyInput />
                         <div className="mt-auto">
                             <DashboardChart />
                         </div>
+                    </div>
+                    <div className="col-span-6 flex flex-col min-h-[90vh]  w-[100%] h-[100%]">
+                        <SellAndBuyInput />
+                        <DashboardOrderHistory />
                     </div>
                 </div>
             </MarketDataProvider>

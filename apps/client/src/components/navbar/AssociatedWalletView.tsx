@@ -18,7 +18,7 @@ type Props = {
 
 export const AssociatedWalletView = ({ wallet }: Props) => {
     const { data: balance } = useBalance({
-        address: wallet.address as `0x${string}`,
+        address: wallet.associatedAddress as `0x${string}`,
     });
 
     return (

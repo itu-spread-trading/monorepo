@@ -15,11 +15,13 @@ import {
 type Props = {
     onConnect?: () => void;
     runOnMount?: boolean;
+    delay?: number;
 };
 
 export const useHandleConnection = ({
     onConnect,
-    runOnMount = true,
+    runOnMount = false,
+    delay = 1000,
 }: Props = {}) => {
     const { isConnected, address } = useAccount();
     const { disconnect } = useDisconnect();
@@ -34,6 +36,25 @@ export const useHandleConnection = ({
             const result = await new Promise((resolve) => {
                 setTimeout(async () => {
                     try {
+                        console.log('Connecting wallet...');
+                        const existingAccessToken =
+                            localStorage.getItem('accessToken');
+
+                        if (existingAccessToken != null) {
+                            console.log('Access Token exists...');
+                            const decoded =
+                                jwtDecode<SpreadJWT>(existingAccessToken);
+                            if (
+                                decoded.address.toLowerCase() ===
+                                address.toLowerCase()
+                            ) {
+                                setWallet(decoded);
+                                onConnect?.();
+                                resolve(true);
+                                return;
+                            }
+                        }
+
                         const isRegistered =
                             await isRegisteredMutation.mutateAsync(address);
                         let wallet = null;
@@ -57,13 +78,15 @@ export const useHandleConnection = ({
                         }
                         const accessToken = wallet.accessToken;
                         localStorage.setItem('accessToken', accessToken);
-                        setWallet(jwtDecode<SpreadJWT>(accessToken));
+                        const _wallet = jwtDecode<SpreadJWT>(accessToken);
+                        console.log('Setting wallet', _wallet);
+                        setWallet(_wallet);
                         onConnect?.();
                         resolve(true);
                     } catch {
                         resolve(false);
                     }
-                }, 1000);
+                }, delay);
             });
 
             if (result === false) {

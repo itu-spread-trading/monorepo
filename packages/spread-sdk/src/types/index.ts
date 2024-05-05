@@ -137,14 +137,14 @@ export type SpreadStandardDeviationResponse = {
     value: number;
 };
 
-enum SprreadSDKOrderStatus {
+export enum SpreadSDKOrderStatus {
     PENDING = 'PENDING',
     FILLED = 'FILLED',
     CANCELLED = 'CANCELLED',
     OPEN = 'OPEN',
 }
 
-enum SprreadSDKOrderType {
+export enum SpreadSDKOrderType {
     BUY = 'BUY',
     SELL = 'SELL',
 }
@@ -154,14 +154,14 @@ export type SpreadSDKOrder = {
     symbol: SpreadSDKSupportedSymbols;
     spread: number;
     size: number;
-    status: SprreadSDKOrderStatus;
+    status: SpreadSDKOrderStatus;
     date: string;
-    type: SprreadSDKOrderType;
+    type: SpreadSDKOrderType;
     associtedLimitOrderHash: string | null;
 };
 
 export class SpreadSDKUpdateOrderDto {
-    status: SprreadSDKOrderStatus;
+    status: SpreadSDKOrderType;
 }
 
 export type SpreadSDKSupportedSymbols =

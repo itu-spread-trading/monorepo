@@ -22,6 +22,7 @@ export default function ConnectPage(): ReactNode {
         onConnect: () => {
             router.push('/dashboard');
         },
+        runOnMount: true,
     });
 
     return (

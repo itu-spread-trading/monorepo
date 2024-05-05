@@ -1,3 +1,4 @@
+import { Badge } from '@/components/ui/badge';
 import {
     Select,
     SelectContent,
@@ -6,9 +7,14 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-import { useSetTokenPair, useTokenPair } from '@/store';
+import { useTokenPairQuery } from '@/queries';
+import { useOneInchTokenPair, useSetTokenPair, useTokenPair } from '@/store';
 import { symbolToImage } from '@/utils';
-import { SpreadSDKSupportedSymbols } from '@ituspreadtrading/sdk';
+import {
+    SpreadSDKSupportedSymbols,
+    formatAddress,
+    formatSpreadSDKSymbolTo1inchToken,
+} from '@ituspreadtrading/sdk';
 import { ReactNode } from 'react';
 
 const tokenPairs = [
@@ -42,16 +48,16 @@ const formatUSDTTokenPairName = (name: SpreadSDKSupportedSymbols) => {
 export const TokenSelect = (): ReactNode => {
     const setTokenPair = useSetTokenPair();
     const tokenPair = useTokenPair();
+    const oneInchTokenPair = useOneInchTokenPair();
 
     return (
-        <>
+        <div className="flex space-x-4 items-center">
             <Select
                 onValueChange={(e: SpreadSDKSupportedSymbols) => {
                     setTokenPair(e);
                 }}
                 defaultValue={tokenPair}
             >
-                <h6>Token pair</h6>
                 <SelectTrigger className="w-[180px]">
                     <SelectValue placeholder="Select a token pair" />
                 </SelectTrigger>
@@ -71,6 +77,13 @@ export const TokenSelect = (): ReactNode => {
                     </SelectGroup>
                 </SelectContent>
             </Select>
-        </>
+            <div className="flex flex-col space-y-2">
+                <Badge>
+                    {formatSpreadSDKSymbolTo1inchToken(tokenPair)}:{' '}
+                    {oneInchTokenPair.TOKEN}
+                </Badge>
+                <Badge>USDT: {oneInchTokenPair.USDT}</Badge>
+            </div>
+        </div>
     );
 };

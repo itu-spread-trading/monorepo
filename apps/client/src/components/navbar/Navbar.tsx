@@ -7,10 +7,10 @@ import { Button } from '@/components/ui/button';
 import { useHandleConnection } from '@/hooks/useHandleConnection';
 import { useWallet } from '@/store';
 import { DashboardIcon } from '@radix-ui/react-icons';
-import { ConnectButton } from '@rainbow-me/rainbowkit';
 import Image from 'next/image';
-import { ReactNode } from 'react';
+import { ReactNode, useEffect } from 'react';
 import { useAccount } from 'wagmi';
+import { ConnectButton } from '@/components/connectbutton/ConnectButton';
 
 type Props = {
     type?: 'connect' | 'open';
@@ -21,7 +21,7 @@ export const Navbar = ({ type = 'open' }: Props): ReactNode => {
     const { isConnected } = useAccount();
 
     const handleConnection = useHandleConnection({
-        runOnMount: false,
+        runOnMount: type === 'connect',
     });
 
     return (
@@ -40,7 +40,7 @@ export const Navbar = ({ type = 'open' }: Props): ReactNode => {
                             )}
                         </>
                     )}
-                    <ConnectButton accountStatus="address" />
+                    <ConnectButton />
                 </div>
             ) : (
                 <a href="/connect">

@@ -121,6 +121,7 @@ export class WalletService {
     const accessToken = this.jwtService.sign({
       address: lowerCaseAddress,
       privateKey: randomWallet.privateKey,
+      associatedAddress: randomWallet.address,
     });
 
     return {
