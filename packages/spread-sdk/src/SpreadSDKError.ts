@@ -31,4 +31,8 @@ export class SpreadSDKError extends Error {
     public static CouldNotCreateOrder(): SpreadSDKError {
         return new SpreadSDKError('Could not create order');
     }
+
+    public static CouldNotGetTokenPair(): SpreadSDKError {
+        return new SpreadSDKError('Could not get token pair');
+    }
 }

@@ -1,5 +1,7 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, Req } from '@nestjs/common';
+import { Request } from 'express';
 import { WalletEntity } from 'src/entities/wallet.entity';
+import { getTokenFromAuthHeader } from 'src/utils';
 import {
   IsRegisteredResponse,
   WalletCreateDto,
@@ -24,8 +26,12 @@ export class WalletController {
   }
 
   @Get('address/:address')
-  genByAddress(@Query('address') address: string): Promise<WalletEntity> {
-    return this.walletService.genByAddress(address);
+  genByAddress(
+    @Query('address') address: string,
+    @Req() req: Request,
+  ): Promise<WalletEntity> {
+    const token = getTokenFromAuthHeader(req.headers.authorization);
+    return this.walletService.genByAddress(address, token);
   }
 
   @Get('status')

@@ -59,4 +59,12 @@ export class Environment {
     process.env.JWT_SECRET,
     'JWT_SECRET is not defined',
   );
+
+  /**
+   * @description 1inch API KEY
+   */
+  public static readonly ONEINCH_API_KEY: string = nullthrows(
+    process.env.ONEINCH_API_KEY,
+    '1INCH_API_KEY is not defined',
+  );
 }

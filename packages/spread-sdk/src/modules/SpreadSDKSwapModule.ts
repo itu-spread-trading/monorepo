@@ -35,6 +35,9 @@ export class SpreadSDKSwapModule implements ISpreadSDKSwapModule {
         });
         this.axios1Inch = Axios.create({
             baseURL: this.baseUrl,
+            headers: {
+                Authorization: `Bearer ${props.apiKey}`,
+            },
         });
     }
 

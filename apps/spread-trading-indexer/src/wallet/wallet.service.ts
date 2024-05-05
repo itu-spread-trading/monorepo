@@ -49,8 +49,11 @@ export class WalletService {
     return wallet;
   }
 
-  async genByAddress(address: string): Promise<WalletEntity> {
-    verifyJwt(this.jwtService, address);
+  async genByAddress(
+    address: string,
+    accessToken: string,
+  ): Promise<WalletEntity> {
+    verifyJwt(this.jwtService, accessToken);
 
     const wallet = this.walletRepository.findOne({
       where: {

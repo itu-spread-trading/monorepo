@@ -1,6 +1,9 @@
 import { SpreadSDKError } from './SpreadSDKError';
-import { SpreadSDKOrderbookModule, SpreadSDKSwapModule } from './modules';
-import { SpreadSDKTokenModule } from './modules/SpreadSDKTokenModule';
+import {
+    SpreadSDKOrderbookModule,
+    SpreadSDKSwapModule,
+    SpreadSDKTokenModule,
+} from './modules';
 import {
     ISpreadSDK,
     ISpreadSDKOrderbookModule,
@@ -13,6 +16,8 @@ import {
     SpreadSDKInitProps,
     SpreadSDKModuleInitProps,
     SpreadSDKOrder,
+    SpreadSDKSupportedSymbols,
+    SpreadSDKTokenPair,
     SpreadSDKUpdateOrderDto,
     SpreadStandardDeviationResponse,
 } from './types';
@@ -110,6 +115,10 @@ export class SpreadSDK implements ISpreadSDK {
     }
 
     public async genOrders(): Promise<Array<SpreadSDKOrder>> {
+        if (!this.initialized) {
+            throw SpreadSDKError.NotInitialized();
+        }
+
         try {
             const response = await this.axiosInstance.get('/order');
             return response.data;
@@ -119,6 +128,10 @@ export class SpreadSDK implements ISpreadSDK {
     }
 
     public async genOrdersById(id: number): Promise<SpreadSDKOrder | null> {
+        if (!this.initialized) {
+            throw SpreadSDKError.NotInitialized();
+        }
+
         try {
             const response = await this.axiosInstance.get(`/order/${id}`);
             return response.data;
@@ -131,6 +144,10 @@ export class SpreadSDK implements ISpreadSDK {
         id: number,
         dto: SpreadSDKUpdateOrderDto,
     ): Promise<SpreadSDKOrder | null> {
+        if (!this.initialized) {
+            throw SpreadSDKError.NotInitialized();
+        }
+
         try {
             const response = await this.axiosInstance.put(`/order/${id}`, dto);
             return response.data;
@@ -142,11 +159,31 @@ export class SpreadSDK implements ISpreadSDK {
     public async genCreateOrder(
         dto: Partial<SpreadSDKOrder>,
     ): Promise<SpreadSDKOrder> {
+        if (!this.initialized) {
+            throw SpreadSDKError.NotInitialized();
+        }
+
         try {
             const response = await this.axiosInstance.post('/order', dto);
             return response.data;
         } catch {
             throw SpreadSDKError.CouldNotCreateOrder();
+        }
+    }
+
+    public async genTokenPair(
+        symbol: SpreadSDKSupportedSymbols,
+    ): Promise<SpreadSDKTokenPair> {
+        try {
+            const tokenPair = await this.axiosInstance.get('/sdk/tokenpair', {
+                params: {
+                    symbol: symbol,
+                    chainId: this.props.chainId,
+                },
+            });
+            return tokenPair.data;
+        } catch {
+            throw SpreadSDKError.CouldNotGetTokenPair();
         }
     }
 }
