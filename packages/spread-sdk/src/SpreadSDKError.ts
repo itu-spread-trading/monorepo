@@ -11,4 +11,8 @@ export class SpreadSDKError extends Error {
     public static CouldNotGetSpread(): SpreadSDKError {
         return new SpreadSDKError('Could not get spread data');
     }
+
+    public static CouldNotGetStandardDeviation(): SpreadSDKError {
+        return new SpreadSDKError('Could not get spread standard deviation');
+    }
 }

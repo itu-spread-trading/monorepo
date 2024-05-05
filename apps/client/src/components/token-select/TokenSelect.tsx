@@ -7,6 +7,7 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 import { useSetTokenPair, useTokenPair } from '@/store';
+import { symbolToImage } from '@/utils';
 import { SpreadSDKSupportedSymbols } from '@ituspreadtrading/sdk';
 import { ReactNode } from 'react';
 
@@ -58,7 +59,13 @@ export const TokenSelect = (): ReactNode => {
                     <SelectGroup>
                         {tokenPairs.map((tokenPair) => (
                             <SelectItem key={tokenPair} value={tokenPair}>
-                                {formatUSDTTokenPairName(tokenPair)}
+                                <div className="flex items-center">
+                                    <img
+                                        className="w-6 h-6 mr-1 rounded-full bg-white"
+                                        src={symbolToImage(tokenPair).src}
+                                    />
+                                    {formatUSDTTokenPairName(tokenPair)}
+                                </div>
                             </SelectItem>
                         ))}
                     </SelectGroup>

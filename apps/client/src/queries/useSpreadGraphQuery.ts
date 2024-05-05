@@ -35,3 +35,20 @@ export const useSpreadMeanGraphQuery = ({
         },
     });
 };
+
+export const useSpreadStandardDeviation = ({ symbol, range = '1m' }: Props) => {
+    const interval = '5m';
+    const { data, ...rest } = useQuery({
+        queryKey: [queries.STANDARD_DEVIATION + symbol + range],
+        queryFn: async () => {
+            const response = await spreadSDK.getSpreadStandardDeviation({
+                symbol,
+                interval,
+                range,
+            });
+            return response.value;
+        },
+    });
+
+    return { data: data ?? 0, ...rest };
+};

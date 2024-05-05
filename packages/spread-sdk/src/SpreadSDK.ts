@@ -10,6 +10,7 @@ import {
     SpreadQueryResponse,
     SpreadSDKInitProps,
     SpreadSDKModuleInitProps,
+    SpreadStandardDeviationResponse,
 } from './types';
 import { getApiUrlOrOverride } from './utils';
 import Axios, { AxiosInstance } from 'axios';
@@ -78,6 +79,18 @@ export class SpreadSDK implements ISpreadSDK {
             return response.data;
         } catch {
             throw SpreadSDKError.CouldNotGetSpread();
+        }
+    }
+    public async getSpreadStandardDeviation(
+        query: SpreadGraphQueryParams,
+    ): Promise<SpreadStandardDeviationResponse> {
+        try {
+            const response = await this.axiosInstance.get('/spread/sd', {
+                params: query,
+            });
+            return response.data;
+        } catch {
+            throw SpreadSDKError.CouldNotGetStandardDeviation();
         }
     }
 

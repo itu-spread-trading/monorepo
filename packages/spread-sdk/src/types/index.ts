@@ -130,6 +130,13 @@ export type SpreadMeanResponse = {
     value: number;
 };
 
+export type SpreadStandardDeviationResponse = {
+    /**
+     * Standard deviation of spread between futures and spot
+     */
+    value: number;
+};
+
 export type SpreadSDKSupportedSymbols =
     | 'BNBUSDT'
     | 'ETHUSDT'

@@ -2,6 +2,14 @@
 
 import WallpaperImage from '@/assets/login.png';
 import Logo from '@/assets/logo.png';
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+} from '@/components';
 import { useHandleConnection } from '@/hooks/useHandleConnection';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import Image from 'next/image';
@@ -33,12 +41,24 @@ export default function ConnectPage(): ReactNode {
                 />
             </div>
             <div className="flex flex-col items-center m-auto">
-                <Image
-                    className="w-[80%] m-auto mb-4 h-full"
-                    alt="Spread Logo"
-                    src={Logo}
-                />
-                <ConnectButton />
+                <Card className="w-[350px] items-center">
+                    <CardHeader>
+                        <CardTitle>Connect</CardTitle>
+                        <CardDescription>
+                            Connect your crypto wallet to proceed
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <Image
+                            className="w-[80%] m-auto mb-4 h-full"
+                            alt="Spread Logo"
+                            src={Logo}
+                        />
+                    </CardContent>
+                    <CardFooter className="flex justify-center w-full">
+                        <ConnectButton />
+                    </CardFooter>
+                </Card>
             </div>
         </div>
     );

@@ -6,7 +6,7 @@ import { useQuery } from '@tanstack/react-query';
 
 const spreadFetcher = new SpreadFetcher();
 
-const defaultMarketData = {
+export const defaultMarketData = {
     spotPrice: 0,
     futuresPrice: 0,
     bestAskPrice: 0,
