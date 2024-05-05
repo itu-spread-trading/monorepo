@@ -11,7 +11,7 @@ export const useTokenPairQuery = ({ symbol }: Props) => {
     return useQuery({
         queryKey: [queries.TOKEN_PAIR + symbol],
         queryFn: async () => {
-            const tokenPair = await spreadSDK.token.genTokenPair(symbol);
+            const tokenPair = await spreadSDK.genTokenPair(symbol);
             return tokenPair;
         },
     });

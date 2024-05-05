@@ -1,9 +1,8 @@
 'use client';
 
-import { SpreadCandleStickGraph } from '@/app/dashboard/candleGraph';
+import { DashboardChart } from '@/app/dashboard/chart';
 import { SellAndBuyInput } from '@/app/dashboard/input';
 import { MarketDataTable } from '@/app/dashboard/marketdata';
-import { SpreadMeanGraph } from '@/app/dashboard/meanGraph';
 import { Navbar, TokenSelect, Card, CardHeader } from '@/components';
 import { MarketDataProvider } from '@/context';
 import { useMarketDataQuery } from '@/queries';
@@ -46,14 +45,11 @@ export default function DashboardPage(): ReactNode {
                         <Card className="mt-2">
                             <MarketDataTable marketData={marketData} />
                         </Card>
-                        <div className="mt-auto">
-                            <SpreadCandleStickGraph />
-                        </div>
                     </div>
                     <div className="col-span-6 flex flex-col min-h-[90vh]  w-[100%] h-[100%]">
                         <SellAndBuyInput />
                         <div className="mt-auto">
-                            <SpreadMeanGraph />
+                            <DashboardChart />
                         </div>
                     </div>
                 </div>
