@@ -1,3 +1,5 @@
+import { LimitOrderWithExtension } from '@1inch/limit-order-protocol-utils';
+
 export type SpreadSDK1InchData<T> = T & {
     sdkType: '1inch';
 };
@@ -13,26 +15,7 @@ export type SpreadSDK1InchToken = SpreadSDK1InchData<{
 
 export type SpreadSDK1InchLimitOrder = SpreadSDK1InchData<{
     signature: string;
-    orderHash: string;
-    createDateTime: string;
-    remainingMakerAmount: string;
-    makerBalance: string;
-    makerAllowance: string;
-    data: {
-        makerAsset: string;
-        takerAsset: string;
-        salt: string;
-        receiver: string;
-        makingAmount: string;
-        takingAmount: string;
-        maker: string;
-        extension: string;
-        makerTraits: string;
-    };
-    makerRate: string;
-    takerRate: string;
-    isMakerContract: boolean;
-    orderInvalidReason: Array<string> | null;
+    data: LimitOrderWithExtension;
 }>;
 
 export type SpreadSDK1InchSwapParams = SpreadSDK1InchData<{

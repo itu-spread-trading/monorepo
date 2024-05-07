@@ -1,12 +1,6 @@
-import {
-    ChainId,
-    EIP712TypedData,
-    LimitOrderBuilder,
-    Web3ProviderConnector,
-} from '@1inch/limit-order-protocol-utils';
+import { ChainId, LimitOrderBuilder } from '@1inch/limit-order-protocol-utils';
 import Axios, { AxiosInstance } from 'axios';
 import { ethers } from 'ethers';
-import Web3 from 'web3';
 
 import {
     ISpreadSDKOrderbookModule,
@@ -110,12 +104,13 @@ export class SpreadSDKOrderbookModule implements ISpreadSDKOrderbookModule {
             version: '4',
             domainName: '1inch',
         });
+
         const limitOrder = limitOrderBuilder.buildLimitOrder({
-            makerAsset: ethers.constants.AddressZero,
-            takerAsset: ethers.constants.AddressZero,
-            maker: ethers.constants.AddressZero,
-            makingAmount: '100',
-            takingAmount: '200',
+            makerAsset: props.makerAsset,
+            takerAsset: props.takerAsset,
+            maker: props.maker,
+            makingAmount: props.makingAmount,
+            takingAmount: props.takingAmount,
         });
 
         const limitOrderTypedData = limitOrderBuilder.buildLimitOrderTypedData(
@@ -137,6 +132,10 @@ export class SpreadSDKOrderbookModule implements ISpreadSDKOrderbookModule {
             limitOrderTypedData.message,
         );
 
-        console.log(signature);
+        return {
+            sdkType: '1inch',
+            data: limitOrder,
+            signature,
+        };
     }
 }

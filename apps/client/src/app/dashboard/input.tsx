@@ -27,6 +27,7 @@ import { ERC20ABI } from '@/utils/erc20abi';
 import { useApproveToken } from '@/utils/wallet';
 import { formatSpreadSDKSymbolTo1inchToken } from '@ituspreadtrading/sdk';
 import { useMutation } from '@tanstack/react-query';
+import { ethers } from 'ethers';
 import { ReactNode, useEffect, useMemo, useState } from 'react';
 import { useAccount, useConnect, useReadContract } from 'wagmi';
 import { injected } from 'wagmi/connectors';
@@ -66,6 +67,7 @@ const SellCard = ({ sd, spread }: CardProps) => {
     const { connect } = useConnect();
     const [sellSpread, setSellSpread] = useState(0);
     const [sellSize, setSellSize] = useState(0);
+
     const handleConnection = useHandleConnection({
         delay: 0,
     });
@@ -73,6 +75,7 @@ const SellCard = ({ sd, spread }: CardProps) => {
 
     const { getTokenAmountFromUSD, getParsedAmount } =
         useGetTokenAmountFromUSD();
+    const parsedSellSize = getParsedAmount(sellSize).toString();
     const approveToken = useApproveToken();
     const oneInchTokenPair = useOneInchTokenPair();
 
@@ -139,11 +142,20 @@ const SellCard = ({ sd, spread }: CardProps) => {
                               tokenPair,
                           )}`
                         : 'Submit',
-                    onClick: () => {
+                    onClick: async () => {
                         if (zeroAllowance) {
                             approveTokenMutation.mutate();
                         } else {
-                            alert('Submit order');
+                            const limitOrderResponse =
+                                await spreadSDK.orderbook.genCreateLimitOrder({
+                                    sdkType: '1inch',
+                                    makerAsset: ethers.constants.AddressZero,
+                                    takerAsset: ethers.constants.AddressZero,
+                                    maker: ethers.constants.AddressZero,
+                                    makingAmount: parsedSellSize,
+                                    takingAmount: '100',
+                                });
+                            alert(JSON.stringify(limitOrderResponse));
                         }
                     },
                     loading: approveTokenMutation.isPending,
@@ -157,24 +169,8 @@ const SellCard = ({ sd, spread }: CardProps) => {
         tokenPair,
         approveTokenMutation.isPending,
         isConnected,
+        parsedSellSize,
     ]);
-
-    useEffect(() => {
-        if (wallet == null) {
-            return;
-        }
-
-        setTimeout(() => {
-            const order = spreadSDK.orderbook.genCreateLimitOrder({
-                sdkType: '1inch',
-                makerAsset: '',
-                takerAsset: '',
-                maker: 'string',
-                makingAmount: 'string',
-                takingAmount: 'string',
-            });
-        }, 1000);
-    }, [wallet]);
 
     return (
         <Card>
@@ -239,7 +235,7 @@ const SellCard = ({ sd, spread }: CardProps) => {
                     <Label htmlFor="spread">Parsed amount</Label>
                     <Input
                         disabled={true}
-                        value={getParsedAmount(sellSize).toString()}
+                        value={parsedSellSize}
                         className="h-10 w-[100%]"
                         id="size"
                         type="number"
