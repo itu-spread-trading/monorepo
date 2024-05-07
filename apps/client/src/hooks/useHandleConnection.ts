@@ -1,16 +1,16 @@
 'use client';
 
 import { useIsRegisteredMutation } from '@/app/mutations';
-import { useEffect } from 'react';
-import { jwtDecode } from 'jwt-decode';
-import { useAccount, useDisconnect, useSignMessage } from 'wagmi';
-import { SpreadJWT } from '@/types';
-import { useSetWallet } from '@/store';
-import { LOGIN_MESSAGE, REGISTER_MESSAGE } from '@/utils';
 import {
     useLoginMutation,
     useRegisterMutation,
 } from '@/app/mutations/useAuthMutations';
+import { useSetWallet } from '@/store';
+import { SpreadJWT } from '@/types';
+import { LOGIN_MESSAGE, REGISTER_MESSAGE } from '@/utils';
+import { jwtDecode } from 'jwt-decode';
+import { useEffect } from 'react';
+import { useAccount, useDisconnect, useSignMessage } from 'wagmi';
 
 type Props = {
     onConnect?: () => void;

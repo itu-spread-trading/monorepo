@@ -1,5 +1,6 @@
 import { ChainId } from '@1inch/limit-order-protocol-utils';
 import { ethers } from 'ethers';
+
 import { SpreadSDKError } from '../SpreadSDKError';
 
 export const getRpcUrl = (chainId: number): string => {

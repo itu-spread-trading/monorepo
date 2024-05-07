@@ -1,3 +1,6 @@
+import Axios, { AxiosInstance } from 'axios';
+import { Wallet } from 'ethers';
+
 import { SpreadSDKError } from './SpreadSDKError';
 import {
     SpreadSDKOrderbookModule,
@@ -16,14 +19,11 @@ import {
     SpreadSDKInitProps,
     SpreadSDKModuleInitProps,
     SpreadSDKOrder,
-    SpreadSDKSupportedSymbols,
-    SpreadSDKTokenPair,
     SpreadSDKUpdateOrderDto,
     SpreadStandardDeviationResponse,
 } from './types';
 import { getApiUrlOrOverride, getProvider } from './utils';
-import Axios, { AxiosInstance } from 'axios';
-import { Wallet } from 'ethers';
+
 export class SpreadSDK implements ISpreadSDK {
     private props: SpreadSDKInitProps;
     private apiUrl: string;
@@ -168,22 +168,6 @@ export class SpreadSDK implements ISpreadSDK {
             return response.data;
         } catch {
             throw SpreadSDKError.CouldNotCreateOrder();
-        }
-    }
-
-    public async genTokenPair(
-        symbol: SpreadSDKSupportedSymbols,
-    ): Promise<SpreadSDKTokenPair> {
-        try {
-            const tokenPair = await this.axiosInstance.get('/sdk/tokenpair', {
-                params: {
-                    symbol: symbol,
-                    chainId: this.props.chainId,
-                },
-            });
-            return tokenPair.data;
-        } catch {
-            throw SpreadSDKError.CouldNotGetTokenPair();
         }
     }
 

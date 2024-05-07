@@ -1,13 +1,14 @@
 'use client';
-import '@rainbow-me/rainbowkit/styles.css';
-import './globals.css';
 
+import { Toaster } from '@/components/ui/toaster';
+import { Web3Provider } from '@/context';
 import { clsnm } from '@/utils';
+import '@rainbow-me/rainbowkit/styles.css';
 import { Inter as FontSans } from 'next/font/google';
 import { ReactNode } from 'react';
-import { Web3Provider } from '@/context';
 import { RecoilRoot } from 'recoil';
-import { Toaster } from '@/components/ui/toaster';
+
+import './globals.css';
 
 export const fontSans = FontSans({
     subsets: ['latin'],

@@ -1,4 +1,3 @@
-import { SpreadSDKSupportedSymbols } from '@ituspreadtrading/sdk';
 import adaImage from '@/assets/tokens/ada.png';
 import aptImage from '@/assets/tokens/apt.png';
 import atomImage from '@/assets/tokens/atom.png';
@@ -19,6 +18,7 @@ import uniImage from '@/assets/tokens/uni.png';
 import usdcImage from '@/assets/tokens/usdc.png';
 import xmrImage from '@/assets/tokens/xmr.png';
 import xrpImage from '@/assets/tokens/xrp.png';
+import { SpreadSDKSupportedSymbols } from '@ituspreadtrading/sdk';
 import { StaticImageData } from 'next/image';
 
 export const symbolToImage = (

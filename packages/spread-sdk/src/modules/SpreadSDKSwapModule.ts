@@ -1,3 +1,5 @@
+import Axios, { AxiosInstance } from 'axios';
+
 import {
     ISpreadSDKSwapModule,
     SpreadSDKApproveCallData,
@@ -9,7 +11,6 @@ import {
     SpreadSDKSwapParams,
     SpreadSDKToken,
 } from '../types';
-import Axios, { AxiosInstance } from 'axios';
 import { getApiUrlOrOverride } from '../utils';
 
 export class SpreadSDKSwapModule implements ISpreadSDKSwapModule {

@@ -1,5 +1,6 @@
-import { SpreadSDKInitProps } from '../types';
 import dotenv from 'dotenv';
+
+import { SpreadSDKInitProps } from '../types';
 import { nullthrows } from './nullthrows';
 
 dotenv.config();

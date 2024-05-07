@@ -1,16 +1,16 @@
 'use client';
 
 import Logo from '@/assets/logo.png';
-import { AssociatedWalletView } from './AssociatedWalletView';
+import { ConnectButton } from '@/components/connectbutton/ConnectButton';
 import { Button } from '@/components/ui/button';
-
 import { useHandleConnection } from '@/hooks/useHandleConnection';
 import { useWallet } from '@/store';
 import { DashboardIcon } from '@radix-ui/react-icons';
 import Image from 'next/image';
 import { ReactNode, useEffect } from 'react';
 import { useAccount } from 'wagmi';
-import { ConnectButton } from '@/components/connectbutton/ConnectButton';
+
+import { AssociatedWalletView } from './AssociatedWalletView';
 
 type Props = {
     type?: 'connect' | 'open';

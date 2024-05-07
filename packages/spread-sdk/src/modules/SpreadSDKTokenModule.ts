@@ -1,3 +1,5 @@
+import Axios, { AxiosInstance } from 'axios';
+
 import {
     ISpreadSDKTokenModule,
     SpreadSDKInitProps,
@@ -5,7 +7,6 @@ import {
     SpreadSDKSupportedSymbols,
     SpreadSDKTokenPair,
 } from '../types';
-import Axios, { AxiosInstance } from 'axios';
 import {
     formatSpreadSDKSymbolTo1inchToken,
     getApiUrlOrOverride,
@@ -17,6 +18,7 @@ export class SpreadSDKTokenModule implements ISpreadSDKTokenModule {
     public baseUrl: string;
     protected apiUrl: string;
     private axios1Inch: AxiosInstance;
+    private axiosSpread: AxiosInstance;
 
     constructor(props: SpreadSDKModuleInitProps) {
         this.init(props);
@@ -28,6 +30,9 @@ export class SpreadSDKTokenModule implements ISpreadSDKTokenModule {
         // Api Configuration
         this.baseUrl = `https://api.1inch.dev/token/v1.2/${props.chainId}/`;
         this.apiUrl = getApiUrlOrOverride(props.apiUrlOverride);
+        this.axiosSpread = Axios.create({
+            baseURL: this.apiUrl,
+        });
         this.axios1Inch = Axios.create({
             baseURL: this.baseUrl,
             headers: {
@@ -41,15 +46,17 @@ export class SpreadSDKTokenModule implements ISpreadSDKTokenModule {
     ): Promise<SpreadSDKTokenPair> {
         const tokenName = formatSpreadSDKSymbolTo1inchToken(symbol);
 
-        const relatedTokenResults = await this.axios1Inch.get('/search', {
-            params: {
-                query: tokenName,
-                chain_id: this.props.chainId,
-                limit: 1,
+        const relatedTokenResult = await this.axiosSpread.get(
+            '/sdk/tokenpair',
+            {
+                params: {
+                    symbol: tokenName,
+                    chainId: this.props.chainId,
+                },
             },
-        });
+        );
 
-        const relatedToken = relatedTokenResults.data[0];
+        const relatedToken = relatedTokenResult.data;
 
         return {
             USDT: this.getUSDTAddress(this.props.chainId),

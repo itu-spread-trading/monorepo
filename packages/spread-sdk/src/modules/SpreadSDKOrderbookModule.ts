@@ -17,7 +17,7 @@ import {
     SpreadSDKModuleInitProps,
     SpreadSDKOrderbookLimitOrdersQuery,
 } from '../types';
-import { getApiUrlOrOverride, getProvider, getRpcUrl } from '../utils';
+import { getApiUrlOrOverride, getProvider } from '../utils';
 
 export class SpreadSDKOrderbookModule implements ISpreadSDKOrderbookModule {
     public props: SpreadSDKModuleInitProps;

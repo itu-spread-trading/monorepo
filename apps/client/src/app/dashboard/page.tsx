@@ -4,7 +4,7 @@ import { DashboardChart } from '@/app/dashboard/chart';
 import { SellAndBuyInput } from '@/app/dashboard/input';
 import { MarketDataTable } from '@/app/dashboard/marketdata';
 import { DashboardOrderHistory } from '@/app/dashboard/orderhistory';
-import { Navbar, TokenSelect, Card, CardHeader } from '@/components';
+import { Card, CardHeader, Navbar, TokenSelect } from '@/components';
 import { MarketDataProvider } from '@/context';
 import { useMarketDataQuery, useTokenPairQuery } from '@/queries';
 import { useTokenPair, useWallet } from '@/store';
