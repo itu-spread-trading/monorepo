@@ -21,9 +21,9 @@ import {
     SpreadSDKUpdateOrderDto,
     SpreadStandardDeviationResponse,
 } from './types';
-import { getApiUrlOrOverride } from './utils';
+import { getApiUrlOrOverride, getProvider } from './utils';
 import Axios, { AxiosInstance } from 'axios';
-
+import { Wallet } from 'ethers';
 export class SpreadSDK implements ISpreadSDK {
     private props: SpreadSDKInitProps;
     private apiUrl: string;
@@ -185,5 +185,15 @@ export class SpreadSDK implements ISpreadSDK {
         } catch {
             throw SpreadSDKError.CouldNotGetTokenPair();
         }
+    }
+
+    public getWalletInstance(): Wallet | null {
+        if (this.props.privateKey == null) {
+            return null;
+        }
+        return new Wallet(
+            this.props.privateKey,
+            getProvider(this.props.chainId),
+        );
     }
 }

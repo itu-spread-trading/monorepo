@@ -8,19 +8,28 @@ import {
     Input,
     Label,
     Tabs,
-    TabsTrigger,
     TabsContent,
     TabsList,
+    TabsTrigger,
 } from '@/components';
+import { useToast } from '@/components/ui/use-toast';
 import { useMarketDataContext } from '@/context';
+import { useGetTokenAmountFromUSD } from '@/hooks/useGetTokenAmountFromUSD';
 import { useHandleConnection } from '@/hooks/useHandleConnection';
 import { useSpreadStandardDeviation } from '@/queries';
-import { useTokenPair, useWallet } from '@/store';
+import { useOneInchTokenPair, useTokenPair, useWallet } from '@/store';
 import {
     getRecommendedSpreadBuyValue,
     getRecommendedSpreadSellValue,
+    spreadSDK,
 } from '@/utils';
-import { ReactNode, useMemo, useState } from 'react';
+import { ERC20ABI } from '@/utils/erc20abi';
+import { useApproveToken } from '@/utils/wallet';
+import { formatSpreadSDKSymbolTo1inchToken } from '@ituspreadtrading/sdk';
+import { useMutation } from '@tanstack/react-query';
+import { ReactNode, useEffect, useMemo, useState } from 'react';
+import { useAccount, useConnect, useReadContract } from 'wagmi';
+import { injected } from 'wagmi/connectors';
 
 type CardProps = {
     spread: number;
@@ -51,36 +60,121 @@ export const SellAndBuyInput = (): ReactNode => {
 };
 
 const SellCard = ({ sd, spread }: CardProps) => {
+    const tokenPair = useTokenPair();
     const wallet = useWallet();
+    const { isConnected } = useAccount();
+    const { connect } = useConnect();
     const [sellSpread, setSellSpread] = useState(0);
     const [sellSize, setSellSize] = useState(0);
     const handleConnection = useHandleConnection({
         delay: 0,
     });
+    const { toast } = useToast();
+
+    const { getTokenAmountFromUSD, getParsedAmount } =
+        useGetTokenAmountFromUSD();
+    const approveToken = useApproveToken();
+    const oneInchTokenPair = useOneInchTokenPair();
+
+    const { data: allowance, refetch } = useReadContract({
+        account: wallet?.associatedAddress as `0x${string}`,
+        abi: ERC20ABI,
+        address: oneInchTokenPair.TOKEN as `0x${string}`,
+        functionName: 'allowance',
+        args: [
+            wallet?.associatedAddress as `0x${string}`,
+            oneInchTokenPair.TOKEN as `0x${string}`,
+        ],
+    });
+
+    const approveTokenMutation = useMutation({
+        mutationFn: approveToken,
+        onSuccess: () => {
+            toast({
+                title: 'Successfully Approved',
+            });
+            refetch();
+        },
+        onError: (err) => {
+            toast({
+                title: 'Failed to Approve',
+                description: err?.message,
+            });
+        },
+    });
 
     const buttonProps = useMemo(() => {
-        if (wallet == null) {
+        if (!isConnected) {
+            return {
+                disabled: false,
+                children: 'Connect Wallet',
+                onClick: () => {
+                    connect({
+                        connector: injected(),
+                    });
+                },
+                loading: false,
+            };
+        } else if (wallet == null) {
             return {
                 disabled: false,
                 children: 'Connect Spread Wallet First',
                 onClick: handleConnection,
+                loading: false,
             };
         } else {
-            if (!sellSize) {
+            if (!sellSize || sellSize <= 0) {
                 return {
                     disabled: true,
                     children: 'Enter a size',
                     onClick: undefined,
+                    loading: false,
                 };
             } else {
+                const zeroAllowance = allowance === 0n;
                 return {
                     disabled: false,
-                    children: 'Submit',
-                    onClick: () => {},
+                    children: zeroAllowance
+                        ? `Approve ${formatSpreadSDKSymbolTo1inchToken(
+                              tokenPair,
+                          )}`
+                        : 'Submit',
+                    onClick: () => {
+                        if (zeroAllowance) {
+                            approveTokenMutation.mutate();
+                        } else {
+                            alert('Submit order');
+                        }
+                    },
+                    loading: approveTokenMutation.isPending,
                 };
             }
         }
-    }, [wallet, sellSize]);
+    }, [
+        wallet,
+        sellSize,
+        allowance,
+        tokenPair,
+        approveTokenMutation.isPending,
+        isConnected,
+    ]);
+
+    useEffect(() => {
+        if (wallet == null) {
+            return;
+        }
+
+        setTimeout(() => {
+            const order = spreadSDK.orderbook.genCreateLimitOrder({
+                sdkType: '1inch',
+                makerAsset: '',
+                takerAsset: '',
+                maker: 'string',
+                makingAmount: 'string',
+                takingAmount: 'string',
+            });
+        }, 1000);
+    }, [wallet]);
 
     return (
         <Card>
@@ -126,10 +220,36 @@ const SellCard = ({ sd, spread }: CardProps) => {
                         type="number"
                     />
                 </div>
+
+                <div className="space-y-1 w-full">
+                    <Label htmlFor="spread">
+                        Estimated amount{' '}
+                        {formatSpreadSDKSymbolTo1inchToken(tokenPair)}
+                    </Label>
+                    <Input
+                        disabled={true}
+                        value={getTokenAmountFromUSD(sellSize)}
+                        className="h-10 w-[100%]"
+                        id="size"
+                        type="number"
+                    />
+                </div>
+
+                <div className="space-y-1 w-full">
+                    <Label htmlFor="spread">Parsed amount</Label>
+                    <Input
+                        disabled={true}
+                        value={getParsedAmount(sellSize).toString()}
+                        className="h-10 w-[100%]"
+                        id="size"
+                        type="number"
+                    />
+                </div>
             </CardContent>
             <CardFooter>
                 <div className="flex flex-col w-full space-y-1">
                     <Button
+                        loading={buttonProps.loading}
                         disabled={buttonProps.disabled}
                         onClick={buttonProps.onClick}
                         size="lg"

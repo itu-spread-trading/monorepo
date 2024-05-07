@@ -7,6 +7,7 @@ import { Inter as FontSans } from 'next/font/google';
 import { ReactNode } from 'react';
 import { Web3Provider } from '@/context';
 import { RecoilRoot } from 'recoil';
+import { Toaster } from '@/components/ui/toaster';
 
 export const fontSans = FontSans({
     subsets: ['latin'],
@@ -35,6 +36,7 @@ export default function RootLayout({ children }: Props): ReactNode {
                 <RecoilRoot>
                     <Web3Provider>{children}</Web3Provider>
                 </RecoilRoot>
+                <Toaster />
             </body>
         </html>
     );

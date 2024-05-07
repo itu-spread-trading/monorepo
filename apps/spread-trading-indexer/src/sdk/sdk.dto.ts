@@ -1,4 +1,4 @@
 export class GetTokenPairDto {
-  symbol: string;
-  chainId: number;
+    symbol: string;
+    chainId: number;
 }

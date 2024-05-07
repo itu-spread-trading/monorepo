@@ -1,4 +1,13 @@
+import {
+    ChainId,
+    EIP712TypedData,
+    LimitOrderBuilder,
+    Web3ProviderConnector,
+} from '@1inch/limit-order-protocol-utils';
 import Axios, { AxiosInstance } from 'axios';
+import { ethers } from 'ethers';
+import Web3 from 'web3';
+
 import {
     ISpreadSDKOrderbookModule,
     SpreadSDKBaseQuery,
@@ -8,7 +17,7 @@ import {
     SpreadSDKModuleInitProps,
     SpreadSDKOrderbookLimitOrdersQuery,
 } from '../types';
-import { getApiUrlOrOverride } from '../utils';
+import { getApiUrlOrOverride, getProvider, getRpcUrl } from '../utils';
 
 export class SpreadSDKOrderbookModule implements ISpreadSDKOrderbookModule {
     public props: SpreadSDKModuleInitProps;
@@ -21,6 +30,23 @@ export class SpreadSDKOrderbookModule implements ISpreadSDKOrderbookModule {
     constructor(props: SpreadSDKModuleInitProps) {
         this.init(props);
     }
+
+    protected limitOrderProtocolAddresses: { [key in ChainId]: string } = {
+        [ChainId.ethereumMainnet]: '0x1111111254eeb25477b68fb85ed929f73a960582',
+        [ChainId.binanceMainnet]: '0x1111111254eeb25477b68fb85ed929f73a960582',
+        [ChainId.polygonMainnet]: '0x1111111254eeb25477b68fb85ed929f73a960582',
+        [ChainId.optimismMainnet]: '0x1111111254eeb25477b68fb85ed929f73a960582',
+        [ChainId.arbitrumMainnet]: '0x1111111254eeb25477b68fb85ed929f73a960582',
+        [ChainId.auroraMainnet]: '0x1111111254eeb25477b68fb85ed929f73a960582',
+        [ChainId.gnosisMainnet]: '0x1111111254eeb25477b68fb85ed929f73a960582',
+        [ChainId.avalancheMainnet]:
+            '0x1111111254eeb25477b68fb85ed929f73a960582',
+        [ChainId.fantomMainnet]: '0x1111111254eeb25477b68fb85ed929f73a960582',
+        [ChainId.klaytnMainnet]: '0x1111111254eeb25477b68fb85ed929f73a960582',
+        [ChainId.zkSyncEraMainnet]:
+            '0x6e2b76966cbd9cf4cc2fa0d76d24d5241e0abc2f',
+        [ChainId.baseMainnet]: '0x1111111254eeb25477b68fb85ed929f73a960582',
+    } as const;
 
     public init(props: SpreadSDKInitProps): void {
         this.props = props;
@@ -78,8 +104,39 @@ export class SpreadSDKOrderbookModule implements ISpreadSDKOrderbookModule {
     public async genCreateLimitOrder(
         props: SpreadSDKCreateLimitOrderProps,
     ): Promise<SpreadSDKLimitOrder> {
-        const chainId = this.props.chainId; // suggested, or use your own number
+        const contractAddress =
+            this.limitOrderProtocolAddresses[this.props.chainId];
+        const limitOrderBuilder = new LimitOrderBuilder(contractAddress, {
+            version: '4',
+            domainName: '1inch',
+        });
+        const limitOrder = limitOrderBuilder.buildLimitOrder({
+            makerAsset: ethers.constants.AddressZero,
+            takerAsset: ethers.constants.AddressZero,
+            maker: ethers.constants.AddressZero,
+            makingAmount: '100',
+            takingAmount: '200',
+        });
 
-        throw new Error('Method not implemented.');
+        const limitOrderTypedData = limitOrderBuilder.buildLimitOrderTypedData(
+            limitOrder,
+            BigInt(this.props.chainId),
+            contractAddress,
+        );
+
+        const wallet = new ethers.Wallet(
+            this.props.privateKey,
+            getProvider(this.props.chainId),
+        );
+
+        delete limitOrderTypedData.types.EIP712Domain;
+
+        const signature = await wallet._signTypedData(
+            limitOrderTypedData.domain,
+            limitOrderTypedData.types,
+            limitOrderTypedData.message,
+        );
+
+        console.log(signature);
     }
 }

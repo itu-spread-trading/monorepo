@@ -12,7 +12,7 @@
   "private": true,
   "scripts": {
     "build": "turbo build",
-    "clear": "find . -name 'node_modules' -type d -prune -exec rm -rf '{}' + && rm package-lock.json",
+    "clear": "find . -name 'node_modules' -type d -prune -exec rm -rf '{}' + && rm bun.lockb",
     "dev": "turbo dev",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "lint": "turbo lint",
@@ -21,17 +21,5 @@
   "workspaces": [
     "apps/*",
     "packages/*"
-  ],
-  "dependencies": {
-    "@radix-ui/react-dialog": "^1.0.5",
-    "@radix-ui/react-label": "^2.0.2",
-    "@radix-ui/react-select": "^2.0.0",
-    "@radix-ui/react-tabs": "^1.0.4",
-    "@radix-ui/react-tooltip": "^1.0.7",
-    "@tanstack/react-table": "^8.16.0",
-    "axios": "^1.6.8",
-    "jwt-decode": "^4.0.0",
-    "recoil": "^0.7.7",
-    "web3": "^4.8.0"
-  }
+  ]
 }

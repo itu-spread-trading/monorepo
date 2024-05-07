@@ -8,12 +8,12 @@ import { OrderService } from 'src/order/order.service';
 import { Environment } from 'src/utils';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([WalletEntity, OrderEntity]),
+    imports: [
+        TypeOrmModule.forFeature([WalletEntity, OrderEntity]),
 
-    JwtModule.register({ secret: Environment.JWT_SECRET }),
-  ],
-  controllers: [OrderController],
-  providers: [OrderService],
+        JwtModule.register({ secret: Environment.JWT_SECRET }),
+    ],
+    controllers: [OrderController],
+    providers: [OrderService],
 })
 export class OrderModule {}

@@ -157,7 +157,8 @@ export type SpreadSDKOrder = {
     status: SpreadSDKOrderStatus;
     date: string;
     type: SpreadSDKOrderType;
-    associtedLimitOrderHash: string | null;
+    associtedLimitOrder: string | null;
+    associatedSwap: string | null;
 };
 
 export class SpreadSDKUpdateOrderDto {

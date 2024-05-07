@@ -7,12 +7,12 @@ import { SDKService } from 'src/sdk/sdk.service';
 import { Environment } from 'src/utils';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([WalletEntity]),
+    imports: [
+        TypeOrmModule.forFeature([WalletEntity]),
 
-    JwtModule.register({ secret: Environment.JWT_SECRET }),
-  ],
-  controllers: [SDKController],
-  providers: [SDKService],
+        JwtModule.register({ secret: Environment.JWT_SECRET }),
+    ],
+    controllers: [SDKController],
+    providers: [SDKService],
 })
 export class SDKModule {}

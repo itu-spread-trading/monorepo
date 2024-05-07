@@ -68,17 +68,9 @@ export type SpreadSDK1InchApproveCalldata = {
 };
 
 export type SpreadSDK1InchCreateLimitOrderProps = SpreadSDK1InchData<{
-    orderHash: string;
-    signature: string;
-    data: {
-        makerAsset: string;
-        takerAsset: string;
-        maker: string;
-        makingAmount: string;
-        takingAmount: string;
-        receiver?: string;
-        salt?: string;
-        extension?: string;
-        makerTraits?: string;
-    };
+    makerAsset: string;
+    takerAsset: string;
+    maker: string;
+    makingAmount: string;
+    takingAmount: string;
 }>;

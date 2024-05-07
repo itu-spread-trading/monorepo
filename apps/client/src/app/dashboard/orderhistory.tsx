@@ -20,7 +20,8 @@ export const DashboardOrderHistory = (): ReactNode => {
     const orders: Array<SpreadSDKOrder> = [
         {
             id: 1,
-            associtedLimitOrderHash: '0x',
+            associatedSwap: null,
+            associtedLimitOrder: null,
             date: '2021-10-10',
             status: SpreadSDKOrderStatus.PENDING,
             type: SpreadSDKOrderType.SELL,
@@ -30,7 +31,8 @@ export const DashboardOrderHistory = (): ReactNode => {
         },
         {
             id: 2,
-            associtedLimitOrderHash: '0x',
+            associatedSwap: null,
+            associtedLimitOrder: null,
             date: '2021-10-10',
             status: SpreadSDKOrderStatus.PENDING,
             type: SpreadSDKOrderType.SELL,
@@ -40,7 +42,8 @@ export const DashboardOrderHistory = (): ReactNode => {
         },
         {
             id: 3,
-            associtedLimitOrderHash: '0x',
+            associatedSwap: null,
+            associtedLimitOrder: null,
             date: '2021-10-10',
             status: SpreadSDKOrderStatus.PENDING,
             type: SpreadSDKOrderType.SELL,
@@ -50,7 +53,8 @@ export const DashboardOrderHistory = (): ReactNode => {
         },
         {
             id: 4,
-            associtedLimitOrderHash: '0x',
+            associatedSwap: null,
+            associtedLimitOrder: null,
             date: '2021-10-10',
             status: SpreadSDKOrderStatus.PENDING,
             type: SpreadSDKOrderType.SELL,
@@ -60,7 +64,8 @@ export const DashboardOrderHistory = (): ReactNode => {
         },
         {
             id: 5,
-            associtedLimitOrderHash: '0x',
+            associatedSwap: null,
+            associtedLimitOrder: null,
             date: '2021-10-10',
             status: SpreadSDKOrderStatus.PENDING,
             type: SpreadSDKOrderType.SELL,
@@ -83,7 +88,8 @@ export const DashboardOrderHistory = (): ReactNode => {
                             <TableHead>Spread</TableHead>
                             <TableHead>Type</TableHead>
                             <TableHead>Status</TableHead>
-                            <TableHead>LimitOrderHash</TableHead>
+                            <TableHead>LimitOrder</TableHead>
+                            <TableHead>Swap</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -97,7 +103,10 @@ export const DashboardOrderHistory = (): ReactNode => {
                                     <TableCell>{order.type}</TableCell>
                                     <TableCell>{order.status}</TableCell>
                                     <TableCell>
-                                        {order.associtedLimitOrderHash}
+                                        {order.associtedLimitOrder}
+                                    </TableCell>
+                                    <TableCell>
+                                        {order.associatedSwap}
                                     </TableCell>
                                 </TableRow>
                             );

@@ -1,43 +1,46 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 export enum OrderStatus {
-  PENDING = 'PENDING',
-  FILLED = 'FILLED',
-  CANCELLED = 'CANCELLED',
-  OPEN = 'OPEN',
+    PENDING = 'PENDING',
+    FILLED = 'FILLED',
+    CANCELLED = 'CANCELLED',
+    OPEN = 'OPEN',
 }
 
 export enum OrderType {
-  BUY = 'BUY',
-  SELL = 'SELL',
+    BUY = 'BUY',
+    SELL = 'SELL',
 }
 
 @Entity('order')
 export class OrderEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
+    @PrimaryGeneratedColumn()
+    id: number;
 
-  @Column()
-  symbol: string;
+    @Column()
+    symbol: string;
 
-  @Column({ type: 'float' })
-  spread: number;
+    @Column({ type: 'float' })
+    spread: number;
 
-  @Column({ type: 'float' })
-  size: number;
+    @Column({ type: 'float' })
+    size: number;
 
-  @Column({ default: OrderStatus.PENDING })
-  status: OrderStatus;
+    @Column({ default: OrderStatus.PENDING })
+    status: OrderStatus;
 
-  @Column()
-  type: OrderType;
+    @Column()
+    type: OrderType;
 
-  @Column({ nullable: true })
-  associtedLimitOrderHash: string;
+    @Column({ nullable: true })
+    associtatedLimitOrder: string;
 
-  @Column({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
-  })
-  date: Date;
+    @Column({ nullable: true })
+    associatedSwap: string;
+
+    @Column({
+        type: 'timestamp',
+        default: () => 'CURRENT_TIMESTAMP',
+    })
+    date: Date;
 }

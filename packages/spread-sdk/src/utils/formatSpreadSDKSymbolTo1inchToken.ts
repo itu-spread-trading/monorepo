@@ -7,6 +7,8 @@ export const formatSpreadSDKSymbolTo1inchToken = (
         return 'WBNB';
     } else if (symbol === 'ETHUSDT') {
         return 'WETH';
+    } else if (symbol === 'BTCUSDT') {
+        return 'BTCB';
     } else {
         return symbol.replace('USDT', '');
     }

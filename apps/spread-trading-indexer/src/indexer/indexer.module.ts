@@ -6,8 +6,11 @@ import { IndexerController } from 'src/indexer/indexer.controller';
 import { IndexerService } from 'src/indexer/indexer.service';
 
 @Module({
-  imports: [ScheduleModule.forRoot(), TypeOrmModule.forFeature([TokenEntity])],
-  controllers: [IndexerController],
-  providers: [IndexerService],
+    imports: [
+        ScheduleModule.forRoot(),
+        TypeOrmModule.forFeature([TokenEntity]),
+    ],
+    controllers: [IndexerController],
+    providers: [IndexerService],
 })
 export class IndexerModule {}

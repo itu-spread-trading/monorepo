@@ -7,12 +7,12 @@ import { WalletController } from 'src/wallet/wallet.controller';
 import { WalletService } from 'src/wallet/wallet.service';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([WalletEntity]),
+    imports: [
+        TypeOrmModule.forFeature([WalletEntity]),
 
-    JwtModule.register({ secret: Environment.JWT_SECRET }),
-  ],
-  controllers: [WalletController],
-  providers: [WalletService],
+        JwtModule.register({ secret: Environment.JWT_SECRET }),
+    ],
+    controllers: [WalletController],
+    providers: [WalletService],
 })
 export class WalletModule {}

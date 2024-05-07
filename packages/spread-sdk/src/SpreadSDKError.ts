@@ -35,4 +35,8 @@ export class SpreadSDKError extends Error {
     public static CouldNotGetTokenPair(): SpreadSDKError {
         return new SpreadSDKError('Could not get token pair');
     }
+
+    public static UnsupportedChain(): SpreadSDKError {
+        return new SpreadSDKError('This chain is currently not supported');
+    }
 }

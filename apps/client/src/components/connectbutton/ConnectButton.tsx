@@ -11,7 +11,7 @@ export const ConnectButton = (): ReactNode => {
     const { isConnected, address } = useAccount();
 
     return (
-        <div className="flex items-center">
+        <div className="flex items-center bg-neutral-800 rounded-lg py-1 px-4">
             {isConnected ? (
                 <>
                     <span>{formatAddress(address)}</span>
