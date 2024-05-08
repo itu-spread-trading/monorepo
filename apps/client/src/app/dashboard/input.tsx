@@ -27,8 +27,7 @@ import { ERC20ABI } from '@/utils/erc20abi';
 import { useApproveToken } from '@/utils/wallet';
 import { formatSpreadSDKSymbolTo1inchToken } from '@ituspreadtrading/sdk';
 import { useMutation } from '@tanstack/react-query';
-import { ethers } from 'ethers';
-import { ReactNode, useEffect, useMemo, useState } from 'react';
+import { ReactNode, useMemo, useState } from 'react';
 import { useAccount, useConnect, useReadContract } from 'wagmi';
 import { injected } from 'wagmi/connectors';
 
@@ -73,9 +72,12 @@ const SellCard = ({ sd, spread }: CardProps) => {
     });
     const { toast } = useToast();
 
-    const { getTokenAmountFromUSD, getParsedAmount } =
-        useGetTokenAmountFromUSD();
-    const parsedSellSize = getParsedAmount(sellSize).toString();
+    const {
+        getFuturesTokenAmount,
+        getTokenAmountFromUSD,
+        getFuturesUSDAmount,
+        getParsedUSDTAmount,
+    } = useGetTokenAmountFromUSD();
     const approveToken = useApproveToken();
     const oneInchTokenPair = useOneInchTokenPair();
 
@@ -105,6 +107,17 @@ const SellCard = ({ sd, spread }: CardProps) => {
             });
         },
     });
+
+    const estimatedFuturesAmount = getFuturesTokenAmount(
+        sellSpread,
+        sellSize,
+    ).toString();
+
+    const futuresUSDAmount = getFuturesUSDAmount(sellSpread);
+    const estimatedUSDTAmount =
+        getParsedUSDTAmount(futuresUSDAmount).toString();
+
+    const token = formatSpreadSDKSymbolTo1inchToken(tokenPair);
 
     const buttonProps = useMemo(() => {
         if (!isConnected) {
@@ -137,11 +150,7 @@ const SellCard = ({ sd, spread }: CardProps) => {
                 const zeroAllowance = allowance === 0n;
                 return {
                     disabled: false,
-                    children: zeroAllowance
-                        ? `Approve ${formatSpreadSDKSymbolTo1inchToken(
-                              tokenPair,
-                          )}`
-                        : 'Submit',
+                    children: zeroAllowance ? `Approve ${token}` : 'Submit',
                     onClick: async () => {
                         if (zeroAllowance) {
                             approveTokenMutation.mutate();
@@ -149,11 +158,11 @@ const SellCard = ({ sd, spread }: CardProps) => {
                             const limitOrderResponse =
                                 await spreadSDK.orderbook.genCreateLimitOrder({
                                     sdkType: '1inch',
-                                    makerAsset: ethers.constants.AddressZero,
-                                    takerAsset: ethers.constants.AddressZero,
-                                    maker: ethers.constants.AddressZero,
-                                    makingAmount: parsedSellSize,
-                                    takingAmount: '100',
+                                    makerAsset: oneInchTokenPair.TOKEN,
+                                    takerAsset: oneInchTokenPair.USDT,
+                                    maker: wallet.associatedAddress,
+                                    makingAmount: estimatedFuturesAmount,
+                                    takingAmount: estimatedUSDTAmount,
                                 });
                             alert(JSON.stringify(limitOrderResponse));
                         }
@@ -169,7 +178,8 @@ const SellCard = ({ sd, spread }: CardProps) => {
         tokenPair,
         approveTokenMutation.isPending,
         isConnected,
-        parsedSellSize,
+        estimatedFuturesAmount,
+        estimatedUSDTAmount,
     ]);
 
     return (
@@ -218,28 +228,36 @@ const SellCard = ({ sd, spread }: CardProps) => {
                 </div>
 
                 <div className="space-y-1 w-full">
-                    <Label htmlFor="spread">
-                        Estimated amount{' '}
-                        {formatSpreadSDKSymbolTo1inchToken(tokenPair)}
-                    </Label>
+                    <Label htmlFor="spread">Estimated futures price ($)</Label>
                     <Input
                         disabled={true}
-                        value={getTokenAmountFromUSD(sellSize)}
+                        value={futuresUSDAmount}
                         className="h-10 w-[100%]"
                         id="size"
                         type="number"
                     />
                 </div>
-
-                <div className="space-y-1 w-full">
-                    <Label htmlFor="spread">Parsed amount</Label>
-                    <Input
-                        disabled={true}
-                        value={parsedSellSize}
-                        className="h-10 w-[100%]"
-                        id="size"
-                        type="number"
-                    />
+                <div className="flex space-x-2">
+                    <div className="space-y-1 w-full">
+                        <Label htmlFor="spread">Parsed {token} amount</Label>
+                        <Input
+                            disabled={true}
+                            value={estimatedFuturesAmount}
+                            className="h-10 w-[100%]"
+                            id="size"
+                            type="number"
+                        />
+                    </div>
+                    <div className="space-y-1 w-full">
+                        <Label htmlFor="spread">Parsed USDT amount</Label>
+                        <Input
+                            disabled={true}
+                            value={estimatedUSDTAmount}
+                            className="h-10 w-[100%]"
+                            id="size"
+                            type="number"
+                        />
+                    </div>
                 </div>
             </CardContent>
             <CardFooter>

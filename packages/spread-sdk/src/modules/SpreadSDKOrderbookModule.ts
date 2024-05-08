@@ -1,6 +1,12 @@
-import { ChainId, LimitOrderBuilder } from '@1inch/limit-order-protocol-utils';
+import {
+    ChainId,
+    LimitOrderV3Builder,
+    Web3ProviderConnector,
+    ZERO_ADDRESS,
+} from '@1inch/limit-order-protocol-utils';
 import Axios, { AxiosInstance } from 'axios';
 import { ethers } from 'ethers';
+import Web3 from 'web3';
 
 import {
     ISpreadSDKOrderbookModule,
@@ -11,7 +17,7 @@ import {
     SpreadSDKModuleInitProps,
     SpreadSDKOrderbookLimitOrdersQuery,
 } from '../types';
-import { getApiUrlOrOverride, getProvider } from '../utils';
+import { getApiUrlOrOverride, getProvider, getRpcUrl } from '../utils';
 
 export class SpreadSDKOrderbookModule implements ISpreadSDKOrderbookModule {
     public props: SpreadSDKModuleInitProps;
@@ -98,19 +104,30 @@ export class SpreadSDKOrderbookModule implements ISpreadSDKOrderbookModule {
     public async genCreateLimitOrder(
         props: SpreadSDKCreateLimitOrderProps,
     ): Promise<SpreadSDKLimitOrder> {
+        const web3 = new Web3(getRpcUrl(this.props.chainId));
+        // You can create and use a custom provider connector (for example: ethers)
+        const connector = new Web3ProviderConnector(web3);
         const contractAddress =
             this.limitOrderProtocolAddresses[this.props.chainId];
-        const limitOrderBuilder = new LimitOrderBuilder(contractAddress, {
-            version: '4',
-            domainName: '1inch',
+        const limitOrderBuilder = new LimitOrderV3Builder(connector, {
+            version: '5',
+            domainName: '1inch Aggregation Router',
         });
 
         const limitOrder = limitOrderBuilder.buildLimitOrder({
-            makerAsset: props.makerAsset,
-            takerAsset: props.takerAsset,
-            maker: props.maker,
+            makerAssetAddress: props.makerAsset,
+            takerAssetAddress: props.takerAsset,
+            makerAddress: props.maker,
             makingAmount: props.makingAmount,
             takingAmount: props.takingAmount,
+            predicate: '0x',
+            permit: '0x',
+            receiver: ZERO_ADDRESS,
+            allowedSender: ZERO_ADDRESS,
+            getMakingAmount: ZERO_ADDRESS,
+            getTakingAmount: ZERO_ADDRESS,
+            preInteraction: '0x',
+            postInteraction: '0x',
         });
 
         const limitOrderTypedData = limitOrderBuilder.buildLimitOrderTypedData(
@@ -118,6 +135,9 @@ export class SpreadSDKOrderbookModule implements ISpreadSDKOrderbookModule {
             BigInt(this.props.chainId),
             contractAddress,
         );
+
+        const limitOrderHash =
+            limitOrderBuilder.buildLimitOrderHash(limitOrderTypedData);
 
         const wallet = new ethers.Wallet(
             this.props.privateKey,
