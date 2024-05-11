@@ -1,11 +1,14 @@
 import {
-    ChainId,
-    LimitOrderV3Builder,
+    FillOrderParams,
+    LimitOrderBuilder,
+    LimitOrderProtocolFacade,
+    PrivateKeyProviderConnector,
     Web3ProviderConnector,
     ZERO_ADDRESS,
+    ZX,
+    limitOrderProtocolAddresses,
 } from '@1inch/limit-order-protocol-utils';
 import Axios, { AxiosInstance } from 'axios';
-import { ethers } from 'ethers';
 import Web3 from 'web3';
 
 import {
@@ -17,7 +20,7 @@ import {
     SpreadSDKModuleInitProps,
     SpreadSDKOrderbookLimitOrdersQuery,
 } from '../types';
-import { getApiUrlOrOverride, getProvider, getRpcUrl } from '../utils';
+import { getApiUrlOrOverride, getRpcUrl } from '../utils';
 
 export class SpreadSDKOrderbookModule implements ISpreadSDKOrderbookModule {
     public props: SpreadSDKModuleInitProps;
@@ -30,23 +33,6 @@ export class SpreadSDKOrderbookModule implements ISpreadSDKOrderbookModule {
     constructor(props: SpreadSDKModuleInitProps) {
         this.init(props);
     }
-
-    protected limitOrderProtocolAddresses: { [key in ChainId]: string } = {
-        [ChainId.ethereumMainnet]: '0x1111111254eeb25477b68fb85ed929f73a960582',
-        [ChainId.binanceMainnet]: '0x1111111254eeb25477b68fb85ed929f73a960582',
-        [ChainId.polygonMainnet]: '0x1111111254eeb25477b68fb85ed929f73a960582',
-        [ChainId.optimismMainnet]: '0x1111111254eeb25477b68fb85ed929f73a960582',
-        [ChainId.arbitrumMainnet]: '0x1111111254eeb25477b68fb85ed929f73a960582',
-        [ChainId.auroraMainnet]: '0x1111111254eeb25477b68fb85ed929f73a960582',
-        [ChainId.gnosisMainnet]: '0x1111111254eeb25477b68fb85ed929f73a960582',
-        [ChainId.avalancheMainnet]:
-            '0x1111111254eeb25477b68fb85ed929f73a960582',
-        [ChainId.fantomMainnet]: '0x1111111254eeb25477b68fb85ed929f73a960582',
-        [ChainId.klaytnMainnet]: '0x1111111254eeb25477b68fb85ed929f73a960582',
-        [ChainId.zkSyncEraMainnet]:
-            '0x6e2b76966cbd9cf4cc2fa0d76d24d5241e0abc2f',
-        [ChainId.baseMainnet]: '0x1111111254eeb25477b68fb85ed929f73a960582',
-    } as const;
 
     public init(props: SpreadSDKInitProps): void {
         this.props = props;
@@ -105,14 +91,19 @@ export class SpreadSDKOrderbookModule implements ISpreadSDKOrderbookModule {
         props: SpreadSDKCreateLimitOrderProps,
     ): Promise<SpreadSDKLimitOrder> {
         const web3 = new Web3(getRpcUrl(this.props.chainId));
-        // You can create and use a custom provider connector (for example: ethers)
         const connector = new Web3ProviderConnector(web3);
-        const contractAddress =
-            this.limitOrderProtocolAddresses[this.props.chainId];
-        const limitOrderBuilder = new LimitOrderV3Builder(connector, {
-            version: '5',
-            domainName: '1inch Aggregation Router',
-        });
+        const contractAddress = limitOrderProtocolAddresses[this.props.chainId];
+
+        const limitOrderProtocolFacade = new LimitOrderProtocolFacade(
+            contractAddress,
+            this.props.chainId,
+            connector,
+        );
+        const limitOrderBuilder = new LimitOrderBuilder(
+            contractAddress,
+            this.props.chainId,
+            connector,
+        );
 
         const limitOrder = limitOrderBuilder.buildLimitOrder({
             makerAssetAddress: props.makerAsset,
@@ -120,7 +111,6 @@ export class SpreadSDKOrderbookModule implements ISpreadSDKOrderbookModule {
             makerAddress: props.maker,
             makingAmount: props.makingAmount,
             takingAmount: props.takingAmount,
-            predicate: '0x',
             permit: '0x',
             receiver: ZERO_ADDRESS,
             allowedSender: ZERO_ADDRESS,
@@ -130,32 +120,48 @@ export class SpreadSDKOrderbookModule implements ISpreadSDKOrderbookModule {
             postInteraction: '0x',
         });
 
-        const limitOrderTypedData = limitOrderBuilder.buildLimitOrderTypedData(
-            limitOrder,
-            BigInt(this.props.chainId),
-            contractAddress,
+        const limitOrderTypedData =
+            limitOrderBuilder.buildLimitOrderTypedData(limitOrder);
+
+        const privateKeyProviderConnector = new PrivateKeyProviderConnector(
+            this.parseHex(this.props.privateKey),
+            web3,
         );
 
-        const limitOrderHash =
-            limitOrderBuilder.buildLimitOrderHash(limitOrderTypedData);
-
-        const wallet = new ethers.Wallet(
-            this.props.privateKey,
-            getProvider(this.props.chainId),
+        const signature = await privateKeyProviderConnector.signTypedData(
+            this.props.publicAddress,
+            limitOrderTypedData,
         );
 
         delete limitOrderTypedData.types.EIP712Domain;
 
-        const signature = await wallet._signTypedData(
-            limitOrderTypedData.domain,
-            limitOrderTypedData.types,
-            limitOrderTypedData.message,
-        );
+        const calldata = limitOrderProtocolFacade.fillLimitOrder({
+            order: limitOrder,
+            signature,
+            makingAmount: '0',
+            takingAmount: props.takingAmount,
+            thresholdAmount: '0',
+            interaction: ZX,
+            skipPermit: true,
+        } as FillOrderParams);
 
         return {
             sdkType: '1inch',
             data: limitOrder,
             signature,
+            calldata,
         };
+    }
+
+    public getProtocolAddress(): string {
+        return limitOrderProtocolAddresses[this.props.chainId];
+    }
+
+    private parseHex(hex: string): string {
+        return hex.startsWith('0x') ? hex.slice(2) : hex;
+    }
+
+    private formatHex(str: string): string {
+        return str.startsWith('0x') ? str : `0x${str}`;
     }
 }

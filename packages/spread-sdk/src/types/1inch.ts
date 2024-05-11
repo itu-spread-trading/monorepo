@@ -1,4 +1,4 @@
-import { LimitOrderLegacy } from '@1inch/limit-order-protocol-utils';
+import { LimitOrder } from '@1inch/limit-order-protocol-utils';
 
 export type SpreadSDK1InchData<T> = T & {
     sdkType: '1inch';
@@ -15,7 +15,8 @@ export type SpreadSDK1InchToken = SpreadSDK1InchData<{
 
 export type SpreadSDK1InchLimitOrder = SpreadSDK1InchData<{
     signature: string;
-    data: LimitOrderLegacy;
+    data: LimitOrder;
+    calldata: string;
 }>;
 
 export type SpreadSDK1InchSwapParams = SpreadSDK1InchData<{

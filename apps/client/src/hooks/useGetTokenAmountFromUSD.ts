@@ -2,7 +2,7 @@ import { useMarketDataContext } from '@/context';
 import { useTokenPair } from '@/store';
 import { symbolToDecimal } from '@/utils/symbolToDecimal';
 import { BigNumber } from 'ethers';
-import { parseUnits } from 'viem';
+import { formatUnits, parseUnits } from 'viem';
 
 export const useGetTokenAmountFromUSD = () => {
     const { spotPrice } = useMarketDataContext();
@@ -44,7 +44,7 @@ export const useGetTokenAmountFromUSD = () => {
 
     const getParsedUSDTAmount = (usdAmount: number) => {
         try {
-            return parseUnits(usdAmount.toFixed(6), 6);
+            return parseUnits(String(usdAmount), 18);
         } catch {
             return BigNumber.from(0);
         }
@@ -67,11 +67,20 @@ export const useGetTokenAmountFromUSD = () => {
         }
     };
 
+    const getTokenAmountInUsd = (
+        tokenAmount: bigint,
+        decimal = symbolToDecimal(tokenPair),
+    ) => {
+        const num = Number(formatUnits(tokenAmount, decimal)) * spotPrice;
+        return num.toFixed(4);
+    };
+
     return {
         getParsedAmount,
         getTokenAmountFromUSD,
         getFuturesUSDAmount,
         getFuturesTokenAmount,
         getParsedUSDTAmount,
+        getTokenAmountInUsd,
     };
 };

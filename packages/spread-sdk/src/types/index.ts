@@ -141,7 +141,7 @@ export enum SpreadSDKOrderStatus {
     PENDING = 'PENDING',
     FILLED = 'FILLED',
     CANCELLED = 'CANCELLED',
-    OPEN = 'OPEN',
+    COMPLETE = 'COMPLETE',
 }
 
 export enum SpreadSDKOrderType {
@@ -151,19 +151,58 @@ export enum SpreadSDKOrderType {
 
 export type SpreadSDKOrder = {
     id: number;
+    address: string;
     symbol: SpreadSDKSupportedSymbols;
     spread: number;
     size: number;
     status: SpreadSDKOrderStatus;
     date: string;
     type: SpreadSDKOrderType;
-    associtedLimitOrder: string | null;
+    associatedLimitOrder: string | null;
     associatedSwap: string | null;
 };
 
-export class SpreadSDKUpdateOrderDto {
-    status: SpreadSDKOrderType;
-}
+export type SpreadSDKCreateOrderDto = {
+    address: string;
+    symbol: string;
+    spread: number;
+    size: number;
+    type: SpreadSDKOrderType;
+    associatedLimitOrder?: string;
+    associatedSwap?: string;
+};
+export type SpreadSDKUpdateOrderDto = {
+    status: SpreadSDKOrderStatus;
+    associatedLimitOrder?: string;
+    associatedSwap?: string;
+};
+
+export type SpreadSDKSwapQuoteDto = {
+    swapParams: {
+        src: string; // Token address of 1INCH
+        dst: string; // Token address of DAI
+        amount: string; // Amount of 1INCH to swap (in wei)
+        from: string; // Address of the sender
+        slippage: string; // Maximum acceptable slippage percentage for the swap (e.g., 1 for 1%)
+        disableEstimate: string; // Set to true to disable estimation of swap details
+        allowPartialFill: string; // Set to true to allow partial filling of the swap order
+    };
+    chainId: number;
+};
+
+export type SpreadSDKStartSellSpreadDto = {
+    calldata: string;
+    metaCalldata: string;
+    usdtAddress: string;
+    contractAddress: string;
+} & SpreadSDKCreateOrderDto;
+
+export type SpreadSDKStartBuySpreadDto = {
+    calldata: string;
+    metaCalldata: string;
+    tokenAddress: string;
+    contractAddress: string;
+} & SpreadSDKCreateOrderDto;
 
 export type SpreadSDKSupportedSymbols =
     | 'BNBUSDT'

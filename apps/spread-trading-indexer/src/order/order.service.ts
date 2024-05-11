@@ -21,13 +21,24 @@ export class OrderService {
     ) {}
 
     public async genCreateOrder(dto: CreateOrderDto): Promise<OrderEntity> {
-        const newOrder = this.orderRepository.create(dto);
+        const newOrder = this.orderRepository.create({
+            ...dto,
+            address: dto.address.toLowerCase(),
+        });
         const createdOrder = await this.orderRepository.save(newOrder);
         return createdOrder;
     }
 
-    public async genOrders(): Promise<Array<OrderEntity>> {
-        return await this.orderRepository.find();
+    public async genOrders(address: string): Promise<Array<OrderEntity>> {
+        return await this.orderRepository.find({
+            order: {
+                date: 'DESC',
+            },
+            where: {
+                address: address.toLowerCase(),
+            },
+            take: 100,
+        });
     }
 
     public async genOrder(id: number): Promise<OrderEntity> {

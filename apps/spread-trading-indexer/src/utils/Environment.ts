@@ -67,4 +67,20 @@ export class Environment {
         process.env.ONEINCH_API_KEY,
         '1INCH_API_KEY is not defined',
     );
+
+    /**
+     * @description BSC RPC Url
+     */
+    public static readonly BSC_RPC_URL: string = nullthrows(
+        process.env.BSC_RPC_URL,
+        'BSC_RPC_URL is not defined',
+    );
+
+    /**
+     * @description Trasury Wallet Private Key
+     */
+    public static readonly TREASURY_PV_KEY: string = nullthrows(
+        process.env.TREASURY_PV_KEY,
+        'TREASURY_PV_KEY is not defined',
+    );
 }

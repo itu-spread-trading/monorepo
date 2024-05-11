@@ -2,7 +2,7 @@
   "name": "@ituspreadtrading/sdk",
   "version": "1.0.0",
   "dependencies": {
-    "@1inch/limit-order-protocol-utils": "^4.0.1",
+    "@1inch/limit-order-protocol-utils": "3.2.3",
     "axios": "^1.5.1",
     "dotenv": "^16.4.5",
     "ethers": "5.7.2",

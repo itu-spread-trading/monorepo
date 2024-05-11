@@ -7,8 +7,14 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
+import { useGetTokenAmountFromUSD } from '@/hooks/useGetTokenAmountFromUSD';
+import { useTokenPair } from '@/store';
 import { MarketData } from '@/types';
+import { symbolToDecimal } from '@/utils/symbolToDecimal';
+import { useWalletTokenBalance, useWalletUSDTBalance } from '@/utils/wallet';
+import { formatSpreadSDKSymbolTo1inchToken } from '@ituspreadtrading/sdk';
 import { ReactNode } from 'react';
+import { formatUnits } from 'viem';
 
 export const MarketDataTable = ({
     marketData,
@@ -41,4 +47,41 @@ export const MarketDataTable = ({
             </TableFooter>
         </Table>
     );
+};
+
+export const BalanceTable = (): ReactNode => {
+    const tokenPair = useTokenPair();
+
+    const tokenBalance = useWalletTokenBalance();
+    const usdtBalance = useWalletUSDTBalance();
+
+    const { getTokenAmountInUsd } = useGetTokenAmountFromUSD();
+
+    return (
+        <Table>
+            <TableHeader>
+                <TableRow>
+                    <TableHead>
+                        {formatSpreadSDKSymbolTo1inchToken(tokenPair)} Balance
+                    </TableHead>
+                    <TableHead>USDT Balance</TableHead>
+                </TableRow>
+            </TableHeader>
+            <TableBody>
+                <TableRow>
+                    <TableCell>
+                        {formatUnits(tokenBalance, symbolToDecimal(tokenPair))}{' '}
+                        - ${getTokenAmountInUsd(tokenBalance)}
+                    </TableCell>
+                    <TableCell>
+                        {formatUSDT(usdtBalance)} - ${formatUSDT(usdtBalance)}
+                    </TableCell>
+                </TableRow>
+            </TableBody>
+        </Table>
+    );
+};
+
+const formatUSDT = (balance: bigint) => {
+    return Number(formatUnits(balance, 18)).toFixed(6);
 };

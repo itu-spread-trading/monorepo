@@ -5,7 +5,7 @@ import { SpreadSDKError } from '../SpreadSDKError';
 
 export const getRpcUrl = (chainId: number): string => {
     if (chainId === ChainId.binanceMainnet) {
-        return 'https://binance.llamarpc.com';
+        return 'https://bsc-dataseed1.binance.org/';
     } else {
         throw SpreadSDKError.UnsupportedChain();
     }

@@ -1,3 +1,4 @@
+import { ChainId } from '@1inch/limit-order-protocol-utils';
 import Axios, { AxiosInstance } from 'axios';
 
 import {
@@ -20,6 +21,10 @@ export class SpreadSDKSwapModule implements ISpreadSDKSwapModule {
     protected apiUrl: string;
     private axiosSpread: AxiosInstance;
     private axios1Inch: AxiosInstance;
+
+    routerAddresses = {
+        [ChainId.binanceMainnet]: '0x111111125421cA6dc452d289314280a0f8842A65',
+    };
 
     constructor(props: SpreadSDKModuleInitProps) {
         this.init(props);
@@ -45,13 +50,24 @@ export class SpreadSDKSwapModule implements ISpreadSDKSwapModule {
     public getSwapParams(
         props: SpreadSDKGetSwapParamsProps,
     ): SpreadSDKSwapParams {
-        throw new Error('Method not implemented.');
+        return {
+            sdkType: '1inch',
+            src: props.inputToken,
+            dst: props.outputToken,
+            amount: props.amount,
+            from: this.props.publicAddress,
+            slippage: '1',
+        };
     }
 
     public async genSwapCalldata(
         params: SpreadSDKSwapParams,
     ): Promise<SpreadSDKSwapCalldata> {
-        throw new Error('Method not implemented.');
+        const swapResponse = await this.axiosSpread.post('/sdk/swapquote', {
+            swapParams: params,
+            chainId: this.props.chainId,
+        });
+        return swapResponse.data;
     }
 
     public async genApproveCalldata(
@@ -66,5 +82,9 @@ export class SpreadSDKSwapModule implements ISpreadSDKSwapModule {
 
     public async genAllowance(tokenAddress: string): Promise<string> {
         throw new Error('Method not implemented.');
+    }
+
+    public getRouterAddress(): string {
+        return this.routerAddresses[this.props.chainId];
     }
 }

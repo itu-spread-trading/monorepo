@@ -4,4 +4,5 @@ export const queries = {
     MARKET: 'market-data',
     STANDARD_DEVIATION: 'spread-standard-deviation',
     TOKEN_PAIR: 'token-pair',
+    ORDERS: 'orders',
 };

@@ -1,10 +1,10 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
 
 export enum OrderStatus {
     PENDING = 'PENDING',
     FILLED = 'FILLED',
     CANCELLED = 'CANCELLED',
-    OPEN = 'OPEN',
+    COMPLETE = 'COMPLETE',
 }
 
 export enum OrderType {
@@ -16,6 +16,10 @@ export enum OrderType {
 export class OrderEntity {
     @PrimaryGeneratedColumn()
     id: number;
+
+    @Column()
+    @Index()
+    address: string;
 
     @Column()
     symbol: string;
@@ -32,8 +36,8 @@ export class OrderEntity {
     @Column()
     type: OrderType;
 
-    @Column({ nullable: true })
-    associtatedLimitOrder: string;
+    @Column({ nullable: true, length: 2048 })
+    associatedLimitOrder: string;
 
     @Column({ nullable: true })
     associatedSwap: string;

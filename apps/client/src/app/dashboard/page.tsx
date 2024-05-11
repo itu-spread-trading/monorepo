@@ -2,7 +2,7 @@
 
 import { DashboardChart } from '@/app/dashboard/chart';
 import { SellAndBuyInput } from '@/app/dashboard/input';
-import { MarketDataTable } from '@/app/dashboard/marketdata';
+import { BalanceTable, MarketDataTable } from '@/app/dashboard/marketdata';
 import { DashboardOrderHistory } from '@/app/dashboard/orderhistory';
 import { Card, CardHeader, Navbar, TokenSelect } from '@/components';
 import { MarketDataProvider } from '@/context';
@@ -29,7 +29,7 @@ export default function DashboardPage(): ReactNode {
         if (isConnected && wallet != null) {
             spreadSDK.init(
                 getDefaultConfig({
-                    publicAddress: wallet.address,
+                    publicAddress: wallet.associatedAddress,
                     privateKey: wallet.privateKey,
                 }),
             );
@@ -49,6 +49,8 @@ export default function DashboardPage(): ReactNode {
                         </Card>
                         <Card className="mt-2">
                             <MarketDataTable marketData={marketData} />
+                            <div className="h-4"></div>
+                            <BalanceTable />
                         </Card>
                         <div className="mt-auto">
                             <DashboardChart />

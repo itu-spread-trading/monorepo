@@ -9,9 +9,6 @@ import {
 } from './modules';
 import {
     ISpreadSDK,
-    ISpreadSDKOrderbookModule,
-    ISpreadSDKSwapModule,
-    ISpreadSDKTokenModule,
     SpreadCandleResponse,
     SpreadGraphQueryParams,
     SpreadMeanResponse,
@@ -19,6 +16,8 @@ import {
     SpreadSDKInitProps,
     SpreadSDKModuleInitProps,
     SpreadSDKOrder,
+    SpreadSDKStartBuySpreadDto,
+    SpreadSDKStartSellSpreadDto,
     SpreadSDKUpdateOrderDto,
     SpreadStandardDeviationResponse,
 } from './types';
@@ -37,9 +36,9 @@ export class SpreadSDK implements ISpreadSDK {
     /**
      * Modules
      */
-    orderbook: ISpreadSDKOrderbookModule;
-    swap: ISpreadSDKSwapModule;
-    token: ISpreadSDKTokenModule;
+    orderbook: SpreadSDKOrderbookModule;
+    swap: SpreadSDKSwapModule;
+    token: SpreadSDKTokenModule;
 
     constructor(props: SpreadSDKInitProps) {
         this.init(props);
@@ -58,6 +57,10 @@ export class SpreadSDK implements ISpreadSDK {
         this.axiosInstance = Axios.create({
             baseURL: getApiUrlOrOverride(props.apiUrlOverride),
         });
+    }
+
+    public isInitialized(): boolean {
+        return this.initialized;
     }
 
     public getPublicAddress(): string {
@@ -120,7 +123,11 @@ export class SpreadSDK implements ISpreadSDK {
         }
 
         try {
-            const response = await this.axiosInstance.get('/order');
+            const response = await this.axiosInstance.get('/order', {
+                params: {
+                    address: this.props.publicAddress.toLowerCase(),
+                },
+            });
             return response.data;
         } catch {
             throw SpreadSDKError.CouldNotGetOrders();
@@ -179,5 +186,19 @@ export class SpreadSDK implements ISpreadSDK {
             this.props.privateKey,
             getProvider(this.props.chainId),
         );
+    }
+
+    public async genStartSellSpread(
+        data: SpreadSDKStartSellSpreadDto,
+    ): Promise<SpreadSDKOrder> {
+        const orderResponse = await this.axiosInstance.post('/sdk/sell', data);
+        return orderResponse.data;
+    }
+
+    public async genStartBuySpread(
+        data: SpreadSDKStartBuySpreadDto,
+    ): Promise<SpreadSDKOrder> {
+        const orderResponse = await this.axiosInstance.post('/sdk/buy', data);
+        return orderResponse.data;
     }
 }
