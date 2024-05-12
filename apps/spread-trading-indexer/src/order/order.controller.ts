@@ -21,6 +21,11 @@ export class OrderController {
         return this.orderService.genOrder(id);
     }
 
+    @Get('/last')
+    genLastOrder(@Query('address') address: string) {
+        return this.orderService.genLastOrder(address);
+    }
+
     @Put('/:id')
     genUpdateOrder(@Param('id') id: number, @Body() dto: UpdateOrderDto) {
         return this.orderService.genUpdateOrder(id, dto);

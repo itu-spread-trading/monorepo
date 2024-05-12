@@ -23,7 +23,9 @@ export const SpreadCandleStickGraph = () => {
         const seriesData = data.map((item) => {
             return {
                 x: new Date(item.date).getTime(),
-                y: [item.open, item.high, item.low, item.close],
+                y: [item.open, item.high, item.low, item.close].map((item) =>
+                    item.toFixed(6),
+                ),
             };
         });
 

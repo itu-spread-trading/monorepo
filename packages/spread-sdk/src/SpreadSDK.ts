@@ -134,6 +134,23 @@ export class SpreadSDK implements ISpreadSDK {
         }
     }
 
+    public async genLastOrder(): Promise<SpreadSDKOrder | null> {
+        if (!this.initialized) {
+            throw SpreadSDKError.NotInitialized();
+        }
+
+        try {
+            const response = await this.axiosInstance.get('/order/last', {
+                params: {
+                    address: this.props.publicAddress.toLowerCase(),
+                },
+            });
+            return response.data;
+        } catch {
+            throw SpreadSDKError.CouldNotGetLastOrder();
+        }
+    }
+
     public async genOrdersById(id: number): Promise<SpreadSDKOrder | null> {
         if (!this.initialized) {
             throw SpreadSDKError.NotInitialized();

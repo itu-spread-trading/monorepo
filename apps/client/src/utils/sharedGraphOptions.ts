@@ -45,7 +45,7 @@ export const getSharedGraphOptions = (): ApexOptions => {
             tooltip: {
                 enabled: true,
             },
-            show: false,
+            show: true,
         },
         grid: {
             yaxis: {

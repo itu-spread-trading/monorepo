@@ -41,6 +41,17 @@ export class OrderService {
         });
     }
 
+    public async genLastOrder(address: string): Promise<OrderEntity> {
+        return await this.orderRepository.findOne({
+            order: {
+                date: 'DESC',
+            },
+            where: {
+                address: address.toLowerCase(),
+            },
+        });
+    }
+
     public async genOrder(id: number): Promise<OrderEntity> {
         const order = await this.orderRepository.findOne({
             where: {

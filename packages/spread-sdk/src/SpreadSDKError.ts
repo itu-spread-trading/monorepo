@@ -39,4 +39,8 @@ export class SpreadSDKError extends Error {
     public static UnsupportedChain(): SpreadSDKError {
         return new SpreadSDKError('This chain is currently not supported');
     }
+
+    public static CouldNotGetLastOrder(): SpreadSDKError {
+        return new SpreadSDKError('Could not get last order');
+    }
 }
