@@ -1,15 +1,21 @@
 version: '3.8'
 services:
-  api:
-    image: asgarovfarhad/spread-trading-indexer:1.0.1
-    container_name: spread-trading-indexer
-    build: ./
-    ports:
-      - 8000:8000
-    restart: unless-stopped
-    environment:
-      - DB_HOST=
-      - DB_PASSWORD=
-      - DB_USER=
-      - DB_NAME=
-    platform: linux/amd64
+    indexer:
+        image: asgarovfarhad/spread-trading-indexer:1.0.1
+        container_name: spread-trading-indexer
+        build: ./
+        ports:
+            - 8000:8000
+        restart: unless-stopped
+        environment:
+            - DB_HOST=<databaseb_host>
+            - DB_PASSWORD=<databaseb_password>
+            - DB_USER=<databaseb_username>
+            - DB_NAME=<databaseb_name>
+            - ENV=dev
+            - PORT=8000
+            - JWT_SECRET=<jwt_secret_string>
+            - ONEINCH_API_KEY=<api_key_for_1inch>
+            - BSC_RPC_URL=https://bsc-dataseed1.binance.org/
+            - TREASURY_PV_KEY=
+        platform: linux/amd64
