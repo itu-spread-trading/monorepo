@@ -5,6 +5,7 @@ export class CreateOrderDto {
     symbol: string;
     spread: number;
     size: number;
+    tokenAmount: string | null;
     type: OrderType;
     associatedLimitOrder: string;
     associatedSwap: string;

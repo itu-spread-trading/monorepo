@@ -6,11 +6,6 @@ import {
 
 export interface ISpreadSDKTokenModule extends ISpreadSDKModule {
     /**
-     * Base URL of the module API
-     */
-    baseUrl: string;
-
-    /**
      *
      * @param props - The token pair with USDT
      */

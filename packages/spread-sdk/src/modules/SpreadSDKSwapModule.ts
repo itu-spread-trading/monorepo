@@ -16,11 +16,10 @@ import { getApiUrlOrOverride } from '../utils';
 
 export class SpreadSDKSwapModule implements ISpreadSDKSwapModule {
     public props: SpreadSDKModuleInitProps;
-
     public baseUrl: string;
-    protected apiUrl: string;
-    private axiosSpread: AxiosInstance;
-    private axios1Inch: AxiosInstance;
+    public apiUrl: string;
+    public axiosSpread: AxiosInstance;
+    public axios1Inch: AxiosInstance;
 
     routerAddresses = {
         [ChainId.binanceMainnet]: '0x111111125421cA6dc452d289314280a0f8842A65',

@@ -1,5 +1,6 @@
 import { ISpreadSDKOrderbookModule } from './ISpreadSDKOrderbookModule';
 import { ISpreadSDKSwapModule } from './ISpreadSDKSwapModule';
+import { ISpreadSDKTokenModule } from './ISpreadSDKTokenModule';
 
 export interface ISpreadSDK {
     /**
@@ -7,4 +8,5 @@ export interface ISpreadSDK {
      */
     orderbook: ISpreadSDKOrderbookModule;
     swap: ISpreadSDKSwapModule;
+    token: ISpreadSDKTokenModule;
 }

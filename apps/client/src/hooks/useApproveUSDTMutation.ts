@@ -12,7 +12,9 @@ export const useApproveUSDTMutation = (onSuccess?: () => void) => {
             toast({
                 title: 'Successfully Approved',
             });
-            onSuccess?.();
+            setTimeout(() => {
+                onSuccess?.();
+            }, 1000);
         },
         onError: (err) => {
             toast({

@@ -24,11 +24,10 @@ import { getApiUrlOrOverride, getRpcUrl } from '../utils';
 
 export class SpreadSDKOrderbookModule implements ISpreadSDKOrderbookModule {
     public props: SpreadSDKModuleInitProps;
-
     public baseUrl: string;
-    protected apiUrl: string;
-    private axiosSpread: AxiosInstance;
-    private axios1Inch: AxiosInstance;
+    public apiUrl: string;
+    public axiosSpread: AxiosInstance;
+    public axios1Inch: AxiosInstance;
 
     constructor(props: SpreadSDKModuleInitProps) {
         this.init(props);

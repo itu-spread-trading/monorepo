@@ -11,6 +11,11 @@ export class OrderController {
         return this.orderService.genCreateOrder(dto);
     }
 
+    @Get('/last')
+    genLastOrder(@Query('address') address: string) {
+        return this.orderService.genLastOrder(address);
+    }
+
     @Get()
     genOrders(@Query('address') address: string) {
         return this.orderService.genOrders(address);
@@ -19,11 +24,6 @@ export class OrderController {
     @Get('/:id')
     genOrder(@Param('id') id: number) {
         return this.orderService.genOrder(id);
-    }
-
-    @Get('/last')
-    genLastOrder(@Query('address') address: string) {
-        return this.orderService.genLastOrder(address);
     }
 
     @Put('/:id')

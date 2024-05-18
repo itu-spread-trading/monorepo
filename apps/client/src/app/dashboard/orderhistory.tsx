@@ -37,7 +37,7 @@ export const DashboardOrderHistory = (): ReactNode => {
     const orders = data ?? [];
 
     return (
-        <Card className="mt-2 max-h-[450px] min-h-[250px] overflow-auto">
+        <Card className="mt-2 h-[100%] max-h-[375px] overflow-auto">
             <CardHeader>Order History</CardHeader>
             <CardContent>
                 {orders.length > 0 ? (

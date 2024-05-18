@@ -14,11 +14,10 @@ import {
 
 export class SpreadSDKTokenModule implements ISpreadSDKTokenModule {
     public props: SpreadSDKModuleInitProps;
-
     public baseUrl: string;
-    protected apiUrl: string;
-    private axios1Inch: AxiosInstance;
-    private axiosSpread: AxiosInstance;
+    public apiUrl: string;
+    public axiosSpread: AxiosInstance;
+    public axios1Inch: AxiosInstance;
 
     constructor(props: SpreadSDKModuleInitProps) {
         this.init(props);

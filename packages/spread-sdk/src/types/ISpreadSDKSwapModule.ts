@@ -10,11 +10,6 @@ import {
 
 export interface ISpreadSDKSwapModule extends ISpreadSDKModule {
     /**
-     * Base URL of the module API
-     */
-    baseUrl: string;
-
-    /**
      *
      * @param props - The required metadata to build the swap
      */

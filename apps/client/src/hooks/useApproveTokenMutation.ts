@@ -1,8 +1,10 @@
 import { useToast } from '@/components/ui/use-toast';
 import { useApproveToken } from '@/utils/wallet';
-import { useMutation } from '@tanstack/react-query';
+import { UseMutationResult, useMutation } from '@tanstack/react-query';
 
-export const useApproveTokenMutation = (onSuccess?: () => void) => {
+export const useApproveTokenMutation = (
+    onSuccess?: () => void,
+): UseMutationResult<void, Error, string, unknown> => {
     const { toast } = useToast();
 
     const approveToken = useApproveToken();
@@ -12,7 +14,9 @@ export const useApproveTokenMutation = (onSuccess?: () => void) => {
             toast({
                 title: 'Successfully Approved USDT',
             });
-            onSuccess?.();
+            setTimeout(() => {
+                onSuccess?.();
+            }, 1000);
         },
         onError: (err) => {
             toast({

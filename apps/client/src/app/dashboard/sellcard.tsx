@@ -126,6 +126,7 @@ export const SellCard = ({ sd, spread }: CardProps) => {
                 size: sellSize,
                 type: SpreadSDKOrderType.SELL,
                 symbol: tokenPair,
+                tokenAmount: estimatedFuturesAmount,
             });
 
             if (sellStartResponse.status === SpreadSDKOrderStatus.FILLED) {
@@ -189,7 +190,7 @@ export const SellCard = ({ sd, spread }: CardProps) => {
                     children: zeroAllowance
                         ? `Approve ${token}`
                         : zeroUSDTAllowance
-                        ? 'Approve USDT for swap'
+                        ? 'Approve USDT for Swap'
                         : 'Submit',
                     onClick: async () => {
                         if (zeroAllowance) {
@@ -216,6 +217,7 @@ export const SellCard = ({ sd, spread }: CardProps) => {
         sellSize,
         allowance,
         tokenPair,
+        usdtAllowance,
         approveTokenMutation.isPending,
         approveUSDTMutation.isPending,
         sellMutation.isPending,

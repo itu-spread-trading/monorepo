@@ -1,0 +1,848 @@
+<svg version="1.1" baseProfile="full" width="6121.0" height="1037.0" viewbox="0 0 6121 1037" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ev="http://www.w3.org/2001/xml-events">
+<desc >#.interface: fill=lightblue
+#.enumeration: fill=lightgreen
+#.type: fill=lightgray
+[SpreadSDK|-props: SpreadSDKInitProps;-apiUrl: string;-axiosInstance: AxiosInstance;-initialized: boolean;+orderbook: SpreadSDKOrderbookModule;+swap: SpreadSDKSwapModule;+token: SpreadSDKTokenModule|+static create(): SpreadSDK;+init(): void;+isInitialized(): boolean;+getPublicAddress(): string;+getSpreadGraph(): Promise&lt;SpreadCandleResponse\[\]&gt;;+getSpreadMeanGraph(): Promise&lt;SpreadMeanResponse\[\]&gt;;+getSpreadStandardDeviation(): Promise&lt;SpreadStandardDeviationResponse&gt;;+getSpread(): Promise&lt;SpreadQueryResponse&gt;;+genOrders(): Promise&lt;SpreadSDKOrder\[\]&gt;;+genLastOrder(): Promise&lt;SpreadSDKOrder&gt;;+genOrdersById(): Promise&lt;SpreadSDKOrder&gt;;+genUpdateOrderById(): Promise&lt;SpreadSDKOrder&gt;;+genCreateOrder(): Promise&lt;SpreadSDKOrder&gt;;+getWalletInstance(): Wallet;+genStartSellSpread(): Promise&lt;SpreadSDKOrder&gt;;+genStartBuySpread(): Promise&lt;SpreadSDKOrder&gt;]
+[ISpreadSDK]&lt;:--[SpreadSDK]
+[SpreadSDKError||+static NotInitialized(): SpreadSDKError;+static CouldNotGetSpread(): SpreadSDKError;+static CouldNotGetStandardDeviation(): SpreadSDKError;+static CouldNotGetOrders(): SpreadSDKError;+static CouldNotGetOrder(): SpreadSDKError;+static CouldNotUpdateOrder(): SpreadSDKError;+static CouldNotCreateOrder(): SpreadSDKError;+static CouldNotGetTokenPair(): SpreadSDKError;+static UnsupportedChain(): SpreadSDKError;+static CouldNotGetLastOrder(): SpreadSDKError]
+[SpreadSDKOrderbookModule|+props: SpreadSDKInitProps;+baseUrl: string;+apiUrl: string;+axiosSpread: AxiosInstance;+axios1Inch: AxiosInstance|+init(): void;+genLimitOrdersForAddress(): Promise&lt;SpreadSDK1InchLimitOrder\[\]&gt;;+genLimitOrdersByOrderHash(): Promise&lt;SpreadSDK1InchLimitOrder&gt;;+genLimitOrders(): Promise&lt;SpreadSDK1InchLimitOrder\[\]&gt;;+genCreateLimitOrder(): Promise&lt;SpreadSDK1InchLimitOrder&gt;;+getProtocolAddress(): string;-parseHex(): string;-formatHex(): string]
+[ISpreadSDKOrderbookModule]&lt;:--[SpreadSDKOrderbookModule]
+[SpreadSDKSwapModule|+props: SpreadSDKInitProps;+baseUrl: string;+apiUrl: string;+axiosSpread: AxiosInstance;+axios1Inch: AxiosInstance;+routerAddresses: { 56: string; }|+init(): void;+getSwapParams(): SpreadSDK1InchSwapParams;+genSwapCalldata(): Promise&lt;SpreadSDK1InchSwapCalldata&gt;;+genApproveCalldata(): Promise&lt;SpreadSDK1InchApproveCalldata&gt;;+genAvailableTokens(): Promise&lt;SpreadSDK1InchToken&gt;;+genAllowance(): Promise&lt;string&gt;;+getRouterAddress(): string]
+[ISpreadSDKSwapModule]&lt;:--[SpreadSDKSwapModule]
+[SpreadSDKTokenModule|+props: SpreadSDKInitProps;+baseUrl: string;+apiUrl: string;+axiosSpread: AxiosInstance;+axios1Inch: AxiosInstance|+init(): void;+genTokenPair(): Promise&lt;SpreadSDKTokenPair&gt;;+getUSDTAddress(): string]
+[ISpreadSDKTokenModule]&lt;:--[SpreadSDKTokenModule]
+[&lt;type&gt;SpreadSDK1InchApproveCalldata|+data: string;+gasPrice: string;+to: string;+value: string|]
+[SpreadGraphQueryParams|+symbol: SpreadSDKSupportedSymbols;+interval?: &quot;5m&quot; \| &quot;1h&quot; \| &quot;4h&quot; \| &quot;1d&quot;;+range?: &quot;1d&quot; \| &quot;1w&quot; \| &quot;1m&quot; \| &quot;3m&quot; \| &quot;6m&quot;|]
+[&lt;interface&gt;SpreadSDKBaseQuery|+limit?: number;+page?: number|]
+[&lt;interface&gt;SpreadSDKOrderbookLimitOrdersQuery|+sortBy?: &quot;createDateTime&quot; \| &quot;takerRate&quot; \| &quot;makerRate&quot; \| &quot;makerAmount&quot; \| &quot;takerAmount&quot;;+takerAsset?: string;+makerAsset?: string|]
+[&lt;enumeration&gt;SpreadSDKOrderStatus|PENDING;FILLED;CANCELLED;COMPLETE]
+[&lt;enumeration&gt;SpreadSDKOrderType|BUY;SELL]
+[&lt;type&gt;SpreadSDKInitProps|+apiUrlOverride?: string;+apiKey: string;+chainId: number;+publicAddress: string;+privateKey?: string|]
+[&lt;type&gt;SpreadSDKGetSwapParamsProps|+inputToken: string;+outputToken: string;+amount: string|]
+[&lt;type&gt;SpreadQueryResponse|+spread: number;+date: string|]
+[&lt;type&gt;SpreadCandleResponse|+date: string;+open: number;+close: number;+high: number;+low: number|]
+[&lt;type&gt;SpreadMeanResponse|+date: string;+value: number|]
+[&lt;type&gt;SpreadStandardDeviationResponse|+value: number|]
+[&lt;type&gt;SpreadSDKOrder|+id: number;+address: string;+symbol: SpreadSDKSupportedSymbols;+spread: number;+size: number;+tokenAmount: string;+status: SpreadSDKOrderStatus;+date: string;+type: SpreadSDKOrderType;+associatedLimitOrder: string;+associatedSwap: string|]
+[&lt;type&gt;SpreadSDKCreateOrderDto|+address: string;+symbol: string;+spread: number;+tokenAmount: string;+size: number;+type: SpreadSDKOrderType;+associatedLimitOrder?: string;+associatedSwap?: string|]
+[&lt;type&gt;SpreadSDKUpdateOrderDto|+status: SpreadSDKOrderStatus;+associatedLimitOrder?: string;+associatedSwap?: string|]
+[&lt;type&gt;SpreadSDKSwapQuoteDto|+swapParams: { src: string; dst: string; amount: string; from: string; slippage: string; disableEstimate: string; allowPartialFill: string; };+chainId: number|]
+[&lt;type&gt;SpreadSDKTokenPair|+USDT: string;+TOKEN: string|]
+[SpreadSDKBaseQuery]&lt;:--[SpreadSDKOrderbookLimitOrdersQuery]
+[&lt;interface&gt;ISpreadSDK|+orderbook: ISpreadSDKOrderbookModule;+swap: ISpreadSDKSwapModule;+token: ISpreadSDKTokenModule|]
+[&lt;interface&gt;ISpreadSDKModule|+baseUrl: string;+props: SpreadSDKInitProps;+apiUrl: string;+axiosSpread: AxiosInstance;+axios1Inch: AxiosInstance|+init(): void]
+[&lt;interface&gt;ISpreadSDKOrderbookModule||+genLimitOrdersForAddress(): Promise&lt;SpreadSDK1InchLimitOrder\[\]&gt;;+genLimitOrdersByOrderHash(): Promise&lt;SpreadSDK1InchLimitOrder&gt;;+genLimitOrders(): Promise&lt;SpreadSDK1InchLimitOrder\[\]&gt;;+genCreateLimitOrder(): Promise&lt;SpreadSDK1InchLimitOrder&gt;]
+[ISpreadSDKModule]&lt;:--[ISpreadSDKOrderbookModule]
+[&lt;interface&gt;ISpreadSDKSwapModule||+getSwapParams(): SpreadSDK1InchSwapParams;+genSwapCalldata(): Promise&lt;SpreadSDK1InchSwapCalldata&gt;;+genApproveCalldata(): Promise&lt;SpreadSDK1InchApproveCalldata&gt;;+genAvailableTokens(): Promise&lt;SpreadSDK1InchToken&gt;;+genAllowance(): Promise&lt;string&gt;]
+[ISpreadSDKModule]&lt;:--[ISpreadSDKSwapModule]
+[&lt;interface&gt;ISpreadSDKTokenModule||+genTokenPair(): Promise&lt;SpreadSDKTokenPair&gt;]
+[ISpreadSDKModule]&lt;:--[ISpreadSDKTokenModule]</desc>
+<g stroke-width="1.0" text-align="left" font="12pt Helvetica, Arial, sans-serif" font-size="12pt" font-family="Helvetica" font-weight="normal" font-style="normal">
+<g font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round" stroke="#33322E">
+<g stroke="transparent" fill="transparent">
+<rect x="0.0" y="0.0" height="1037.0" width="6121.0" stroke="none"></rect>
+</g>
+<g transform="translate(8, 8)" fill="#33322E">
+<g transform="translate(20, 20)" fill="#eee8d5" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal">
+<g stroke-dasharray="6 6">
+<path d="M321.5 173.3 L321.5 240 L321.5 260 L321.5 260.0 " fill="none"></path>
+</g>
+<path d="M326.8 173.3 L321.5 173.3 L316.2 173.3 L321.5 160.0 Z"></path>
+<g stroke-dasharray="6 6">
+<path d="M1115.8 534.8 L1115.75 688 L1115.75 715.5 L1115.8 715.5 " fill="none"></path>
+</g>
+<path d="M1121.1 534.8 L1115.8 534.8 L1110.4 534.8 L1115.8 521.5 Z"></path>
+<g stroke-dasharray="6 6">
+<path d="M1868.0 542.3 L1868 688 L1868 708 L1868.0 708.0 " fill="none"></path>
+</g>
+<path d="M1873.3 542.3 L1868.0 542.3 L1862.7 542.3 L1868.0 529.0 Z"></path>
+<g stroke-dasharray="6 6">
+<path d="M3749.8 512.3 L3749.75 688 L3749.75 753 L3749.8 753.0 " fill="none"></path>
+</g>
+<path d="M3755.1 512.3 L3749.8 512.3 L3744.4 512.3 L3749.8 499.0 Z"></path>
+<g stroke-dasharray="6 6">
+<path d="M5708.5 165.8 L5708.5 240 L5708.5 414 L5708.5 414.0 " fill="none"></path>
+</g>
+<path d="M5713.8 165.8 L5708.5 165.8 L5703.2 165.8 L5708.5 152.5 Z"></path>
+<g stroke-dasharray="6 6">
+<path d="M1731.9 133.5 L1115.75 240 L1115.75 406.5 L1115.8 406.5 " fill="none"></path>
+</g>
+<path d="M1732.8 138.8 L1731.9 133.5 L1731.0 128.3 L1745.0 131.3 Z"></path>
+<g stroke-dasharray="6 6">
+<path d="M1868.0 199.8 L1868 240 L1868 399 L1868.0 399.0 " fill="none"></path>
+</g>
+<path d="M1873.3 199.8 L1868.0 199.8 L1862.7 199.8 L1868.0 186.5 Z"></path>
+<g stroke-dasharray="6 6">
+<path d="M2004.3 119.4 L3749.75 240 L3749.75 429 L3749.8 429.0 " fill="none"></path>
+</g>
+<path d="M2004.7 114.1 L2004.3 119.4 L2003.9 124.7 L1991.0 118.5 Z"></path>
+<g data-name="SpreadSDK">
+<g fill="#eee8d5" stroke="#33322E" data-name="SpreadSDK">
+<rect x="0.0" y="260.0" height="408.0" width="643.0" data-name="SpreadSDK"></rect>
+<path d="M0.0 291.0 L643.0 291.0" fill="none" data-name="SpreadSDK"></path>
+<path d="M0.0 412.0 L643.0 412.0" fill="none" data-name="SpreadSDK"></path>
+</g>
+<g transform="translate(0, 260)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="SpreadSDK">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="SpreadSDK">
+<a id="SpreadSDK.ts.SpreadSDK" xlink:href="SpreadSDK.ts"><text x="313.5" y="13.5" stroke="none" text-anchor="middle" data-name="SpreadSDK">SpreadSDK</text></a>
+
+</g>
+</g>
+<g transform="translate(0, 291)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="SpreadSDK">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="SpreadSDK">
+<text x="0.0" y="13.5" stroke="none" data-name="SpreadSDK">-props: SpreadSDKInitProps</text>
+<text x="0.0" y="28.5" stroke="none" data-name="SpreadSDK">-apiUrl: string</text>
+<text x="0.0" y="43.5" stroke="none" data-name="SpreadSDK">-axiosInstance: AxiosInstance</text>
+<text x="0.0" y="58.5" stroke="none" data-name="SpreadSDK">-initialized: boolean</text>
+<text x="0.0" y="73.5" stroke="none" data-name="SpreadSDK">+orderbook: SpreadSDKOrderbookModule</text>
+<text x="0.0" y="88.5" stroke="none" data-name="SpreadSDK">+swap: SpreadSDKSwapModule</text>
+<text x="0.0" y="103.5" stroke="none" data-name="SpreadSDK">+token: SpreadSDKTokenModule</text>
+
+</g>
+</g>
+<g transform="translate(0, 412)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="SpreadSDK">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="SpreadSDK">
+<text x="0.0" y="13.5" stroke="none" data-name="SpreadSDK">+static create(): SpreadSDK</text>
+<text x="0.0" y="28.5" stroke="none" data-name="SpreadSDK">+init(): void</text>
+<text x="0.0" y="43.5" stroke="none" data-name="SpreadSDK">+isInitialized(): boolean</text>
+<text x="0.0" y="58.5" stroke="none" data-name="SpreadSDK">+getPublicAddress(): string</text>
+<text x="0.0" y="73.5" stroke="none" data-name="SpreadSDK">+getSpreadGraph(): Promise&lt;SpreadCandleResponse[]&gt;</text>
+<text x="0.0" y="88.5" stroke="none" data-name="SpreadSDK">+getSpreadMeanGraph(): Promise&lt;SpreadMeanResponse[]&gt;</text>
+<text x="0.0" y="103.5" stroke="none" data-name="SpreadSDK">+getSpreadStandardDeviation(): Promise&lt;SpreadStandardDeviationResponse&gt;</text>
+<text x="0.0" y="118.5" stroke="none" data-name="SpreadSDK">+getSpread(): Promise&lt;SpreadQueryResponse&gt;</text>
+<text x="0.0" y="133.5" stroke="none" data-name="SpreadSDK">+genOrders(): Promise&lt;SpreadSDKOrder[]&gt;</text>
+<text x="0.0" y="148.5" stroke="none" data-name="SpreadSDK">+genLastOrder(): Promise&lt;SpreadSDKOrder&gt;</text>
+<text x="0.0" y="163.5" stroke="none" data-name="SpreadSDK">+genOrdersById(): Promise&lt;SpreadSDKOrder&gt;</text>
+<text x="0.0" y="178.5" stroke="none" data-name="SpreadSDK">+genUpdateOrderById(): Promise&lt;SpreadSDKOrder&gt;</text>
+<text x="0.0" y="193.5" stroke="none" data-name="SpreadSDK">+genCreateOrder(): Promise&lt;SpreadSDKOrder&gt;</text>
+<text x="0.0" y="208.5" stroke="none" data-name="SpreadSDK">+getWalletInstance(): Wallet</text>
+<text x="0.0" y="223.5" stroke="none" data-name="SpreadSDK">+genStartSellSpread(): Promise&lt;SpreadSDKOrder&gt;</text>
+<text x="0.0" y="238.5" stroke="none" data-name="SpreadSDK">+genStartBuySpread(): Promise&lt;SpreadSDKOrder&gt;</text>
+
+</g>
+</g>
+</g>
+<g data-name="ISpreadSDK">
+<g fill="lightblue" stroke="#33322E" data-name="ISpreadSDK">
+<rect x="144.0" y="60.0" height="100.0" width="355.0" data-name="ISpreadSDK"></rect>
+<path d="M144.0 91.0 L499.0 91.0" fill="none" data-name="ISpreadSDK"></path>
+<path d="M144.0 152.0 L499.0 152.0" fill="none" data-name="ISpreadSDK"></path>
+</g>
+<g transform="translate(144, 60)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="ISpreadSDK">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="ISpreadSDK">
+<a id="types/ISpreadSDK.ts.ISpreadSDK" xlink:href="types/ISpreadSDK.ts"><text x="169.5" y="13.5" stroke="none" text-anchor="middle" data-name="ISpreadSDK">ISpreadSDK</text></a>
+
+</g>
+</g>
+<g transform="translate(144, 91)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="ISpreadSDK">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="ISpreadSDK">
+<text x="0.0" y="13.5" stroke="none" data-name="ISpreadSDK">+orderbook: ISpreadSDKOrderbookModule</text>
+<text x="0.0" y="28.5" stroke="none" data-name="ISpreadSDK">+swap: ISpreadSDKSwapModule</text>
+<text x="0.0" y="43.5" stroke="none" data-name="ISpreadSDK">+token: ISpreadSDKTokenModule</text>
+
+</g>
+</g>
+<g transform="translate(144, 152)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="ISpreadSDK">
+<g transform="translate(8, 8)" fill="#33322E" data-name="ISpreadSDK">
+
+</g>
+</g>
+</g>
+<g data-name="SpreadSDKError">
+<g fill="#eee8d5" stroke="#33322E" data-name="SpreadSDKError">
+<rect x="539.0" y="7.5" height="205.0" width="472.0" data-name="SpreadSDKError"></rect>
+<path d="M539.0 38.5 L1011.0 38.5" fill="none" data-name="SpreadSDKError"></path>
+<path d="M539.0 46.5 L1011.0 46.5" fill="none" data-name="SpreadSDKError"></path>
+</g>
+<g transform="translate(539, 7.5)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="SpreadSDKError">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="SpreadSDKError">
+<a id="SpreadSDKError.ts.SpreadSDKError" xlink:href="SpreadSDKError.ts"><text x="228.0" y="13.5" stroke="none" text-anchor="middle" data-name="SpreadSDKError">SpreadSDKError</text></a>
+
+</g>
+</g>
+<g transform="translate(539, 38.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="SpreadSDKError">
+<g transform="translate(8, 8)" fill="#33322E" data-name="SpreadSDKError">
+
+</g>
+</g>
+<g transform="translate(539, 46.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="SpreadSDKError">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="SpreadSDKError">
+<text x="0.0" y="13.5" stroke="none" data-name="SpreadSDKError">+static NotInitialized(): SpreadSDKError</text>
+<text x="0.0" y="28.5" stroke="none" data-name="SpreadSDKError">+static CouldNotGetSpread(): SpreadSDKError</text>
+<text x="0.0" y="43.5" stroke="none" data-name="SpreadSDKError">+static CouldNotGetStandardDeviation(): SpreadSDKError</text>
+<text x="0.0" y="58.5" stroke="none" data-name="SpreadSDKError">+static CouldNotGetOrders(): SpreadSDKError</text>
+<text x="0.0" y="73.5" stroke="none" data-name="SpreadSDKError">+static CouldNotGetOrder(): SpreadSDKError</text>
+<text x="0.0" y="88.5" stroke="none" data-name="SpreadSDKError">+static CouldNotUpdateOrder(): SpreadSDKError</text>
+<text x="0.0" y="103.5" stroke="none" data-name="SpreadSDKError">+static CouldNotCreateOrder(): SpreadSDKError</text>
+<text x="0.0" y="118.5" stroke="none" data-name="SpreadSDKError">+static CouldNotGetTokenPair(): SpreadSDKError</text>
+<text x="0.0" y="133.5" stroke="none" data-name="SpreadSDKError">+static UnsupportedChain(): SpreadSDKError</text>
+<text x="0.0" y="148.5" stroke="none" data-name="SpreadSDKError">+static CouldNotGetLastOrder(): SpreadSDKError</text>
+
+</g>
+</g>
+</g>
+<g data-name="SpreadSDKOrderbookModule">
+<g fill="#eee8d5" stroke="#33322E" data-name="SpreadSDKOrderbookModule">
+<rect x="827.8" y="715.5" height="258.0" width="576.0" data-name="SpreadSDKOrderbookModule"></rect>
+<path d="M827.8 746.5 L1403.8 746.5" fill="none" data-name="SpreadSDKOrderbookModule"></path>
+<path d="M827.8 837.5 L1403.8 837.5" fill="none" data-name="SpreadSDKOrderbookModule"></path>
+</g>
+<g transform="translate(827.75, 715.5)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="SpreadSDKOrderbookModule">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="SpreadSDKOrderbookModule">
+<a id="modules/SpreadSDKOrderbookModule.ts.SpreadSDKOrderbookModule" xlink:href="modules/SpreadSDKOrderbookModule.ts"><text x="280.0" y="13.5" stroke="none" text-anchor="middle" data-name="SpreadSDKOrderbookModule">SpreadSDKOrderbookModule</text></a>
+
+</g>
+</g>
+<g transform="translate(827.75, 746.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="SpreadSDKOrderbookModule">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="SpreadSDKOrderbookModule">
+<text x="0.0" y="13.5" stroke="none" data-name="SpreadSDKOrderbookModule">+props: SpreadSDKInitProps</text>
+<text x="0.0" y="28.5" stroke="none" data-name="SpreadSDKOrderbookModule">+baseUrl: string</text>
+<text x="0.0" y="43.5" stroke="none" data-name="SpreadSDKOrderbookModule">+apiUrl: string</text>
+<text x="0.0" y="58.5" stroke="none" data-name="SpreadSDKOrderbookModule">+axiosSpread: AxiosInstance</text>
+<text x="0.0" y="73.5" stroke="none" data-name="SpreadSDKOrderbookModule">+axios1Inch: AxiosInstance</text>
+
+</g>
+</g>
+<g transform="translate(827.75, 837.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="SpreadSDKOrderbookModule">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="SpreadSDKOrderbookModule">
+<text x="0.0" y="13.5" stroke="none" data-name="SpreadSDKOrderbookModule">+init(): void</text>
+<text x="0.0" y="28.5" stroke="none" data-name="SpreadSDKOrderbookModule">+genLimitOrdersForAddress(): Promise&lt;SpreadSDK1InchLimitOrder[]&gt;</text>
+<text x="0.0" y="43.5" stroke="none" data-name="SpreadSDKOrderbookModule">+genLimitOrdersByOrderHash(): Promise&lt;SpreadSDK1InchLimitOrder&gt;</text>
+<text x="0.0" y="58.5" stroke="none" data-name="SpreadSDKOrderbookModule">+genLimitOrders(): Promise&lt;SpreadSDK1InchLimitOrder[]&gt;</text>
+<text x="0.0" y="73.5" stroke="none" data-name="SpreadSDKOrderbookModule">+genCreateLimitOrder(): Promise&lt;SpreadSDK1InchLimitOrder&gt;</text>
+<text x="0.0" y="88.5" stroke="none" data-name="SpreadSDKOrderbookModule">+getProtocolAddress(): string</text>
+<text x="0.0" y="103.5" stroke="none" data-name="SpreadSDKOrderbookModule">-parseHex(): string</text>
+<text x="0.0" y="118.5" stroke="none" data-name="SpreadSDKOrderbookModule">-formatHex(): string</text>
+
+</g>
+</g>
+</g>
+<g data-name="ISpreadSDKOrderbookModule">
+<g fill="lightblue" stroke="#33322E" data-name="ISpreadSDKOrderbookModule">
+<rect x="827.8" y="406.5" height="115.0" width="576.0" data-name="ISpreadSDKOrderbookModule"></rect>
+<path d="M827.8 437.5 L1403.8 437.5" fill="none" data-name="ISpreadSDKOrderbookModule"></path>
+<path d="M827.8 445.5 L1403.8 445.5" fill="none" data-name="ISpreadSDKOrderbookModule"></path>
+</g>
+<g transform="translate(827.75, 406.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="ISpreadSDKOrderbookModule">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="ISpreadSDKOrderbookModule">
+<a id="types/ISpreadSDKOrderbookModule.ts.ISpreadSDKOrderbookModule" xlink:href="types/ISpreadSDKOrderbookModule.ts"><text x="280.0" y="13.5" stroke="none" text-anchor="middle" data-name="ISpreadSDKOrderbookModule">ISpreadSDKOrderbookModule</text></a>
+
+</g>
+</g>
+<g transform="translate(827.75, 437.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="ISpreadSDKOrderbookModule">
+<g transform="translate(8, 8)" fill="#33322E" data-name="ISpreadSDKOrderbookModule">
+
+</g>
+</g>
+<g transform="translate(827.75, 445.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="ISpreadSDKOrderbookModule">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="ISpreadSDKOrderbookModule">
+<text x="0.0" y="13.5" stroke="none" data-name="ISpreadSDKOrderbookModule">+genLimitOrdersForAddress(): Promise&lt;SpreadSDK1InchLimitOrder[]&gt;</text>
+<text x="0.0" y="28.5" stroke="none" data-name="ISpreadSDKOrderbookModule">+genLimitOrdersByOrderHash(): Promise&lt;SpreadSDK1InchLimitOrder&gt;</text>
+<text x="0.0" y="43.5" stroke="none" data-name="ISpreadSDKOrderbookModule">+genLimitOrders(): Promise&lt;SpreadSDK1InchLimitOrder[]&gt;</text>
+<text x="0.0" y="58.5" stroke="none" data-name="ISpreadSDKOrderbookModule">+genCreateLimitOrder(): Promise&lt;SpreadSDK1InchLimitOrder&gt;</text>
+
+</g>
+</g>
+</g>
+<g data-name="SpreadSDKSwapModule">
+<g fill="#eee8d5" stroke="#33322E" data-name="SpreadSDKSwapModule">
+<rect x="1588.5" y="708.0" height="273.0" width="559.0" data-name="SpreadSDKSwapModule"></rect>
+<path d="M1588.5 739.0 L2147.5 739.0" fill="none" data-name="SpreadSDKSwapModule"></path>
+<path d="M1588.5 860.0 L2147.5 860.0" fill="none" data-name="SpreadSDKSwapModule"></path>
+</g>
+<g transform="translate(1588.5, 708)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="SpreadSDKSwapModule">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="SpreadSDKSwapModule">
+<a id="modules/SpreadSDKSwapModule.ts.SpreadSDKSwapModule" xlink:href="modules/SpreadSDKSwapModule.ts"><text x="271.5" y="13.5" stroke="none" text-anchor="middle" data-name="SpreadSDKSwapModule">SpreadSDKSwapModule</text></a>
+
+</g>
+</g>
+<g transform="translate(1588.5, 739)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="SpreadSDKSwapModule">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="SpreadSDKSwapModule">
+<text x="0.0" y="13.5" stroke="none" data-name="SpreadSDKSwapModule">+props: SpreadSDKInitProps</text>
+<text x="0.0" y="28.5" stroke="none" data-name="SpreadSDKSwapModule">+baseUrl: string</text>
+<text x="0.0" y="43.5" stroke="none" data-name="SpreadSDKSwapModule">+apiUrl: string</text>
+<text x="0.0" y="58.5" stroke="none" data-name="SpreadSDKSwapModule">+axiosSpread: AxiosInstance</text>
+<text x="0.0" y="73.5" stroke="none" data-name="SpreadSDKSwapModule">+axios1Inch: AxiosInstance</text>
+<text x="0.0" y="88.5" stroke="none" data-name="SpreadSDKSwapModule">+routerAddresses: { 56: string</text>
+<text x="0.0" y="103.5" stroke="none" data-name="SpreadSDKSwapModule">}</text>
+
+</g>
+</g>
+<g transform="translate(1588.5, 860)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="SpreadSDKSwapModule">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="SpreadSDKSwapModule">
+<text x="0.0" y="13.5" stroke="none" data-name="SpreadSDKSwapModule">+init(): void</text>
+<text x="0.0" y="28.5" stroke="none" data-name="SpreadSDKSwapModule">+getSwapParams(): SpreadSDK1InchSwapParams</text>
+<text x="0.0" y="43.5" stroke="none" data-name="SpreadSDKSwapModule">+genSwapCalldata(): Promise&lt;SpreadSDK1InchSwapCalldata&gt;</text>
+<text x="0.0" y="58.5" stroke="none" data-name="SpreadSDKSwapModule">+genApproveCalldata(): Promise&lt;SpreadSDK1InchApproveCalldata&gt;</text>
+<text x="0.0" y="73.5" stroke="none" data-name="SpreadSDKSwapModule">+genAvailableTokens(): Promise&lt;SpreadSDK1InchToken&gt;</text>
+<text x="0.0" y="88.5" stroke="none" data-name="SpreadSDKSwapModule">+genAllowance(): Promise&lt;string&gt;</text>
+<text x="0.0" y="103.5" stroke="none" data-name="SpreadSDKSwapModule">+getRouterAddress(): string</text>
+
+</g>
+</g>
+</g>
+<g data-name="ISpreadSDKSwapModule">
+<g fill="lightblue" stroke="#33322E" data-name="ISpreadSDKSwapModule">
+<rect x="1588.5" y="399.0" height="130.0" width="559.0" data-name="ISpreadSDKSwapModule"></rect>
+<path d="M1588.5 430.0 L2147.5 430.0" fill="none" data-name="ISpreadSDKSwapModule"></path>
+<path d="M1588.5 438.0 L2147.5 438.0" fill="none" data-name="ISpreadSDKSwapModule"></path>
+</g>
+<g transform="translate(1588.5, 399)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="ISpreadSDKSwapModule">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="ISpreadSDKSwapModule">
+<a id="types/ISpreadSDKSwapModule.ts.ISpreadSDKSwapModule" xlink:href="types/ISpreadSDKSwapModule.ts"><text x="271.5" y="13.5" stroke="none" text-anchor="middle" data-name="ISpreadSDKSwapModule">ISpreadSDKSwapModule</text></a>
+
+</g>
+</g>
+<g transform="translate(1588.5, 430)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="ISpreadSDKSwapModule">
+<g transform="translate(8, 8)" fill="#33322E" data-name="ISpreadSDKSwapModule">
+
+</g>
+</g>
+<g transform="translate(1588.5, 438)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="ISpreadSDKSwapModule">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="ISpreadSDKSwapModule">
+<text x="0.0" y="13.5" stroke="none" data-name="ISpreadSDKSwapModule">+getSwapParams(): SpreadSDK1InchSwapParams</text>
+<text x="0.0" y="28.5" stroke="none" data-name="ISpreadSDKSwapModule">+genSwapCalldata(): Promise&lt;SpreadSDK1InchSwapCalldata&gt;</text>
+<text x="0.0" y="43.5" stroke="none" data-name="ISpreadSDKSwapModule">+genApproveCalldata(): Promise&lt;SpreadSDK1InchApproveCalldata&gt;</text>
+<text x="0.0" y="58.5" stroke="none" data-name="ISpreadSDKSwapModule">+genAvailableTokens(): Promise&lt;SpreadSDK1InchToken&gt;</text>
+<text x="0.0" y="73.5" stroke="none" data-name="ISpreadSDKSwapModule">+genAllowance(): Promise&lt;string&gt;</text>
+
+</g>
+</g>
+</g>
+<g data-name="SpreadSDKTokenModule">
+<g fill="#eee8d5" stroke="#33322E" data-name="SpreadSDKTokenModule">
+<rect x="3543.3" y="753.0" height="183.0" width="413.0" data-name="SpreadSDKTokenModule"></rect>
+<path d="M3543.3 784.0 L3956.3 784.0" fill="none" data-name="SpreadSDKTokenModule"></path>
+<path d="M3543.3 875.0 L3956.3 875.0" fill="none" data-name="SpreadSDKTokenModule"></path>
+</g>
+<g transform="translate(3543.25, 753)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="SpreadSDKTokenModule">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="SpreadSDKTokenModule">
+<a id="modules/SpreadSDKTokenModule.ts.SpreadSDKTokenModule" xlink:href="modules/SpreadSDKTokenModule.ts"><text x="198.5" y="13.5" stroke="none" text-anchor="middle" data-name="SpreadSDKTokenModule">SpreadSDKTokenModule</text></a>
+
+</g>
+</g>
+<g transform="translate(3543.25, 784)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="SpreadSDKTokenModule">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="SpreadSDKTokenModule">
+<text x="0.0" y="13.5" stroke="none" data-name="SpreadSDKTokenModule">+props: SpreadSDKInitProps</text>
+<text x="0.0" y="28.5" stroke="none" data-name="SpreadSDKTokenModule">+baseUrl: string</text>
+<text x="0.0" y="43.5" stroke="none" data-name="SpreadSDKTokenModule">+apiUrl: string</text>
+<text x="0.0" y="58.5" stroke="none" data-name="SpreadSDKTokenModule">+axiosSpread: AxiosInstance</text>
+<text x="0.0" y="73.5" stroke="none" data-name="SpreadSDKTokenModule">+axios1Inch: AxiosInstance</text>
+
+</g>
+</g>
+<g transform="translate(3543.25, 875)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="SpreadSDKTokenModule">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="SpreadSDKTokenModule">
+<text x="0.0" y="13.5" stroke="none" data-name="SpreadSDKTokenModule">+init(): void</text>
+<text x="0.0" y="28.5" stroke="none" data-name="SpreadSDKTokenModule">+genTokenPair(): Promise&lt;SpreadSDKTokenPair&gt;</text>
+<text x="0.0" y="43.5" stroke="none" data-name="SpreadSDKTokenModule">+getUSDTAddress(): string</text>
+
+</g>
+</g>
+</g>
+<g data-name="ISpreadSDKTokenModule">
+<g fill="lightblue" stroke="#33322E" data-name="ISpreadSDKTokenModule">
+<rect x="3543.3" y="429.0" height="70.0" width="413.0" data-name="ISpreadSDKTokenModule"></rect>
+<path d="M3543.3 460.0 L3956.3 460.0" fill="none" data-name="ISpreadSDKTokenModule"></path>
+<path d="M3543.3 468.0 L3956.3 468.0" fill="none" data-name="ISpreadSDKTokenModule"></path>
+</g>
+<g transform="translate(3543.25, 429)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="ISpreadSDKTokenModule">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="ISpreadSDKTokenModule">
+<a id="types/ISpreadSDKTokenModule.ts.ISpreadSDKTokenModule" xlink:href="types/ISpreadSDKTokenModule.ts"><text x="198.5" y="13.5" stroke="none" text-anchor="middle" data-name="ISpreadSDKTokenModule">ISpreadSDKTokenModule</text></a>
+
+</g>
+</g>
+<g transform="translate(3543.25, 460)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="ISpreadSDKTokenModule">
+<g transform="translate(8, 8)" fill="#33322E" data-name="ISpreadSDKTokenModule">
+
+</g>
+</g>
+<g transform="translate(3543.25, 468)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="ISpreadSDKTokenModule">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="ISpreadSDKTokenModule">
+<text x="0.0" y="13.5" stroke="none" data-name="ISpreadSDKTokenModule">+genTokenPair(): Promise&lt;SpreadSDKTokenPair&gt;</text>
+
+</g>
+</g>
+</g>
+<g data-name="SpreadSDK1InchApproveCalldata">
+<g fill="lightgray" stroke="#33322E" data-name="SpreadSDK1InchApproveCalldata">
+<rect x="1051.0" y="52.5" height="115.0" width="282.0" data-name="SpreadSDK1InchApproveCalldata"></rect>
+<path d="M1051.0 83.5 L1333.0 83.5" fill="none" data-name="SpreadSDK1InchApproveCalldata"></path>
+<path d="M1051.0 159.5 L1333.0 159.5" fill="none" data-name="SpreadSDK1InchApproveCalldata"></path>
+</g>
+<g transform="translate(1051, 52.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="SpreadSDK1InchApproveCalldata">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="SpreadSDK1InchApproveCalldata">
+<a id="types/1inch.ts.SpreadSDK1InchApproveCalldata" xlink:href="types/1inch.ts"><text x="133.0" y="13.5" stroke="none" text-anchor="middle" data-name="SpreadSDK1InchApproveCalldata">SpreadSDK1InchApproveCalldata</text></a>
+
+</g>
+</g>
+<g transform="translate(1051, 83.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="SpreadSDK1InchApproveCalldata">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="SpreadSDK1InchApproveCalldata">
+<text x="0.0" y="13.5" stroke="none" data-name="SpreadSDK1InchApproveCalldata">+data: string</text>
+<text x="0.0" y="28.5" stroke="none" data-name="SpreadSDK1InchApproveCalldata">+gasPrice: string</text>
+<text x="0.0" y="43.5" stroke="none" data-name="SpreadSDK1InchApproveCalldata">+to: string</text>
+<text x="0.0" y="58.5" stroke="none" data-name="SpreadSDK1InchApproveCalldata">+value: string</text>
+
+</g>
+</g>
+<g transform="translate(1051, 159.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="SpreadSDK1InchApproveCalldata">
+<g transform="translate(8, 8)" fill="#33322E" data-name="SpreadSDK1InchApproveCalldata">
+
+</g>
+</g>
+</g>
+<g data-name="SpreadGraphQueryParams">
+<g fill="#eee8d5" stroke="#33322E" data-name="SpreadGraphQueryParams">
+<rect x="1373.0" y="60.0" height="100.0" width="332.0" data-name="SpreadGraphQueryParams"></rect>
+<path d="M1373.0 91.0 L1705.0 91.0" fill="none" data-name="SpreadGraphQueryParams"></path>
+<path d="M1373.0 152.0 L1705.0 152.0" fill="none" data-name="SpreadGraphQueryParams"></path>
+</g>
+<g transform="translate(1373, 60)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="SpreadGraphQueryParams">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="SpreadGraphQueryParams">
+<a id="types/index.ts.SpreadGraphQueryParams" xlink:href="types/index.ts"><text x="158.0" y="13.5" stroke="none" text-anchor="middle" data-name="SpreadGraphQueryParams">SpreadGraphQueryParams</text></a>
+
+</g>
+</g>
+<g transform="translate(1373, 91)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="SpreadGraphQueryParams">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="SpreadGraphQueryParams">
+<text x="0.0" y="13.5" stroke="none" data-name="SpreadGraphQueryParams">+symbol: SpreadSDKSupportedSymbols</text>
+<text x="0.0" y="28.5" stroke="none" data-name="SpreadGraphQueryParams">+interval?: &quot;5m&quot; | &quot;1h&quot; | &quot;4h&quot; | &quot;1d&quot;</text>
+<text x="0.0" y="43.5" stroke="none" data-name="SpreadGraphQueryParams">+range?: &quot;1d&quot; | &quot;1w&quot; | &quot;1m&quot; | &quot;3m&quot; | &quot;6m&quot;</text>
+
+</g>
+</g>
+<g transform="translate(1373, 152)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="SpreadGraphQueryParams">
+<g transform="translate(8, 8)" fill="#33322E" data-name="SpreadGraphQueryParams">
+
+</g>
+</g>
+</g>
+<g data-name="SpreadSDKBaseQuery">
+<g fill="lightblue" stroke="#33322E" data-name="SpreadSDKBaseQuery">
+<rect x="5611.0" y="67.5" height="85.0" width="195.0" data-name="SpreadSDKBaseQuery"></rect>
+<path d="M5611.0 98.5 L5806.0 98.5" fill="none" data-name="SpreadSDKBaseQuery"></path>
+<path d="M5611.0 144.5 L5806.0 144.5" fill="none" data-name="SpreadSDKBaseQuery"></path>
+</g>
+<g transform="translate(5611, 67.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="SpreadSDKBaseQuery">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="SpreadSDKBaseQuery">
+<a id="types/index.ts.SpreadSDKBaseQuery" xlink:href="types/index.ts"><text x="89.5" y="13.5" stroke="none" text-anchor="middle" data-name="SpreadSDKBaseQuery">SpreadSDKBaseQuery</text></a>
+
+</g>
+</g>
+<g transform="translate(5611, 98.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="SpreadSDKBaseQuery">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="SpreadSDKBaseQuery">
+<text x="0.0" y="13.5" stroke="none" data-name="SpreadSDKBaseQuery">+limit?: number</text>
+<text x="0.0" y="28.5" stroke="none" data-name="SpreadSDKBaseQuery">+page?: number</text>
+
+</g>
+</g>
+<g transform="translate(5611, 144.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="SpreadSDKBaseQuery">
+<g transform="translate(8, 8)" fill="#33322E" data-name="SpreadSDKBaseQuery">
+
+</g>
+</g>
+</g>
+<g data-name="SpreadSDKOrderbookLimitOrdersQuery">
+<g fill="lightblue" stroke="#33322E" data-name="SpreadSDKOrderbookLimitOrdersQuery">
+<rect x="5352.0" y="414.0" height="100.0" width="713.0" data-name="SpreadSDKOrderbookLimitOrdersQuery"></rect>
+<path d="M5352.0 445.0 L6065.0 445.0" fill="none" data-name="SpreadSDKOrderbookLimitOrdersQuery"></path>
+<path d="M5352.0 506.0 L6065.0 506.0" fill="none" data-name="SpreadSDKOrderbookLimitOrdersQuery"></path>
+</g>
+<g transform="translate(5352, 414)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="SpreadSDKOrderbookLimitOrdersQuery">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="SpreadSDKOrderbookLimitOrdersQuery">
+<a id="types/index.ts.SpreadSDKOrderbookLimitOrdersQuery" xlink:href="types/index.ts"><text x="348.5" y="13.5" stroke="none" text-anchor="middle" data-name="SpreadSDKOrderbookLimitOrdersQuery">SpreadSDKOrderbookLimitOrdersQuery</text></a>
+
+</g>
+</g>
+<g transform="translate(5352, 445)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="SpreadSDKOrderbookLimitOrdersQuery">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="SpreadSDKOrderbookLimitOrdersQuery">
+<text x="0.0" y="13.5" stroke="none" data-name="SpreadSDKOrderbookLimitOrdersQuery">+sortBy?: &quot;createDateTime&quot; | &quot;takerRate&quot; | &quot;makerRate&quot; | &quot;makerAmount&quot; | &quot;takerAmount&quot;</text>
+<text x="0.0" y="28.5" stroke="none" data-name="SpreadSDKOrderbookLimitOrdersQuery">+takerAsset?: string</text>
+<text x="0.0" y="43.5" stroke="none" data-name="SpreadSDKOrderbookLimitOrdersQuery">+makerAsset?: string</text>
+
+</g>
+</g>
+<g transform="translate(5352, 506)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="SpreadSDKOrderbookLimitOrdersQuery">
+<g transform="translate(8, 8)" fill="#33322E" data-name="SpreadSDKOrderbookLimitOrdersQuery">
+
+</g>
+</g>
+</g>
+<g data-name="SpreadSDKOrderStatus">
+<g fill="lightgreen" stroke="#33322E" data-name="SpreadSDKOrderStatus">
+<rect x="2031.0" y="56.5" height="107.0" width="202.0" data-name="SpreadSDKOrderStatus"></rect>
+<path d="M2031.0 87.5 L2233.0 87.5" fill="none" data-name="SpreadSDKOrderStatus"></path>
+</g>
+<g transform="translate(2031, 56.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="SpreadSDKOrderStatus">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="SpreadSDKOrderStatus">
+<a id="types/index.ts.SpreadSDKOrderStatus" xlink:href="types/index.ts"><text x="93.0" y="13.5" stroke="none" text-anchor="middle" data-name="SpreadSDKOrderStatus">SpreadSDKOrderStatus</text></a>
+
+</g>
+</g>
+<g transform="translate(2031, 87.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="SpreadSDKOrderStatus">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="SpreadSDKOrderStatus">
+<text x="0.0" y="13.5" stroke="none" data-name="SpreadSDKOrderStatus">PENDING</text>
+<text x="0.0" y="28.5" stroke="none" data-name="SpreadSDKOrderStatus">FILLED</text>
+<text x="0.0" y="43.5" stroke="none" data-name="SpreadSDKOrderStatus">CANCELLED</text>
+<text x="0.0" y="58.5" stroke="none" data-name="SpreadSDKOrderStatus">COMPLETE</text>
+
+</g>
+</g>
+</g>
+<g data-name="SpreadSDKOrderType">
+<g fill="lightgreen" stroke="#33322E" data-name="SpreadSDKOrderType">
+<rect x="2273.0" y="71.5" height="77.0" width="191.0" data-name="SpreadSDKOrderType"></rect>
+<path d="M2273.0 102.5 L2464.0 102.5" fill="none" data-name="SpreadSDKOrderType"></path>
+</g>
+<g transform="translate(2273, 71.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="SpreadSDKOrderType">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="SpreadSDKOrderType">
+<a id="types/index.ts.SpreadSDKOrderType" xlink:href="types/index.ts"><text x="87.5" y="13.5" stroke="none" text-anchor="middle" data-name="SpreadSDKOrderType">SpreadSDKOrderType</text></a>
+
+</g>
+</g>
+<g transform="translate(2273, 102.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="SpreadSDKOrderType">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="SpreadSDKOrderType">
+<text x="0.0" y="13.5" stroke="none" data-name="SpreadSDKOrderType">BUY</text>
+<text x="0.0" y="28.5" stroke="none" data-name="SpreadSDKOrderType">SELL</text>
+
+</g>
+</g>
+</g>
+<g data-name="SpreadSDKInitProps">
+<g fill="lightgray" stroke="#33322E" data-name="SpreadSDKInitProps">
+<rect x="2504.0" y="45.0" height="130.0" width="204.0" data-name="SpreadSDKInitProps"></rect>
+<path d="M2504.0 76.0 L2708.0 76.0" fill="none" data-name="SpreadSDKInitProps"></path>
+<path d="M2504.0 167.0 L2708.0 167.0" fill="none" data-name="SpreadSDKInitProps"></path>
+</g>
+<g transform="translate(2504, 45)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="SpreadSDKInitProps">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="SpreadSDKInitProps">
+<a id="types/index.ts.SpreadSDKInitProps" xlink:href="types/index.ts"><text x="94.0" y="13.5" stroke="none" text-anchor="middle" data-name="SpreadSDKInitProps">SpreadSDKInitProps</text></a>
+
+</g>
+</g>
+<g transform="translate(2504, 76)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="SpreadSDKInitProps">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="SpreadSDKInitProps">
+<text x="0.0" y="13.5" stroke="none" data-name="SpreadSDKInitProps">+apiUrlOverride?: string</text>
+<text x="0.0" y="28.5" stroke="none" data-name="SpreadSDKInitProps">+apiKey: string</text>
+<text x="0.0" y="43.5" stroke="none" data-name="SpreadSDKInitProps">+chainId: number</text>
+<text x="0.0" y="58.5" stroke="none" data-name="SpreadSDKInitProps">+publicAddress: string</text>
+<text x="0.0" y="73.5" stroke="none" data-name="SpreadSDKInitProps">+privateKey?: string</text>
+
+</g>
+</g>
+<g transform="translate(2504, 167)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="SpreadSDKInitProps">
+<g transform="translate(8, 8)" fill="#33322E" data-name="SpreadSDKInitProps">
+
+</g>
+</g>
+</g>
+<g data-name="SpreadSDKGetSwapParamsProps">
+<g fill="lightgray" stroke="#33322E" data-name="SpreadSDKGetSwapParamsProps">
+<rect x="2748.0" y="60.0" height="100.0" width="284.0" data-name="SpreadSDKGetSwapParamsProps"></rect>
+<path d="M2748.0 91.0 L3032.0 91.0" fill="none" data-name="SpreadSDKGetSwapParamsProps"></path>
+<path d="M2748.0 152.0 L3032.0 152.0" fill="none" data-name="SpreadSDKGetSwapParamsProps"></path>
+</g>
+<g transform="translate(2748, 60)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="SpreadSDKGetSwapParamsProps">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="SpreadSDKGetSwapParamsProps">
+<a id="types/index.ts.SpreadSDKGetSwapParamsProps" xlink:href="types/index.ts"><text x="134.0" y="13.5" stroke="none" text-anchor="middle" data-name="SpreadSDKGetSwapParamsProps">SpreadSDKGetSwapParamsProps</text></a>
+
+</g>
+</g>
+<g transform="translate(2748, 91)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="SpreadSDKGetSwapParamsProps">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="SpreadSDKGetSwapParamsProps">
+<text x="0.0" y="13.5" stroke="none" data-name="SpreadSDKGetSwapParamsProps">+inputToken: string</text>
+<text x="0.0" y="28.5" stroke="none" data-name="SpreadSDKGetSwapParamsProps">+outputToken: string</text>
+<text x="0.0" y="43.5" stroke="none" data-name="SpreadSDKGetSwapParamsProps">+amount: string</text>
+
+</g>
+</g>
+<g transform="translate(2748, 152)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="SpreadSDKGetSwapParamsProps">
+<g transform="translate(8, 8)" fill="#33322E" data-name="SpreadSDKGetSwapParamsProps">
+
+</g>
+</g>
+</g>
+<g data-name="SpreadQueryResponse">
+<g fill="lightgray" stroke="#33322E" data-name="SpreadQueryResponse">
+<rect x="3072.0" y="67.5" height="85.0" width="201.0" data-name="SpreadQueryResponse"></rect>
+<path d="M3072.0 98.5 L3273.0 98.5" fill="none" data-name="SpreadQueryResponse"></path>
+<path d="M3072.0 144.5 L3273.0 144.5" fill="none" data-name="SpreadQueryResponse"></path>
+</g>
+<g transform="translate(3072, 67.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="SpreadQueryResponse">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="SpreadQueryResponse">
+<a id="types/index.ts.SpreadQueryResponse" xlink:href="types/index.ts"><text x="92.5" y="13.5" stroke="none" text-anchor="middle" data-name="SpreadQueryResponse">SpreadQueryResponse</text></a>
+
+</g>
+</g>
+<g transform="translate(3072, 98.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="SpreadQueryResponse">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="SpreadQueryResponse">
+<text x="0.0" y="13.5" stroke="none" data-name="SpreadQueryResponse">+spread: number</text>
+<text x="0.0" y="28.5" stroke="none" data-name="SpreadQueryResponse">+date: string</text>
+
+</g>
+</g>
+<g transform="translate(3072, 144.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="SpreadQueryResponse">
+<g transform="translate(8, 8)" fill="#33322E" data-name="SpreadQueryResponse">
+
+</g>
+</g>
+</g>
+<g data-name="SpreadCandleResponse">
+<g fill="lightgray" stroke="#33322E" data-name="SpreadCandleResponse">
+<rect x="3313.0" y="45.0" height="130.0" width="209.0" data-name="SpreadCandleResponse"></rect>
+<path d="M3313.0 76.0 L3522.0 76.0" fill="none" data-name="SpreadCandleResponse"></path>
+<path d="M3313.0 167.0 L3522.0 167.0" fill="none" data-name="SpreadCandleResponse"></path>
+</g>
+<g transform="translate(3313, 45)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="SpreadCandleResponse">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="SpreadCandleResponse">
+<a id="types/index.ts.SpreadCandleResponse" xlink:href="types/index.ts"><text x="96.5" y="13.5" stroke="none" text-anchor="middle" data-name="SpreadCandleResponse">SpreadCandleResponse</text></a>
+
+</g>
+</g>
+<g transform="translate(3313, 76)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="SpreadCandleResponse">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="SpreadCandleResponse">
+<text x="0.0" y="13.5" stroke="none" data-name="SpreadCandleResponse">+date: string</text>
+<text x="0.0" y="28.5" stroke="none" data-name="SpreadCandleResponse">+open: number</text>
+<text x="0.0" y="43.5" stroke="none" data-name="SpreadCandleResponse">+close: number</text>
+<text x="0.0" y="58.5" stroke="none" data-name="SpreadCandleResponse">+high: number</text>
+<text x="0.0" y="73.5" stroke="none" data-name="SpreadCandleResponse">+low: number</text>
+
+</g>
+</g>
+<g transform="translate(3313, 167)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="SpreadCandleResponse">
+<g transform="translate(8, 8)" fill="#33322E" data-name="SpreadCandleResponse">
+
+</g>
+</g>
+</g>
+<g data-name="SpreadMeanResponse">
+<g fill="lightgray" stroke="#33322E" data-name="SpreadMeanResponse">
+<rect x="3562.0" y="67.5" height="85.0" width="197.0" data-name="SpreadMeanResponse"></rect>
+<path d="M3562.0 98.5 L3759.0 98.5" fill="none" data-name="SpreadMeanResponse"></path>
+<path d="M3562.0 144.5 L3759.0 144.5" fill="none" data-name="SpreadMeanResponse"></path>
+</g>
+<g transform="translate(3562, 67.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="SpreadMeanResponse">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="SpreadMeanResponse">
+<a id="types/index.ts.SpreadMeanResponse" xlink:href="types/index.ts"><text x="90.5" y="13.5" stroke="none" text-anchor="middle" data-name="SpreadMeanResponse">SpreadMeanResponse</text></a>
+
+</g>
+</g>
+<g transform="translate(3562, 98.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="SpreadMeanResponse">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="SpreadMeanResponse">
+<text x="0.0" y="13.5" stroke="none" data-name="SpreadMeanResponse">+date: string</text>
+<text x="0.0" y="28.5" stroke="none" data-name="SpreadMeanResponse">+value: number</text>
+
+</g>
+</g>
+<g transform="translate(3562, 144.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="SpreadMeanResponse">
+<g transform="translate(8, 8)" fill="#33322E" data-name="SpreadMeanResponse">
+
+</g>
+</g>
+</g>
+<g data-name="SpreadStandardDeviationResponse">
+<g fill="lightgray" stroke="#33322E" data-name="SpreadStandardDeviationResponse">
+<rect x="3799.0" y="75.0" height="70.0" width="299.0" data-name="SpreadStandardDeviationResponse"></rect>
+<path d="M3799.0 106.0 L4098.0 106.0" fill="none" data-name="SpreadStandardDeviationResponse"></path>
+<path d="M3799.0 137.0 L4098.0 137.0" fill="none" data-name="SpreadStandardDeviationResponse"></path>
+</g>
+<g transform="translate(3799, 75)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="SpreadStandardDeviationResponse">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="SpreadStandardDeviationResponse">
+<a id="types/index.ts.SpreadStandardDeviationResponse" xlink:href="types/index.ts"><text x="141.5" y="13.5" stroke="none" text-anchor="middle" data-name="SpreadStandardDeviationResponse">SpreadStandardDeviationResponse</text></a>
+
+</g>
+</g>
+<g transform="translate(3799, 106)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="SpreadStandardDeviationResponse">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="SpreadStandardDeviationResponse">
+<text x="0.0" y="13.5" stroke="none" data-name="SpreadStandardDeviationResponse">+value: number</text>
+
+</g>
+</g>
+<g transform="translate(3799, 137)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="SpreadStandardDeviationResponse">
+<g transform="translate(8, 8)" fill="#33322E" data-name="SpreadStandardDeviationResponse">
+
+</g>
+</g>
+</g>
+<g data-name="SpreadSDKOrder">
+<g fill="lightgray" stroke="#33322E" data-name="SpreadSDKOrder">
+<rect x="4138.0" y="0.0" height="220.0" width="332.0" data-name="SpreadSDKOrder"></rect>
+<path d="M4138.0 31.0 L4470.0 31.0" fill="none" data-name="SpreadSDKOrder"></path>
+<path d="M4138.0 212.0 L4470.0 212.0" fill="none" data-name="SpreadSDKOrder"></path>
+</g>
+<g transform="translate(4138, 0)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="SpreadSDKOrder">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="SpreadSDKOrder">
+<a id="types/index.ts.SpreadSDKOrder" xlink:href="types/index.ts"><text x="158.0" y="13.5" stroke="none" text-anchor="middle" data-name="SpreadSDKOrder">SpreadSDKOrder</text></a>
+
+</g>
+</g>
+<g transform="translate(4138, 31)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="SpreadSDKOrder">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="SpreadSDKOrder">
+<text x="0.0" y="13.5" stroke="none" data-name="SpreadSDKOrder">+id: number</text>
+<text x="0.0" y="28.5" stroke="none" data-name="SpreadSDKOrder">+address: string</text>
+<text x="0.0" y="43.5" stroke="none" data-name="SpreadSDKOrder">+symbol: SpreadSDKSupportedSymbols</text>
+<text x="0.0" y="58.5" stroke="none" data-name="SpreadSDKOrder">+spread: number</text>
+<text x="0.0" y="73.5" stroke="none" data-name="SpreadSDKOrder">+size: number</text>
+<text x="0.0" y="88.5" stroke="none" data-name="SpreadSDKOrder">+tokenAmount: string</text>
+<text x="0.0" y="103.5" stroke="none" data-name="SpreadSDKOrder">+status: SpreadSDKOrderStatus</text>
+<text x="0.0" y="118.5" stroke="none" data-name="SpreadSDKOrder">+date: string</text>
+<text x="0.0" y="133.5" stroke="none" data-name="SpreadSDKOrder">+type: SpreadSDKOrderType</text>
+<text x="0.0" y="148.5" stroke="none" data-name="SpreadSDKOrder">+associatedLimitOrder: string</text>
+<text x="0.0" y="163.5" stroke="none" data-name="SpreadSDKOrder">+associatedSwap: string</text>
+
+</g>
+</g>
+<g transform="translate(4138, 212)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="SpreadSDKOrder">
+<g transform="translate(8, 8)" fill="#33322E" data-name="SpreadSDKOrder">
+
+</g>
+</g>
+</g>
+<g data-name="SpreadSDKCreateOrderDto">
+<g fill="lightgray" stroke="#33322E" data-name="SpreadSDKCreateOrderDto">
+<rect x="4510.0" y="22.5" height="175.0" width="258.0" data-name="SpreadSDKCreateOrderDto"></rect>
+<path d="M4510.0 53.5 L4768.0 53.5" fill="none" data-name="SpreadSDKCreateOrderDto"></path>
+<path d="M4510.0 189.5 L4768.0 189.5" fill="none" data-name="SpreadSDKCreateOrderDto"></path>
+</g>
+<g transform="translate(4510, 22.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="SpreadSDKCreateOrderDto">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="SpreadSDKCreateOrderDto">
+<a id="types/index.ts.SpreadSDKCreateOrderDto" xlink:href="types/index.ts"><text x="121.0" y="13.5" stroke="none" text-anchor="middle" data-name="SpreadSDKCreateOrderDto">SpreadSDKCreateOrderDto</text></a>
+
+</g>
+</g>
+<g transform="translate(4510, 53.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="SpreadSDKCreateOrderDto">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="SpreadSDKCreateOrderDto">
+<text x="0.0" y="13.5" stroke="none" data-name="SpreadSDKCreateOrderDto">+address: string</text>
+<text x="0.0" y="28.5" stroke="none" data-name="SpreadSDKCreateOrderDto">+symbol: string</text>
+<text x="0.0" y="43.5" stroke="none" data-name="SpreadSDKCreateOrderDto">+spread: number</text>
+<text x="0.0" y="58.5" stroke="none" data-name="SpreadSDKCreateOrderDto">+tokenAmount: string</text>
+<text x="0.0" y="73.5" stroke="none" data-name="SpreadSDKCreateOrderDto">+size: number</text>
+<text x="0.0" y="88.5" stroke="none" data-name="SpreadSDKCreateOrderDto">+type: SpreadSDKOrderType</text>
+<text x="0.0" y="103.5" stroke="none" data-name="SpreadSDKCreateOrderDto">+associatedLimitOrder?: string</text>
+<text x="0.0" y="118.5" stroke="none" data-name="SpreadSDKCreateOrderDto">+associatedSwap?: string</text>
+
+</g>
+</g>
+<g transform="translate(4510, 189.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="SpreadSDKCreateOrderDto">
+<g transform="translate(8, 8)" fill="#33322E" data-name="SpreadSDKCreateOrderDto">
+
+</g>
+</g>
+</g>
+<g data-name="SpreadSDKUpdateOrderDto">
+<g fill="lightgray" stroke="#33322E" data-name="SpreadSDKUpdateOrderDto">
+<rect x="4808.0" y="60.0" height="100.0" width="270.0" data-name="SpreadSDKUpdateOrderDto"></rect>
+<path d="M4808.0 91.0 L5078.0 91.0" fill="none" data-name="SpreadSDKUpdateOrderDto"></path>
+<path d="M4808.0 152.0 L5078.0 152.0" fill="none" data-name="SpreadSDKUpdateOrderDto"></path>
+</g>
+<g transform="translate(4808, 60)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="SpreadSDKUpdateOrderDto">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="SpreadSDKUpdateOrderDto">
+<a id="types/index.ts.SpreadSDKUpdateOrderDto" xlink:href="types/index.ts"><text x="127.0" y="13.5" stroke="none" text-anchor="middle" data-name="SpreadSDKUpdateOrderDto">SpreadSDKUpdateOrderDto</text></a>
+
+</g>
+</g>
+<g transform="translate(4808, 91)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="SpreadSDKUpdateOrderDto">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="SpreadSDKUpdateOrderDto">
+<text x="0.0" y="13.5" stroke="none" data-name="SpreadSDKUpdateOrderDto">+status: SpreadSDKOrderStatus</text>
+<text x="0.0" y="28.5" stroke="none" data-name="SpreadSDKUpdateOrderDto">+associatedLimitOrder?: string</text>
+<text x="0.0" y="43.5" stroke="none" data-name="SpreadSDKUpdateOrderDto">+associatedSwap?: string</text>
+
+</g>
+</g>
+<g transform="translate(4808, 152)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="SpreadSDKUpdateOrderDto">
+<g transform="translate(8, 8)" fill="#33322E" data-name="SpreadSDKUpdateOrderDto">
+
+</g>
+</g>
+</g>
+<g data-name="SpreadSDKSwapQuoteDto">
+<g fill="lightgray" stroke="#33322E" data-name="SpreadSDKSwapQuoteDto">
+<rect x="5118.0" y="15.0" height="190.0" width="226.0" data-name="SpreadSDKSwapQuoteDto"></rect>
+<path d="M5118.0 46.0 L5344.0 46.0" fill="none" data-name="SpreadSDKSwapQuoteDto"></path>
+<path d="M5118.0 197.0 L5344.0 197.0" fill="none" data-name="SpreadSDKSwapQuoteDto"></path>
+</g>
+<g transform="translate(5118, 15)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="SpreadSDKSwapQuoteDto">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="SpreadSDKSwapQuoteDto">
+<a id="types/index.ts.SpreadSDKSwapQuoteDto" xlink:href="types/index.ts"><text x="105.0" y="13.5" stroke="none" text-anchor="middle" data-name="SpreadSDKSwapQuoteDto">SpreadSDKSwapQuoteDto</text></a>
+
+</g>
+</g>
+<g transform="translate(5118, 46)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="SpreadSDKSwapQuoteDto">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="SpreadSDKSwapQuoteDto">
+<text x="0.0" y="13.5" stroke="none" data-name="SpreadSDKSwapQuoteDto">+swapParams: { src: string</text>
+<text x="0.0" y="28.5" stroke="none" data-name="SpreadSDKSwapQuoteDto">dst: string</text>
+<text x="0.0" y="43.5" stroke="none" data-name="SpreadSDKSwapQuoteDto">amount: string</text>
+<text x="0.0" y="58.5" stroke="none" data-name="SpreadSDKSwapQuoteDto">from: string</text>
+<text x="0.0" y="73.5" stroke="none" data-name="SpreadSDKSwapQuoteDto">slippage: string</text>
+<text x="0.0" y="88.5" stroke="none" data-name="SpreadSDKSwapQuoteDto">disableEstimate: string</text>
+<text x="0.0" y="103.5" stroke="none" data-name="SpreadSDKSwapQuoteDto">allowPartialFill: string</text>
+<text x="0.0" y="118.5" stroke="none" data-name="SpreadSDKSwapQuoteDto">}</text>
+<text x="0.0" y="133.5" stroke="none" data-name="SpreadSDKSwapQuoteDto">+chainId: number</text>
+
+</g>
+</g>
+<g transform="translate(5118, 197)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="SpreadSDKSwapQuoteDto">
+<g transform="translate(8, 8)" fill="#33322E" data-name="SpreadSDKSwapQuoteDto">
+
+</g>
+</g>
+</g>
+<g data-name="SpreadSDKTokenPair">
+<g fill="lightgray" stroke="#33322E" data-name="SpreadSDKTokenPair">
+<rect x="5384.0" y="67.5" height="85.0" width="187.0" data-name="SpreadSDKTokenPair"></rect>
+<path d="M5384.0 98.5 L5571.0 98.5" fill="none" data-name="SpreadSDKTokenPair"></path>
+<path d="M5384.0 144.5 L5571.0 144.5" fill="none" data-name="SpreadSDKTokenPair"></path>
+</g>
+<g transform="translate(5384, 67.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="SpreadSDKTokenPair">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="SpreadSDKTokenPair">
+<a id="types/index.ts.SpreadSDKTokenPair" xlink:href="types/index.ts"><text x="85.5" y="13.5" stroke="none" text-anchor="middle" data-name="SpreadSDKTokenPair">SpreadSDKTokenPair</text></a>
+
+</g>
+</g>
+<g transform="translate(5384, 98.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="SpreadSDKTokenPair">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="SpreadSDKTokenPair">
+<text x="0.0" y="13.5" stroke="none" data-name="SpreadSDKTokenPair">+USDT: string</text>
+<text x="0.0" y="28.5" stroke="none" data-name="SpreadSDKTokenPair">+TOKEN: string</text>
+
+</g>
+</g>
+<g transform="translate(5384, 144.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="SpreadSDKTokenPair">
+<g transform="translate(8, 8)" fill="#33322E" data-name="SpreadSDKTokenPair">
+
+</g>
+</g>
+</g>
+<g data-name="ISpreadSDKModule">
+<g fill="lightblue" stroke="#33322E" data-name="ISpreadSDKModule">
+<rect x="1745.0" y="33.5" height="153.0" width="246.0" data-name="ISpreadSDKModule"></rect>
+<path d="M1745.0 64.5 L1991.0 64.5" fill="none" data-name="ISpreadSDKModule"></path>
+<path d="M1745.0 155.5 L1991.0 155.5" fill="none" data-name="ISpreadSDKModule"></path>
+</g>
+<g transform="translate(1745, 33.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="ISpreadSDKModule">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="ISpreadSDKModule">
+<a id="types/ISpreadSDKModule.ts.ISpreadSDKModule" xlink:href="types/ISpreadSDKModule.ts"><text x="115.0" y="13.5" stroke="none" text-anchor="middle" data-name="ISpreadSDKModule">ISpreadSDKModule</text></a>
+
+</g>
+</g>
+<g transform="translate(1745, 64.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="ISpreadSDKModule">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="ISpreadSDKModule">
+<text x="0.0" y="13.5" stroke="none" data-name="ISpreadSDKModule">+baseUrl: string</text>
+<text x="0.0" y="28.5" stroke="none" data-name="ISpreadSDKModule">+props: SpreadSDKInitProps</text>
+<text x="0.0" y="43.5" stroke="none" data-name="ISpreadSDKModule">+apiUrl: string</text>
+<text x="0.0" y="58.5" stroke="none" data-name="ISpreadSDKModule">+axiosSpread: AxiosInstance</text>
+<text x="0.0" y="73.5" stroke="none" data-name="ISpreadSDKModule">+axios1Inch: AxiosInstance</text>
+
+</g>
+</g>
+<g transform="translate(1745, 155.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="ISpreadSDKModule">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="ISpreadSDKModule">
+<text x="0.0" y="13.5" stroke="none" data-name="ISpreadSDKModule">+init(): void</text>
+
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</svg>

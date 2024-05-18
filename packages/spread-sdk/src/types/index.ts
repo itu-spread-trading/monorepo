@@ -155,6 +155,7 @@ export type SpreadSDKOrder = {
     symbol: SpreadSDKSupportedSymbols;
     spread: number;
     size: number;
+    tokenAmount: string | null;
     status: SpreadSDKOrderStatus;
     date: string;
     type: SpreadSDKOrderType;
@@ -166,6 +167,7 @@ export type SpreadSDKCreateOrderDto = {
     address: string;
     symbol: string;
     spread: number;
+    tokenAmount: string | null;
     size: number;
     type: SpreadSDKOrderType;
     associatedLimitOrder?: string;

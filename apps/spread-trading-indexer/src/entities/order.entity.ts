@@ -30,6 +30,9 @@ export class OrderEntity {
     @Column({ type: 'float' })
     size: number;
 
+    @Column({ nullable: true })
+    tokenAmount: string;
+
     @Column({ default: OrderStatus.PENDING })
     status: OrderStatus;
 

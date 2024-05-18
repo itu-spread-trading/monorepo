@@ -8,11 +8,6 @@ import { ISpreadSDKModule } from './ISpreadSDKModule';
 
 export interface ISpreadSDKOrderbookModule extends ISpreadSDKModule {
     /**
-     * Base URL of the module API
-     */
-    baseUrl: string;
-
-    /**
      * @dev Get limit orders belonging to the specified address
      * @param props - The required metadata to build the swap
      */

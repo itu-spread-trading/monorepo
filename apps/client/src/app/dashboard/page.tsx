@@ -41,7 +41,7 @@ export default function DashboardPage(): ReactNode {
             <Navbar type="connect" />
             <MarketDataProvider value={marketData}>
                 <div className="grid container grid-cols-12 gap-6">
-                    <div className="col-span-6 flex flex-col min-h-[90vh] w-[100%] h-[100%]">
+                    <div className="col-span-6 flex flex-col max-h-[85vh] w-[100%] h-[100%]">
                         <Card>
                             <CardHeader>
                                 <TokenSelect />
@@ -56,7 +56,7 @@ export default function DashboardPage(): ReactNode {
                             <DashboardChart />
                         </div>
                     </div>
-                    <div className="col-span-6 flex flex-col min-h-[90vh]  w-[100%] h-[100%]">
+                    <div className="col-span-6 flex flex-col max-h-[85vh] w-[100%] h-[100%]">
                         <SellAndBuyInput />
                         <DashboardOrderHistory />
                     </div>

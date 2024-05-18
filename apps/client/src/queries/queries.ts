@@ -5,4 +5,5 @@ export const queries = {
     STANDARD_DEVIATION: 'spread-standard-deviation',
     TOKEN_PAIR: 'token-pair',
     ORDERS: 'orders',
+    LAST_ORDER: 'last-order',
 };

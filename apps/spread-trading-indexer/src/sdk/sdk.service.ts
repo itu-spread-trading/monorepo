@@ -94,6 +94,7 @@ export class SDKService {
             size: dto.size,
             spread: dto.spread,
             symbol: dto.symbol,
+            tokenAmount: dto.tokenAmount,
             type: dto.type,
             associatedSwap: null,
             associatedLimitOrder: dto.associatedLimitOrder,
@@ -142,6 +143,7 @@ export class SDKService {
             symbol: dto.symbol,
             type: dto.type,
             associatedSwap: null,
+            tokenAmount: dto.tokenAmount,
             associatedLimitOrder: dto.associatedLimitOrder,
         });
 

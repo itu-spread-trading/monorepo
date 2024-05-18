@@ -9,10 +9,12 @@ import {
     Label,
 } from '@/components';
 import { useToast } from '@/components/ui/use-toast';
+import { useMarketDataContext } from '@/context';
 import { useApproveTokenMutation } from '@/hooks/useApproveTokenMutation';
 import { useApproveUSDTMutation } from '@/hooks/useApproveUSDTMutation';
 import { useGetTokenAmountFromUSD } from '@/hooks/useGetTokenAmountFromUSD';
 import { useHandleConnection } from '@/hooks/useHandleConnection';
+import { useLastOrderQuery } from '@/queries';
 import { useOneInchTokenPair, useTokenPair, useWallet } from '@/store';
 import { getRecommendedSpreadBuyValue, spreadSDK } from '@/utils';
 import { TREASURY_ADDRESS, erc20Interface } from '@/utils/constants';
@@ -30,7 +32,8 @@ import {
 import { useMutation } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { BigNumber } from 'ethers';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { formatUnits, parseUnits } from 'viem';
 import { useAccount, useConnect } from 'wagmi';
 import { injected } from 'wagmi/connectors';
 
@@ -47,12 +50,12 @@ export const BuyCard = ({ sd, spread }: CardProps) => {
     const { isConnected } = useAccount();
     const { connect } = useConnect();
     const { toast } = useToast();
+    const { futuresPrice } = useMarketDataContext();
 
     const handleConnection = useHandleConnection({
         delay: 0,
     });
-    const { getFuturesTokenAmount, getFuturesUSDAmount, getParsedUSDTAmount } =
-        useGetTokenAmountFromUSD();
+    const { getFuturesUSDAmount } = useGetTokenAmountFromUSD();
     const oneInchTokenPair = useOneInchTokenPair();
 
     const {
@@ -66,6 +69,43 @@ export const BuyCard = ({ sd, spread }: CardProps) => {
     const approveTokenForSwapMutation = useApproveTokenMutation(
         refetchTokenAllowanceForSwap,
     );
+    const { data: lastOrder } = useLastOrderQuery();
+
+    const lastOrderStatus = useMemo(() => {
+        if (lastOrder == null) {
+            return false;
+        }
+
+        if (
+            lastOrder.status === SpreadSDKOrderStatus.COMPLETE &&
+            lastOrder.type === SpreadSDKOrderType.SELL
+        ) {
+            return true;
+        } else {
+            return false;
+        }
+    }, [lastOrder?.id]);
+
+    useEffect(() => {
+        if (lastOrder == null) {
+            return;
+        }
+
+        if (lastOrder.status === SpreadSDKOrderStatus.COMPLETE) {
+            const lastOrderTokenAmount = lastOrder.tokenAmount;
+
+            if (lastOrderTokenAmount == null) {
+                return;
+            }
+
+            const lastOrderTokenAmountBN = BigInt(lastOrderTokenAmount);
+            const formatted = formatUnits(lastOrderTokenAmountBN, 18);
+            const formattedNumber = Number(formatted);
+            setBuySize(futuresPrice * formattedNumber);
+        } else {
+            return;
+        }
+    }, [lastOrder?.id, futuresPrice]);
 
     const buyMutation = useMutation({
         mutationFn: async () => {
@@ -129,6 +169,7 @@ export const BuyCard = ({ sd, spread }: CardProps) => {
                 size: buySize,
                 type: SpreadSDKOrderType.BUY,
                 symbol: tokenPair,
+                tokenAmount: estimatedFuturesAmount,
             });
 
             if (sellStartResponse.status === SpreadSDKOrderStatus.FILLED) {
@@ -143,19 +184,43 @@ export const BuyCard = ({ sd, spread }: CardProps) => {
                     associatedSwap: swapTx.hash,
                 });
             }
-
-            console.log('LIMITORDER', sellStartResponse);
         },
     });
 
-    const estimatedFuturesAmount = getFuturesTokenAmount(
-        buySpread,
-        buySize,
-    ).toString();
+    const estimatedFuturesAmount = useMemo(() => {
+        if (lastOrder == null) {
+            return '0';
+        } else {
+            return lastOrder.tokenAmount ?? '0';
+        }
+    }, [lastOrder?.id]);
 
     const futuresUSDAmount = getFuturesUSDAmount(buySpread);
-    const estimatedUSDTAmount = getParsedUSDTAmount(buySize).toString();
     const token = formatSpreadSDKSymbolTo1inchToken(tokenPair);
+
+    const estimatedUSDTAmount = useMemo(() => {
+        if (lastOrder == null) {
+            return '0';
+        }
+
+        if (lastOrder.status === SpreadSDKOrderStatus.COMPLETE) {
+            const lastOrderTokenAmount = lastOrder.tokenAmount;
+
+            if (lastOrderTokenAmount == null) {
+                return '0';
+            }
+
+            const lastOrderTokenAmountBN = BigInt(lastOrderTokenAmount);
+            const formatted = formatUnits(lastOrderTokenAmountBN, 18);
+            const formattedNumber = Number(formatted);
+            return parseUnits(
+                String(formattedNumber * futuresUSDAmount),
+                18,
+            ).toString();
+        } else {
+            return '0';
+        }
+    }, [lastOrder?.id, futuresUSDAmount]);
 
     const buttonProps = useMemo(() => {
         if (!isConnected) {
@@ -176,6 +241,13 @@ export const BuyCard = ({ sd, spread }: CardProps) => {
                 onClick: handleConnection,
                 loading: false,
             };
+        } else if (!lastOrderStatus) {
+            return {
+                disabled: true,
+                children: 'You need to Sell Spread first',
+                onClick: undefined,
+                loading: false,
+            };
         } else {
             if (!buySize || buySize <= 0) {
                 return {
@@ -190,7 +262,7 @@ export const BuyCard = ({ sd, spread }: CardProps) => {
                 return {
                     disabled: false,
                     children: zeroTokenAllowance
-                        ? `Approve ${token} for swap`
+                        ? `Approve ${token} for Swap`
                         : zeroUsdtAllowance
                         ? 'Approve USDT'
                         : 'Submit',
@@ -226,6 +298,7 @@ export const BuyCard = ({ sd, spread }: CardProps) => {
         isConnected,
         estimatedFuturesAmount,
         estimatedUSDTAmount,
+        lastOrderStatus,
     ]);
 
     return (
@@ -263,6 +336,7 @@ export const BuyCard = ({ sd, spread }: CardProps) => {
                 <div className="space-y-1 w-full">
                     <Label htmlFor="spread">Size ($)</Label>
                     <Input
+                        disabled={true}
                         value={buySize}
                         onChange={(e) => {
                             setBuySize(e.target.value as $fixme);

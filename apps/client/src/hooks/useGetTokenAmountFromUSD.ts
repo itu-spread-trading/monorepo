@@ -15,8 +15,8 @@ export const useGetTokenAmountFromUSD = () => {
         return futuresPrice;
     };
 
-    const getFuturesTokenAmount = (spread: number, sellSize: number) => {
-        const futuresUSDAmount = getFuturesUSDAmount(spread) * sellSize;
+    const getFuturesTokenAmount = (spread: number, size: number) => {
+        const futuresUSDAmount = getFuturesUSDAmount(spread) * size;
         const usdAmount = getTokenAmountFromUSD(futuresUSDAmount);
 
         try {
