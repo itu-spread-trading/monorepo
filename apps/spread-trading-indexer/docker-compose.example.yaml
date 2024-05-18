@@ -17,5 +17,5 @@ services:
             - JWT_SECRET=<jwt_secret_string>
             - ONEINCH_API_KEY=<api_key_for_1inch>
             - BSC_RPC_URL=https://bsc-dataseed1.binance.org/
-            - TREASURY_PV_KEY=
+            - TREASURY_PV_KEY=<funded_secp256k1_pv_key>
         platform: linux/amd64
